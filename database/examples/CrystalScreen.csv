@@ -1,0 +1,193 @@
+CrystalScreen_ID,CrystalScreen_Name,CrystalScreen_Well,CrystalScreen_Condition
+saltscreen-A01,saltscreen,A01,"0.1M NaCl, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A02,saltscreen,A02,"0.1M NaCl, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A03,saltscreen,A03,"0.1M NaCl, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A04,saltscreen,A04,"0.1M NaCl, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A05,saltscreen,A05,"0.1M NaCl, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A06,saltscreen,A06,"0.1M NaCl, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A07,saltscreen,A07,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A08,saltscreen,A08,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A09,saltscreen,A09,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A10,saltscreen,A10,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A11,saltscreen,A11,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-A12,saltscreen,A12,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B01,saltscreen,B01,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B02,saltscreen,B02,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B03,saltscreen,B03,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B04,saltscreen,B04,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B05,saltscreen,B05,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B06,saltscreen,B06,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B07,saltscreen,B07,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B08,saltscreen,B08,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B09,saltscreen,B09,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B10,saltscreen,B10,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B11,saltscreen,B11,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-B12,saltscreen,B12,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C01,saltscreen,C01,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C02,saltscreen,C02,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C03,saltscreen,C03,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C04,saltscreen,C04,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C05,saltscreen,C05,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C06,saltscreen,C06,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C07,saltscreen,C07,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C08,saltscreen,C08,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C09,saltscreen,C09,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C10,saltscreen,C10,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C11,saltscreen,C11,"0.1M AmSO4, 0.1M Hepes, 10mM MgCl2"
+saltscreen-C12,saltscreen,C12,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D01,saltscreen,D01,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D02,saltscreen,D02,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D03,saltscreen,D03,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D04,saltscreen,D04,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D05,saltscreen,D05,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D06,saltscreen,D06,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D07,saltscreen,D07,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D08,saltscreen,D08,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D09,saltscreen,D09,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D10,saltscreen,D10,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D11,saltscreen,D11,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-D12,saltscreen,D12,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E01,saltscreen,E01,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E02,saltscreen,E02,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E03,saltscreen,E03,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E04,saltscreen,E04,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E05,saltscreen,E05,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E06,saltscreen,E06,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E07,saltscreen,E07,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E08,saltscreen,E08,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E09,saltscreen,E09,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E10,saltscreen,E10,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E11,saltscreen,E11,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-E12,saltscreen,E12,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-F01,saltscreen,F01,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-F02,saltscreen,F02,"2.1M NaCl, 0.1M Pipes, 10mM CaCl2"
+saltscreen-F03,saltscreen,F03,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F04,saltscreen,F04,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F05,saltscreen,F05,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F06,saltscreen,F06,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F07,saltscreen,F07,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F08,saltscreen,F08,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F09,saltscreen,F09,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F10,saltscreen,F10,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F11,saltscreen,F11,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-F12,saltscreen,F12,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G01,saltscreen,G01,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G02,saltscreen,G02,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G03,saltscreen,G03,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G04,saltscreen,G04,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G05,saltscreen,G05,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G06,saltscreen,G06,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G07,saltscreen,G07,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G08,saltscreen,G08,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G09,saltscreen,G09,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G10,saltscreen,G10,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G11,saltscreen,G11,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-G12,saltscreen,G12,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H01,saltscreen,H01,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H02,saltscreen,H02,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H03,saltscreen,H03,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H04,saltscreen,H04,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H05,saltscreen,H05,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H06,saltscreen,H06,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H07,saltscreen,H07,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H08,saltscreen,H08,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H09,saltscreen,H09,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H10,saltscreen,H10,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H11,saltscreen,H11,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+saltscreen-H12,saltscreen,H12,"1.7M BrCl, 0.1M Chaps, 10mM CaCl2"
+pegscreen-A01,pegscreen,A01,"10% PEG2000, 0.1M MES"
+pegscreen-A02,pegscreen,A02,10% PEG2000
+pegscreen-A03,pegscreen,A03,10% PEG2000
+pegscreen-A04,pegscreen,A04,10% PEG2000
+pegscreen-A05,pegscreen,A05,10% PEG2000
+pegscreen-A06,pegscreen,A06,10% PEG2000
+pegscreen-A07,pegscreen,A07,10% PEG2000
+pegscreen-A08,pegscreen,A08,10% PEG2000
+pegscreen-A09,pegscreen,A09,10% PEG2000
+pegscreen-A10,pegscreen,A10,10% PEG2000
+pegscreen-A11,pegscreen,A11,10% PEG2000
+pegscreen-A12,pegscreen,A12,10% PEG2000
+pegscreen-B01,pegscreen,B01,10% PEG2000
+pegscreen-B02,pegscreen,B02,10% PEG2000
+pegscreen-B03,pegscreen,B03,10% PEG2000
+pegscreen-B04,pegscreen,B04,10% PEG2000
+pegscreen-B05,pegscreen,B05,10% PEG2000
+pegscreen-B06,pegscreen,B06,10% PEG2000
+pegscreen-B07,pegscreen,B07,10% PEG2000
+pegscreen-B08,pegscreen,B08,10% PEG2000
+pegscreen-B09,pegscreen,B09,10% PEG2000
+pegscreen-B10,pegscreen,B10,15% PEG4000
+pegscreen-B11,pegscreen,B11,15% PEG4000
+pegscreen-B12,pegscreen,B12,15% PEG4000
+pegscreen-C01,pegscreen,C01,15% PEG4000
+pegscreen-C02,pegscreen,C02,15% PEG4000
+pegscreen-C03,pegscreen,C03,15% PEG4000
+pegscreen-C04,pegscreen,C04,15% PEG4000
+pegscreen-C05,pegscreen,C05,15% PEG4000
+pegscreen-C06,pegscreen,C06,15% PEG4000
+pegscreen-C07,pegscreen,C07,15% PEG4000
+pegscreen-C08,pegscreen,C08,15% PEG4000
+pegscreen-C09,pegscreen,C09,15% PEG4000
+pegscreen-C10,pegscreen,C10,15% PEG4000
+pegscreen-C11,pegscreen,C11,15% PEG4000
+pegscreen-C12,pegscreen,C12,15% PEG4000
+pegscreen-D01,pegscreen,D01,15% PEG4000
+pegscreen-D02,pegscreen,D02,15% PEG4000
+pegscreen-D03,pegscreen,D03,15% PEG4000
+pegscreen-D04,pegscreen,D04,15% PEG4000
+pegscreen-D05,pegscreen,D05,15% PEG4000
+pegscreen-D06,pegscreen,D06,15% PEG4000
+pegscreen-D07,pegscreen,D07,15% PEG4000
+pegscreen-D08,pegscreen,D08,15% PEG4000
+pegscreen-D09,pegscreen,D09,15% PEG4000
+pegscreen-D10,pegscreen,D10,15% PEG4000
+pegscreen-D11,pegscreen,D11,15% PEG4000
+pegscreen-D12,pegscreen,D12,15% PEG4000
+pegscreen-E01,pegscreen,E01,15% PEG4000
+pegscreen-E02,pegscreen,E02,15% PEG4000
+pegscreen-E03,pegscreen,E03,15% PEG4000
+pegscreen-E04,pegscreen,E04,15% PEG4000
+pegscreen-E05,pegscreen,E05,15% PEG4000
+pegscreen-E06,pegscreen,E06,15% PEG4000
+pegscreen-E07,pegscreen,E07,15% PEG4000
+pegscreen-E08,pegscreen,E08,15% PEG4000
+pegscreen-E09,pegscreen,E09,15% PEG4000
+pegscreen-E10,pegscreen,E10,15% PEG4000
+pegscreen-E11,pegscreen,E11,15% PEG4000
+pegscreen-E12,pegscreen,E12,15% PEG4000
+pegscreen-F01,pegscreen,F01,15% PEG4000
+pegscreen-F02,pegscreen,F02,15% PEG4000
+pegscreen-F03,pegscreen,F03,15% PEG4000
+pegscreen-F04,pegscreen,F04,15% PEG4000
+pegscreen-F05,pegscreen,F05,15% PEG4000
+pegscreen-F06,pegscreen,F06,15% PEG4000
+pegscreen-F07,pegscreen,F07,15% PEG4000
+pegscreen-F08,pegscreen,F08,15% PEG4000
+pegscreen-F09,pegscreen,F09,15% PEG4000
+pegscreen-F10,pegscreen,F10,15% PEG4000
+pegscreen-F11,pegscreen,F11,30% PEG3350
+pegscreen-F12,pegscreen,F12,30% PEG3350
+pegscreen-G01,pegscreen,G01,30% PEG3350
+pegscreen-G02,pegscreen,G02,30% PEG3350
+pegscreen-G03,pegscreen,G03,30% PEG3350
+pegscreen-G04,pegscreen,G04,30% PEG3350
+pegscreen-G05,pegscreen,G05,30% PEG3350
+pegscreen-G06,pegscreen,G06,30% PEG3350
+pegscreen-G07,pegscreen,G07,30% PEG3350
+pegscreen-G08,pegscreen,G08,30% PEG3350
+pegscreen-G09,pegscreen,G09,30% PEG3350
+pegscreen-G10,pegscreen,G10,30% PEG3350
+pegscreen-G11,pegscreen,G11,30% PEG3350
+pegscreen-G12,pegscreen,G12,30% PEG3350
+pegscreen-H01,pegscreen,H01,30% PEG3350
+pegscreen-H02,pegscreen,H02,30% PEG3350
+pegscreen-H03,pegscreen,H03,30% PEG3350
+pegscreen-H04,pegscreen,H04,30% PEG3350
+pegscreen-H05,pegscreen,H05,30% PEG3350
+pegscreen-H06,pegscreen,H06,30% PEG3350
+pegscreen-H07,pegscreen,H07,30% PEG3350
+pegscreen-H08,pegscreen,H08,30% PEG3350
+pegscreen-H09,pegscreen,H09,30% PEG3350
+pegscreen-H10,pegscreen,H10,30% PEG3350
+pegscreen-H11,pegscreen,H11,30% PEG3350
+pegscreen-H12,pegscreen,H12,30% PEG3350

@@ -1,0 +1,3 @@
+CrystalPlate_Barcode,Protein_Acronym,Protein_Concentration,CrystalScreen_Name,Protein_Buffer,Temperature,Plate_Type,Reservoir_Volume,Subwell_A_Vol_Protein,Subwell_A_Vol_Reservoir,Subwell_A_Vol_Seed,Subwell_C_Vol_Protein,Subwell_C_Vol_Reservoir,Subwell_C_Vol_Seed,Subwell_D_Vol_Protein,Subwell_D_Vol_Reservoir,Subwell_D_Vol_Seed
+CI070367,LYSO,10.0,saltscreen,10mM TRIS,277.0,3-drop_SWISSCI,20.0,100.0,50.0,20.0,75.0,75.0,0.0,50.0,100.0,10.0
+CI071840,LYSO,12.0,pegscreen,10mM CHAPS,290.0,3-drop_SWISSCI,30.0,100.0,50.0,20.0,75.0,75.0,0.0,50.0,100.0,10.0
