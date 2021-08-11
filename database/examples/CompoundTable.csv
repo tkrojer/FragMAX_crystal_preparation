@@ -1,4 +1,4 @@
-﻿Compound_ID,Vendor_ID,Vendor,SMILES,InChI,CAS
+﻿Compound_ID,Vendor_ID,Vendor,SMILES,InChI,CAS,Cocktail,Covalent
 F00001,venID0001,Enamine,OCCO,iNCHIXX,CASxbb001
 F00002,venID0002,Enamine,OCCO,iNCHIXX,CASxbb002
 F00003,venID0003,Enamine,OCCO,iNCHIXX,CASxbb003
