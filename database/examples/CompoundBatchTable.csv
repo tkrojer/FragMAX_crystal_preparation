@@ -1,4 +1,4 @@
-﻿CompoundBatch_ID,Compound_ID,Library_Name,CompoundPlate_ID,CompoundPlate_Location,State,Solvent,Concentration,Comment
+﻿CompoundBatch_ID,Compound_ID,Library_Name,CompoundPlate_Name,CompoundPlate_Well,State,Solvent,Concentration,Comment
 F00001a,F00001,FragMAXlib,Fmlib_plate_1_dmso,A01,clear,DMSO,100mM,nope
 F00002a,F00002,FragMAXlib,Fmlib_plate_1_dmso,A02,clear,DMSO,100mM,nope
 F00003a,F00003,FragMAXlib,Fmlib_plate_1_dmso,A03,clear,DMSO,100mM,nope
