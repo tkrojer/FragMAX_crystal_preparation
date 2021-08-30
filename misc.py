@@ -1,3 +1,5 @@
+import re
+
 def swiss_ci_layout():
 
     coordinates = [
@@ -127,3 +129,80 @@ def shifter_csv_header():
         'ExternalComment'
         ]
     return header
+
+def read_shifter_csv_file(shifter_csv):
+    for line in open(shifter_csv):
+        if line.startswith(';'):
+            continue
+        PlateType = re.split(r'[ ,;]+', line)[0]
+        PlateID = re.split(r'[ ,;]+', line)[1]
+        LocationShifter = re.split(r'[ ,;]+', line)[2]
+        PlateColumn = '0' * (2 - len(re.split(r'[ ,;]+', line)[3])) + re.split(r'[ ,;]+', line)[3]
+        PlateRow = re.split(r'[ ,;]+', line)[4]
+        PositionSubWell = re.split(r'[ ,;]+', line)[5]
+        Comment = re.split(r'[ ,;]+', line)[6]
+        CrystalID = re.split(r'[ ,;]+', line)[7]
+        TimeArrival = re.split(r'[ ,;]+', line)[8]
+        TimeDeparture = re.split(r'[ ,;]+', line)[9]
+        PickDuration = re.split(r'[ ,;]+', line)[10]
+        DestinationName = re.split(r'[ ,;]+', line)[11]
+        DestinationLocation = re.split(r'[ ,;]+', line)[12]
+        Barcode = re.split(r'[ ,;]+', line)[13]
+        ExternalComment = re.split(r'[ ,;]+', line)[14]
+
+
+
+        well = row + column
+        marked_crystal_id = barcode + '-' + well + subwell
+        update_marked_crystal_in_db(marked_crystal_id, barcode, well, subwell)
+        wellList.append(well + subwell)
+
+def project_description_note():
+    msg = (
+        'Note: select a project directory; data from existing projects will be read automatically.'
+    )
+    return msg
+
+def select_project_directory_button_tip():
+    msg = (
+        'Select a project directory'
+    )
+    return msg
+
+def crystal_screen_note():
+    msg = (
+        'Note: crystal screens can be registered either by uploading a manually edited CSV file or'
+        ' by uploading a Dragaonfly TXT file. '
+        'Hover over the buttons to obtain tooltips with further information.'
+    )
+    return msg
+
+def add_screen_button_tip():
+    msg = (
+        'Enter name of the new screen (avoid spaces).\n'
+        'and add the name to the dropdown below.\n'
+        'Screen name will be used when you save\n'
+        'the Crystal Screen to the datavbase '
+    )
+    return msg
+
+def refresh_screen_button_tip():
+    msg = (
+        'Loads existing Crystal Screen NAMES from database'
+    )
+    return msg
+
+def load_selected_screen_button_tip():
+    msg = (
+        'Loads selected Crystal Screen from database'
+    )
+    return msg
+
+def save_screen_csv_button_tip(crystal_screen_folder, crystal_screen_template):
+    msg = (
+        'Saves an empty CSV crystal screen template into\n'
+        + str(crystal_screen_folder) + '\n' 
+        'Filename is the same as the currently selected screen:\n'
+        + crystal_screen_template + '.csv'
+    )
+    return msg
