@@ -62,14 +62,14 @@ class crystal_screen(object):
 
         # screen_sheet = sheet(rows=96, columns=2, column_headers=['CrystalScreen_Well','CrystalScreen_Condition'])
         # screen_sheet.layout.height = '350px'   # adjust to monitor size
-#        df_template = pd.read_csv(self.crystal_plate_template)
+        df_template = pd.read_csv(self.crystal_plate_template)
         # screen_sheet = qgrid.show_grid(df, grid_options={'sortable': False})
         # grid_options={'forceFitColumns': False, 'defaultColumnWidth': 100}
-#        self.screen_sheet = qgrid.QgridWidget(df=df_template, show_toolbar=False)
+        self.screen_sheet = qgrid.QgridWidget(df=df_template, show_toolbar=False)
 
-#        self.save_screen_to_db_button = widgets.Button(description='Save CrystalScreen to Database',
-#                                                  layout=widgets.Layout(height="auto", width="auto"),
-#                                                  style={'button_color': 'gray'})
+        self.save_screen_to_db_button = widgets.Button(description='Save CrystalScreen to Database',
+                                                  layout=widgets.Layout(height="auto", width="auto"),
+                                                  style={'button_color': 'gray'})
 #        self.save_screen_to_db_button.on_click(self.save_screen_to_db)
 
-#        self.crystal_screen_progress = IntProgress(min=0, max=95)
+        self.crystal_screen_progress = IntProgress(min=0, max=95)
