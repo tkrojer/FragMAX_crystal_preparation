@@ -3,8 +3,14 @@ from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 from tkinter import Tk, filedialog
 from IPython.display import display,clear_output
 import sqlalchemy as db
+
+from shutil import copyfile
+from shutil import move
+from datetime import datetime
+
 import os
 import misc
+
 
 class project_description(object):
     def __init__(self, settingsObject, dbObject, logger, lp3_project_folder, db_template):
@@ -46,13 +52,13 @@ class project_description(object):
         self.select_project_directory_button.on_click(self.select_project_directory)
         self.grid_widget[4, 3] = self.select_project_directory_button
 
-#        self.read_project_button = widgets.Button(description='Read from DB')
-#        self.read_project_button.on_click(read_project)
-#        self.grid_widget[5,0] = gui_object.read_project_button
+        self.read_project_button = widgets.Button(description='Read from DB')
+        self.read_project_button.on_click(self.read_project)
+        self.grid_widget[5,0] = self.read_project_button
 
-#        self.save_project_button = widgets.Button(description='Save to DB')
-#        self.save_project_button.on_click(save_project)
-#        self.grid_widget[5,1] = gui_object.save_project_button
+        self.save_project_button = widgets.Button(description='Save to DB')
+        self.save_project_button.on_click(self.save_project)
+        self.grid_widget[5,1] = self.save_project_button
 
     def select_project_directory(self, b):
         clear_output()  # Button is deleted after it is clicked.
@@ -136,7 +142,7 @@ class project_description(object):
         self.settings.db_file = os.path.join(self.settings.project_folder, 'database', 'fragmax.sqlite')
         if os.path.isfile(self.settings.db_file):
             self.logger.info('found DB file: ' + self.settings.db_file)
-            backup_db()
+            self.backup_db()
         else:
             self.logger.warning('DB file does not exist: ' + self.settings.db_file)
             self.logger.info('copying DB template file from ' + self.db_template + ' to ' + self.settings.db_file)
@@ -146,28 +152,122 @@ class project_description(object):
 
     def init_db(self):
         self.logger.info('initializing DB...')
-        self.dbObject.engine = db.create_engine('sqlite:///' + db_file)
-        self.dbObject.connection = engine.connect()
+        self.dbObject.engine = db.create_engine('sqlite:///' + self.settings.db_file)
+        self.dbObject.connection = self.dbObject.engine.connect()
         metadata = db.MetaData()
 
-        self.dbObject.projectTable = db.Table('Project', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.projectTable = db.Table('Project', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.crystalscreenTable = db.Table('CrystalScreen', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.crystalscreenTable = db.Table('CrystalScreen', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.proteinTable = db.Table('Protein', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.proteinTable = db.Table('Protein', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.crystal_plate_typeTable = db.Table('CrystalPlateType', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.crystal_plate_typeTable = db.Table('CrystalPlateType', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.crystalplateTable = db.Table('CrystalPlate', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.crystalplateTable = db.Table('CrystalPlate', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.markedcrystalTable = db.Table('MarkedCrystals', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.markedcrystalTable = db.Table('MarkedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.soakplateTable = db.Table('SoakPlate', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.soakplateTable = db.Table('SoakPlate', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.compoundbatchTable = db.Table('CompoundBatchTable', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.compoundbatchTable = db.Table('CompoundBatchTable', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.soakedcrystalTable = db.Table('SoakedCrystals', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.soakedcrystalTable = db.Table('SoakedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
-        self.dbObject.mountedcrystalTable = db.Table('MountedCrystals', metadata, autoload=True, autoload_with=engine)
+        self.dbObject.mountedcrystalTable = db.Table('MountedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.logger.info('finished initializing DB')
+
+    def backup_db(self):
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.logger.info('creating backup current DB file: ' + os.path.join(self.settings.db_dir,
+                                                                            'backup', 'fragmax.sqlite.' + now))
+        copyfile(self.settings.db_file, os.path.join(self.settings.db_dir, 'backup', 'fragmax.sqlite.' + now))
+
+
+    def read_project(self, b):
+        self.read_project_from_db()
+
+
+    def read_project_from_db(self):
+        query = db.select([self.dbObject.projectTable])
+        ResultProxy = self.dbObject.connection.execute(query)
+        results = ResultProxy.fetchall()
+        try:
+            x = [dict(r) for r in results][0]
+            self.project_name.value = str(x['Project_Name'])
+            self.proposal_id.value = str(x['Proposal_ID'])
+        except IndexError:
+            self.logger.warning('no project name and proposal ID registered in DB')
+
+        query = db.select([self.dbObject.proteinTable])
+        ResultProxy = self.dbObject.connection.execute(query)
+        results = ResultProxy.fetchall()
+        try:
+            x = [dict(r) for r in results][0]
+            self.protein_name.value = str(x['Protein_Name'])
+            self.protein_acronym.value = str(x['Protein_Acronym'])
+        except IndexError:
+            self.logger.warning('no protein name and protein acronym registered in DB')
+
+        self.update_crystal_plate_widgets()
+
+    def save_project(self, b):
+        query = db.select([self.dbObject.projectTable.columns.Proposal_ID.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        existing_project_id = [x[0] for x in ResultProxy.fetchall()]
+
+        self.logger.info('existing project_id: ' + str(existing_project_id))
+
+        if existing_project_id == []:
+            self.logger.info(
+                'adding project information: {0!s}, {1!s}'.format(self.project_name.value, self.proposal_id.value.replace(' ', '')))
+            values_list = [{
+                'Project_Name': self.project_name.value,
+                'Proposal_ID': self.proposal_id.value.replace(' ', '')
+            }]
+            query = db.insert(self.dbObject.projectTable)
+            self.dbObject.connection.execute(query, values_list)
+        else:
+            logger.info(
+                'updating project information: {0!s}, {1!s}'.format(project_name.value, proposal_id.value.replace(' ', '')))
+            query = db.update(self.dbObject.projectTable).values(
+                Project_Name=project_name.value,
+                Proposal_ID=proposal_id.value.replace(' ', '')).where(
+                projectTable.columns.Proposal_ID == existing_project_id[0])
+            self.dbObject.connection.execute(query)
+
+        query = db.select([self.dbObject.proteinTable.columns.Protein_Acronym.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        existing_protein_acronym = [x[0] for x in ResultProxy.fetchall()]
+
+        if existing_protein_acronym == []:
+            values_list = [{
+                'Protein_Name': protein_name.value,
+                'Protein_Acronym': protein_acronym.value.replace(' ', '')
+            }]
+            query = db.insert(self.dbObject.proteinTable)
+            self.dbObject.connection.execute(query, values_list)
+        else:
+            query = db.update(self.dbObject.proteinTable).values(
+                Protein_Name=protein_name.value,
+                Protein_Acronym=protein_acronym.value.replace(' ', '')).where(
+                self.dbObject.proteinTable.columns.Protein_Acronym == existing_protein_acronym[0])
+            self.dbObject.connection.execute(query)
+
+#        self.update_crystal_plate_widgets()
+
+
+#def update_crystal_plate_widgets():
+#    query = db.select([proteinTable.columns.Protein_Acronym.distinct()])
+#    ResultProxy = connection.execute(query)
+#    existing_protein = [x[0] for x in ResultProxy.fetchall()]
+#    logger.info('found the following protein acronyms in database: ' + str(existing_protein))
+#    select_protein.options = existing_protein
+#
+#    query = db.select([crystal_plate_typeTable.columns.Plate_Name.distinct()])
+#    ResultProxy = connection.execute(query)
+#    existing_plate_types = [x[0] for x in ResultProxy.fetchall()]
+#    logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
+#    select_plate_type.options = existing_plate_types
+
