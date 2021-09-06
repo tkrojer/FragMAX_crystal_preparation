@@ -3,7 +3,7 @@ from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 from IPython.display import display,clear_output
 from tkinter import Tk, filedialog
 import sqlalchemy as db
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import misc
 from beakerx import *
 
@@ -89,26 +89,26 @@ class inspect_plate(object):
             query = db.insert(self.dbObject.markedcrystalTable)
             self.dbObject.connection.execute(query,values_list)
 
-    def show_marked_crystals(self, wellList):
-        magnify = 2
-        out = widgets.Output()
-        fig, ax = plt.subplots()
-        plt.xlim(0,36 * magnify)
-        plt.ylim(0,25 * magnify)
-        ax.set_aspect(1)
-        for c in misc.swiss_ci_layout():
-            well = c[0]
-            x = c[1] * magnify
-            y = c[2] * magnify
-            radius = 0.2 * magnify
-            if c[3] == 'circle' and well in wellList:
-                ax.add_artist(plt.Circle((x, y), radius, color='red'))
-            if c[3] == 'circle' and not well in wellList:
-                ax.add_artist(plt.Circle((x, y), radius, color='gray'))
-            elif c[3] == 'rectangle':
-                ax.add_patch(Rectangle((x-radius, y-radius), radius*2, radius*2,edgecolor='black',facecolor='none',lw=0.2))
-        plt.axis("off")
-        with out:
-            clear_output(wait=True)
-            display(plt.show())
-        self.vbox_cystal_image.children = [out]
+#    def show_marked_crystals(self, wellList):
+#        magnify = 2
+#        out = widgets.Output()
+#        fig, ax = plt.subplots()
+#        plt.xlim(0,36 * magnify)
+#        plt.ylim(0,25 * magnify)
+#        ax.set_aspect(1)
+#        for c in misc.swiss_ci_layout():
+#            well = c[0]
+#            x = c[1] * magnify
+#            y = c[2] * magnify
+#            radius = 0.2 * magnify
+#            if c[3] == 'circle' and well in wellList:
+#                ax.add_artist(plt.Circle((x, y), radius, color='red'))
+#            if c[3] == 'circle' and not well in wellList:
+#                ax.add_artist(plt.Circle((x, y), radius, color='gray'))
+#            elif c[3] == 'rectangle':
+#                ax.add_patch(Rectangle((x-radius, y-radius), radius*2, radius*2,edgecolor='black',facecolor='none',lw=0.2))
+#        plt.axis("off")
+#        with out:
+#            clear_output(wait=True)
+#            display(plt.show())
+#        self.vbox_cystal_image.children = [out]
