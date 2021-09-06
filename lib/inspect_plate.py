@@ -5,7 +5,7 @@ from tkinter import Tk, filedialog
 import sqlalchemy as db
 import matplotlib.pyplot as plt
 import misc
-
+from beakerx import *
 
 class inspect_plate(object):
     def __init__(self, settingsObject, dbObject, logger):
@@ -14,6 +14,29 @@ class inspect_plate(object):
         self.settingsObject = settingsObject
         self.import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter')
         self.import_shifter_marked_crystals_button.on_click(self.import_shifter_marked_crystals)
+
+        n_rows_mounted_crystals = 288
+
+        headerList_mounted_crystals = [
+            'Crystal_ID',
+            'CompoundBatch_ID',
+            'Pin_Barcode',
+            'Puck_Position',
+            'Puck_Name',
+            'Manual_Crystal_ID'
+        ]
+
+        x = []
+
+        for i in range(n_rows_mounted_crystals):
+            m = {}
+            for j in range(len(headerList_mounted_crystals)):
+                key = headerList_mounted_crystals[j]
+                value = "............"  # cannot be space
+                m[key] = value
+            x.append(m)
+
+        self.mounted_crystals_sheet = TableDisplay(x)
 
         self.vbox_cystal_image = widgets.VBox(children=[])
 

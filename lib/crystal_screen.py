@@ -60,15 +60,7 @@ class crystal_screen(object):
         self.import_dragonfly_button.on_click(self.import_dragonfly)
         self.grid_widget[2, 3] = self.import_dragonfly_button
 
-        #
-        # ipysheet
-        #
-
-        # screen_sheet = sheet(rows=96, columns=2, column_headers=['CrystalScreen_Well','CrystalScreen_Condition'])
-        # screen_sheet.layout.height = '350px'   # adjust to monitor size
         df_template = pd.read_csv(self.crystal_plate_template)
-        # screen_sheet = qgrid.show_grid(df, grid_options={'sortable': False})
-        # grid_options={'forceFitColumns': False, 'defaultColumnWidth': 100}
         self.screen_sheet = qgrid.QgridWidget(df=df_template, show_toolbar=False)
 
         self.save_screen_to_db_button = widgets.Button(description='Save CrystalScreen to Database',
