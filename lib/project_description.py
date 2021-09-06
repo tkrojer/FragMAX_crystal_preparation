@@ -13,11 +13,13 @@ import misc
 
 
 class project_description(object):
-    def __init__(self, settingsObject, dbObject, logger, lp3_project_folder, db_template):
+    def __init__(self, settingsObject, dbObject, crystalplateObject, logger, lp3_project_folder, db_template):
 
         self.settings = settingsObject
 
         self.dbObject = dbObject
+
+        self.crystalplateObject = crystalplateObject
 
         self.logger = logger
 
@@ -255,19 +257,19 @@ class project_description(object):
                 self.dbObject.proteinTable.columns.Protein_Acronym == existing_protein_acronym[0])
             self.dbObject.connection.execute(query)
 
-#        self.update_crystal_plate_widgets()
+        self.update_crystal_plate_widgets()
 
 
-#def update_crystal_plate_widgets():
-#    query = db.select([proteinTable.columns.Protein_Acronym.distinct()])
-#    ResultProxy = connection.execute(query)
-#    existing_protein = [x[0] for x in ResultProxy.fetchall()]
-#    logger.info('found the following protein acronyms in database: ' + str(existing_protein))
-#    select_protein.options = existing_protein
-#
-#    query = db.select([crystal_plate_typeTable.columns.Plate_Name.distinct()])
-#    ResultProxy = connection.execute(query)
-#    existing_plate_types = [x[0] for x in ResultProxy.fetchall()]
-#    logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
-#    select_plate_type.options = existing_plate_types
+    def update_crystal_plate_widgets(self):
+        query = db.select([self.dbObject.proteinTable.columns.Protein_Acronym.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        existing_protein = [x[0] for x in ResultProxy.fetchall()]
+        self.logger.info('found the following protein acronyms in database: ' + str(existing_protein))
+        self.crystalplateObject.select_protein.options = existing_protein
+
+        query = db.select([self.dbObject.crystal_plate_typeTable.columns.Plate_Name.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        existing_plate_types = [x[0] for x in ResultProxy.fetchall()]
+        self.logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
+        self.crystalplateObject.select_plate_type.options = existing_plate_types
 
