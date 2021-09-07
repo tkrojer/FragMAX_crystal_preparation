@@ -6,6 +6,8 @@ import sqlalchemy as db
 #import matplotlib.pyplot as plt
 import misc
 from beakerx import *
+import os
+import re
 
 class inspect_plate(object):
     def __init__(self, settingsObject, dbObject, logger):
@@ -15,30 +17,26 @@ class inspect_plate(object):
         self.import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter')
         self.import_shifter_marked_crystals_button.on_click(self.import_shifter_marked_crystals)
 
-        n_rows_mounted_crystals = 288
+        self.n_rows_inspected_wells = 288
 
-        headerList_mounted_crystals = [
-            'Crystal_ID',
-            'CompoundBatch_ID',
-            'Pin_Barcode',
-            'Puck_Position',
-            'Puck_Name',
-            'Manual_Crystal_ID'
+        headerList_inspected_wells = [
+            'CrystalPlate_Barcode',
+            'CrystalPlate_Well',
+            'CrystalPlate_Subwell'
         ]
 
         x = []
-
-        for i in range(n_rows_mounted_crystals):
+        for i in range(self.n_rows_inspected_wells):
             m = {}
-            for j in range(len(headerList_mounted_crystals)):
-                key = headerList_mounted_crystals[j]
+            for j in range(len(headerList_inspected_wells)):
+                key = headerList_inspected_wells[j]
                 value = "............"  # cannot be space
                 m[key] = value
             x.append(m)
 
-        self.mounted_crystals_sheet = TableDisplay(x)
+        self.inspected_wells_sheet = TableDisplay(x)
 
-        self.vbox_cystal_image = widgets.VBox(children=[])
+#        self.vbox_cystal_image = widgets.VBox(children=[])
 
 
     def import_shifter_marked_crystals(self, b):
@@ -52,9 +50,10 @@ class inspect_plate(object):
                                              filetypes=[("Text Files",
                                                          "*.csv")])
 
-        wellList = []
+#        wellList = []
         if os.path.isfile(b.files[0]):
             self.logger.info('loading ' + b.files[0])
+            n = 0
             for line in open(b.files[0]):
                 if line.startswith(';'):
                     continue
@@ -65,11 +64,22 @@ class inspect_plate(object):
                 well = row + column
                 marked_crystal_id = barcode + '-' + well + subwell
                 self.update_marked_crystal_in_db(marked_crystal_id, barcode, well, subwell)
-                wellList.append(well + subwell)
+#                wellList.append(well + subwell)
+                self.inspected_wells_sheet.values[n][0] = barcode
+                self.inspected_wells_sheet.values[n][1] = well
+                self.inspected_wells_sheet.values[n][2] = subwell
+                n += 1
+            self.inspected_wells_sheet.sendModel()
+            if n < self.n_rows_inspected_wells:
+                for i in range(n,self.n_rows_inspected_wells):
+                    self.inspected_wells_sheet.values[n][0] = "............"
+                    self.inspected_wells_sheet.values[n][1] = "............"
+                    self.inspected_wells_sheet.values[n][2] = "............"
+            self.inspected_wells_sheet.sendModel()
         else:
             self.logger.error('cannot read file ' + b.files[0])
 
-        self.show_marked_crystals(wellList)
+#        self.show_marked_crystals(wellList)
 
     def update_marked_crystal_in_db(self, marked_crystal_id, barcode, well, subwell):
         query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
