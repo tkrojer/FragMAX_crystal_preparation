@@ -1,5 +1,6 @@
 import ipywidgets as widgets
 from ipywidgets import HBox, VBox, Layout, IntProgress, Label
+from IPython.display import display,clear_output
 import misc
 import pandas as pd
 import qgrid
@@ -7,6 +8,8 @@ from shutil import copyfile
 from tkinter import Tk, filedialog
 import ntpath
 import sqlalchemy as db
+import os
+
 
 class crystal_screen(object):
     def __init__(self, settingsObject, dbObject, logger, crystal_plate_template):
@@ -66,7 +69,7 @@ class crystal_screen(object):
         self.save_screen_to_db_button = widgets.Button(description='Save CrystalScreen to Database',
                                                   layout=widgets.Layout(height="auto", width="auto"),
                                                   style={'button_color': 'gray'})
-#        self.save_screen_to_db_button.on_click(self.save_screen_to_db)
+        self.save_screen_to_db_button.on_click(self.save_screen_to_db)
 
         self.crystal_screen_progress = IntProgress(min=0, max=95)
 
@@ -176,3 +179,37 @@ class crystal_screen(object):
             self.logger.info('loading ' + dragonflyCSV)
             df = pd.read_csv(dragonflyCSV, sep=',')
             self.screen_sheet.df = df
+
+
+    def save_screen_to_db(self, b):
+        df = self.screen_sheet.get_changed_df()
+        CrystalScreen_Name = self.select_screen.value.replace(' ','')
+        self.logger.info('saving ' + CrystalScreen_Name + ' crystal screen to database')
+
+        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
+
+        for index, row in df.iterrows():
+            self.crystal_screen_progress.value = index
+            condition = df.at[index,'CrystalScreen_Condition']
+            well = df.at[index,'CrystalScreen_Well']
+            self.logger.info("-- {0!s} {1!s}".format(well, condition))
+            screen_id = CrystalScreen_Name + '-' + well
+            if CrystalScreen_Name in existing_crystalscreens:
+                self.logger.warning('crystal screen exists in database; updating records: {0!s} - {1!s}'.format(well, condition))
+                query = db.update(self.dbObject.crystalscreenTable).values(
+                    CrystalScreen_Condition = condition).where(
+                    self.dbObject.crystalscreenTable.columns.CrystalScreen_ID == screen_id)
+                self.dbObject.connection.execute(query)
+            else:
+                self.logger.info('crystal screen does not exist in database; inserting records: {0!s} - {1!s}'.format(well, condition))
+                values_list = [{
+                    'CrystalScreen_Condition': condition,
+                    'CrystalScreen_Well':      well,
+                    'CrystalScreen_Name':      CrystalScreen_Name,
+                    'CrystalScreen_ID':        screen_id
+                }]
+                query = db.insert(self.dbObject.crystalscreenTable)
+                self.dbObject.connection.execute(query,values_list)
+            crystal_screen_progress.value = 0

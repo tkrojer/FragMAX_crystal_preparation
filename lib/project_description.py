@@ -83,7 +83,7 @@ class project_description(object):
         if os.path.isdir(self.settings.db_dir):
             self.logger.warning('DB folder exists: ' + self.settings.db_dir)
         else:
-            self.logger.info('creating DB folder: ' + db_dir)
+            self.logger.info('creating DB folder: ' + self.settings.db_dir)
             os.mkdir(self.settings.db_dir)
             os.mkdir(os.path.join(self.settings.db_dir, 'backup'))
 
@@ -231,12 +231,12 @@ class project_description(object):
             query = db.insert(self.dbObject.projectTable)
             self.dbObject.connection.execute(query, values_list)
         else:
-            logger.info(
-                'updating project information: {0!s}, {1!s}'.format(project_name.value, proposal_id.value.replace(' ', '')))
+            self.logger.info(
+                'updating project information: {0!s}, {1!s}'.format(self.project_name.value, self.proposal_id.value.replace(' ', '')))
             query = db.update(self.dbObject.projectTable).values(
-                Project_Name=project_name.value,
-                Proposal_ID=proposal_id.value.replace(' ', '')).where(
-                projectTable.columns.Proposal_ID == existing_project_id[0])
+                Project_Name=self.project_name.value,
+                Proposal_ID=self.proposal_id.value.replace(' ', '')).where(
+                self.dbObject.projectTable.columns.Proposal_ID == existing_project_id[0])
             self.dbObject.connection.execute(query)
 
         query = db.select([self.dbObject.proteinTable.columns.Protein_Acronym.distinct()])
@@ -245,15 +245,15 @@ class project_description(object):
 
         if existing_protein_acronym == []:
             values_list = [{
-                'Protein_Name': protein_name.value,
-                'Protein_Acronym': protein_acronym.value.replace(' ', '')
+                'Protein_Name': self.protein_name.value,
+                'Protein_Acronym': self.protein_acronym.value.replace(' ', '')
             }]
             query = db.insert(self.dbObject.proteinTable)
             self.dbObject.connection.execute(query, values_list)
         else:
             query = db.update(self.dbObject.proteinTable).values(
-                Protein_Name=protein_name.value,
-                Protein_Acronym=protein_acronym.value.replace(' ', '')).where(
+                Protein_Name=self.protein_name.value,
+                Protein_Acronym=self.protein_acronym.value.replace(' ', '')).where(
                 self.dbObject.proteinTable.columns.Protein_Acronym == existing_protein_acronym[0])
             self.dbObject.connection.execute(query)
 
