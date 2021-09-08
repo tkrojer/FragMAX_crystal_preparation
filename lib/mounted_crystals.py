@@ -1,3 +1,5 @@
+import ipywidgets as widgets
+from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 from IPython.display import display,clear_output
 from tkinter import Tk, filedialog
 import sqlalchemy as db
@@ -38,7 +40,7 @@ class mounted_crystals(object):
 
         self.grid_widget = widgets.GridspecLayout(10, 4)
 
-        self.grid_widget[0:8,0:3] = mounted_crystals_sheet
+        self.grid_widget[0:8,0:3] = self.mounted_crystals_sheet
 
         update_mounted_crystal_table_button = widgets.Button(description='Update table')
         update_mounted_crystal_table_button.on_click(self.update_mounted_crystal_table)
@@ -49,11 +51,11 @@ class mounted_crystals(object):
         self.grid_widget[1,3] = import_mounted_crystals_button
 
         import_manually_mounted_crystals_button = widgets.Button(description='Import manual')
-        import_manually_mounted_crystals_button.on_click(self.import_manually_mounted_crystals)
+#        import_manually_mounted_crystals_button.on_click(self.import_manually_mounted_crystals)
         self.grid_widget[2,3] = import_manually_mounted_crystals_button
 
         save_template_manually_mounted_crystals_button = widgets.Button(description='Save manual template')
-        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
+#        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
         self.grid_widget[3,3] = save_template_manually_mounted_crystals_button
 
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI')
@@ -106,23 +108,18 @@ class mounted_crystals(object):
                 mount_time = re.split(r'[,;]+', line)[9]
                 comment = re.split(r'[,;]+', line)[6]
 
-        "Crystal_ID"
-        "Pin_Barcode"
-        "Puck_Name"
-        "Puck_Position"
-        "Status"
-        "Mount_Date"
-        "Soak_ID"
-        "Cryo"
-        TEXT,
-        "Cryo_Concentration"
-        TEXT,
-        "CompoundBatch_ID"
-        TEXT,
-        "Comment"
-        TEXT,
-        "Manual_Crystal_ID"
-        TEXT,
+#        "Crystal_ID"
+#        "Pin_Barcode"
+#        "Puck_Name"
+#        "Puck_Position"
+#        "Status"
+#        "Mount_Date"
+#        "Soak_ID"
+#        "Cryo"
+#        "Cryo_Concentration"
+#        "CompoundBatch_ID"
+#        "Comment"
+#        "Manual_Crystal_ID"
 
         else:
             logger.error('cannot read file ' + b.files[0])
