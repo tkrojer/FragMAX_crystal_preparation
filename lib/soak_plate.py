@@ -168,15 +168,15 @@ class soak_plate(object):
 
 
     def save_soakplate_csv_files(self, soakRows, soakPlate):
-        if os.path.isfile(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '.csv')):
-            self.logger.warning('soakplate CSV file exists: ' + os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '.csv'))
+        if os.path.isfile(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '_compound.csv')):
+            self.logger.warning('soakplate CSV file exists: ' + os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '_compound.csv'))
             now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            self.logger.info('moving exisiting soakplate CSV file to backup folder as: ' + soakPlate + '.csv.' + now)
-            move(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '.csv'),
-                 os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '.csv.' + now))
+            self.logger.info('moving exisiting soakplate CSV file to backup folder as: ' + soakPlate + '_compound.csv.' + now)
+            move(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '_compound.csv'),
+                 os.path.join(self.settingsObject.workflow_folder, '2-soak', 'backup', soakPlate + '_compound.csv.' + now))
 
         fieldnames = misc.shifter_csv_header()
-        with open(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '.csv'), 'w', encoding='UTF8', newline='') as f:
+        with open(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '_compound.csv'), 'w', encoding='UTF8', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(soakRows)

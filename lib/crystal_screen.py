@@ -89,8 +89,8 @@ class crystal_screen(object):
         query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
         ResultProxy = self.dbObject.connection.execute(query)
         existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
-        select_screen.options = existing_crystalscreens
-        logger.info('updating screen selection dropdown: ' + str(existing_crystalscreens))
+        self.select_screen.options = existing_crystalscreens
+        self.logger.info('updating screen selection dropdown: ' + str(existing_crystalscreens))
 
     def load_screen_from_db(self, b):
         query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
@@ -103,11 +103,11 @@ class crystal_screen(object):
                               self.dbObject.crystalscreenTable.columns.CrystalScreen_Name == self.select_screen.value)
 #            ResultProxy = connection.execute(query)
 #            result = ResultProxy.fetchall()
-            self.logger.info('loading information for screen ' + self.select_screen.value + ' from database')
-            df = pd.read_sql_query(query, engine)
+            self.logger.info('loading information for screen {0!s} from database'.format(self.select_screen.value))
+            df = pd.read_sql_query(query, self.dbObject.engine)
             self.screen_sheet.df = df
         else:
-            self.logger.warning('screen ' + self.select_screen.value + ' does not exist in database; skipping...')
+            self.logger.warning('screen {0!s} does not exist in database; skipping...'.format(self.select_screen.value))
 
     def save_screen_csv(self, b):
         CrystalScreen_Name = self.select_screen.value.replace(' ','')

@@ -280,7 +280,7 @@ class crystal_plate(object):
             now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.logger.info('backing up exisiting file as ' + barcode + '.csv.' + now)
             move(os.path.join(self.settingsObject.workflow_folder, '1-inspect', barcode + '.csv'),
-                 os.path.join(self.settingsObject.workflow_folder, '1-inspect', barcode + '.csv.' + now))
+                 os.path.join(self.settingsObject.workflow_folder, '1-inspect', 'backup', barcode + '.csv.' + now))
         csv = ''
         subwells = []
         if int(subwell_a) != 0:

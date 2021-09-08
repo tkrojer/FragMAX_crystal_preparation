@@ -8,13 +8,18 @@ import misc
 from beakerx import *
 import os
 import re
+import tips
+from shutil import copyfile
+from shutil import move
+from datetime import datetime
 
 class inspect_plate(object):
     def __init__(self, settingsObject, dbObject, logger):
         self.logger = logger
         self.dbObject = dbObject
         self.settingsObject = settingsObject
-        self.import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter')
+        self.import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter',
+                                                                    tooltip=tips.import_shifter_marked_crystals_button_tip())
         self.import_shifter_marked_crystals_button.on_click(self.import_shifter_marked_crystals)
 
         self.n_rows_inspected_wells = 288
@@ -47,35 +52,39 @@ class inspect_plate(object):
         b.files = filedialog.askopenfilename(multiple=True,
                                              initialdir=os.path.join(self.settingsObject.workflow_folder, '1-inspect'),
                                              title="Select file",
-                                             filetypes=[("Text Files",
-                                                         "*.csv")])
+                                             filetypes=[("CSV Files",
+                                                         ".csv")])
 
 #        wellList = []
         if os.path.isfile(b.files[0]):
-            self.logger.info('loading ' + b.files[0])
-            n = 0
-            for line in open(b.files[0]):
-                if line.startswith(';'):
-                    continue
-                barcode = re.split(r'[ ,;]+', line)[1]
-                row = re.split(r'[ ,;]+', line)[3]
-                column = '0' * (2 - len(re.split(r'[ ,;]+', line)[4])) + re.split(r'[ ,;]+', line)[4]
-                subwell = re.split(r'[ ,;]+', line)[5]
-                well = row + column
-                marked_crystal_id = barcode + '-' + well + subwell
-                self.update_marked_crystal_in_db(marked_crystal_id, barcode, well, subwell)
-#                wellList.append(well + subwell)
-                self.inspected_wells_sheet.values[n][0] = barcode
-                self.inspected_wells_sheet.values[n][1] = well
-                self.inspected_wells_sheet.values[n][2] = subwell
-                n += 1
-            self.inspected_wells_sheet.sendModel()
-            if n < self.n_rows_inspected_wells:
-                for i in range(n,self.n_rows_inspected_wells):
-                    self.inspected_wells_sheet.values[n][0] = "............"
-                    self.inspected_wells_sheet.values[n][1] = "............"
-                    self.inspected_wells_sheet.values[n][2] = "............"
-            self.inspected_wells_sheet.sendModel()
+            if not b.files[0].endswith('_inspect.csv'):
+                self.logger.error('selected filename is {0!s}, but file needs to end with _inspect.csv'.format(b.files[0]))
+            else:
+                self.logger.info('loading ' + b.files[0])
+                n = 0
+                for line in open(b.files[0]):
+                    if line.startswith(';'):
+                        continue
+                    barcode = re.split(r'[ ,;]+', line)[1]
+                    row = re.split(r'[ ,;]+', line)[3]
+                    column = '0' * (2 - len(re.split(r'[ ,;]+', line)[4])) + re.split(r'[ ,;]+', line)[4]
+                    subwell = re.split(r'[ ,;]+', line)[5]
+                    well = row + column
+                    marked_crystal_id = barcode + '-' + well + subwell
+                    self.update_marked_crystal_in_db(marked_crystal_id, barcode, well, subwell)
+#                    wellList.append(well + subwell)
+                    self.inspected_wells_sheet.values[n][0] = barcode
+                    self.inspected_wells_sheet.values[n][1] = well
+                    self.inspected_wells_sheet.values[n][2] = subwell
+                    n += 1
+                self.inspected_wells_sheet.sendModel()
+                if n < self.n_rows_inspected_wells:
+                    for i in range(n,self.n_rows_inspected_wells):
+                        self.inspected_wells_sheet.values[n][0] = "............"
+                        self.inspected_wells_sheet.values[n][1] = "............"
+                        self.inspected_wells_sheet.values[n][2] = "............"
+                self.inspected_wells_sheet.sendModel()
+                self.save_csv_file_to_soak_folder(b.files[0])
         else:
             self.logger.error('cannot read file ' + b.files[0])
 
@@ -98,6 +107,17 @@ class inspect_plate(object):
                     }]
             query = db.insert(self.dbObject.markedcrystalTable)
             self.dbObject.connection.execute(query,values_list)
+
+    def save_csv_file_to_soak_folder(self, shifter_csv):
+        self.logger('saving copy of shifter csv file to 2-soak folder...')
+        new_filename = shifter_csv.replace('_inspect.csv', '_crystal.csv')
+        if os.path.isfile(os.path.join(self.settingsObject.workflow_folder, '2-soak', new_filename)):
+            now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            self.logger.warning('file exists: {0!s}; moving existing file to backup folder'.format(new_filename))
+            move(os.path.join(self.settingsObject.workflow_folder, '2-soak', new_filename),
+                 os.path.join(self.settingsObject.workflow_folder, '2-soak', 'backup', new_filename + now))
+        copyfile(os.path.join(self.settingsObject.workflow_folder, '1-inspect', shifter_csv),
+                 os.path.join(self.settingsObject.workflow_folder, '2-soak', new_filename))
 
 #    def show_marked_crystals(self, wellList):
 #        magnify = 2

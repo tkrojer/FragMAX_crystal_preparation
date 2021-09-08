@@ -74,7 +74,7 @@ class project_description(object):
             self.default_folders()
             self.set_db()
             self.project_directory.value = str(self.settings.project_folder)
-#            read_project_from_db()
+            self.read_project_from_db()
         else:
             self.logger.error('selected project folder does not exist: ' + str(b.folder))
 
