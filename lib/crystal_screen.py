@@ -9,6 +9,7 @@ from tkinter import Tk, filedialog
 import ntpath
 import sqlalchemy as db
 import os
+import csv
 
 
 class crystal_screen(object):
@@ -137,7 +138,9 @@ class crystal_screen(object):
             self.logger.info('loading ' + b.files[0])
             self.screen_name.value = ntpath.basename(b.files[0]).split('.')[0]
             self.add_screen_to_dropdown()
-            df = pd.read_csv(b.files[0], sep=';')
+            dialect = csv.Sniffer().sniff(open(b.files[0]).readline(), [',', ';'])
+            df = pd.read_csv(b.files[0], sep=dialect.delimiter)
+#            df = pd.read_csv(b.files[0], sep=';')
             self.screen_sheet.df = df
         else:
             self.logger.error('cannot read file ' + b.files[0])
