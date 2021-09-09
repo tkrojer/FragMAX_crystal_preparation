@@ -128,7 +128,11 @@ class crystal_screen(object):
         root = Tk()
         root.withdraw()
         root.call('wm', 'attributes', '.', '-topmost', True)
-        b.files = filedialog.askopenfilename(multiple=True)
+        b.files = filedialog.askopenfilename(multiple=True,
+                                             initialdir=os.path.join(self.settings.project_folder, 'crystal_screen'),
+                                             title="Select file",
+                                             filetypes=[("Text Files",
+                                                     "*.csv")])
         if os.path.isfile(b.files[0]):
             self.logger.info('loading ' + b.files[0])
             self.screen_name.value = ntpath.basename(b.files[0]).split('.')[0]
@@ -212,4 +216,4 @@ class crystal_screen(object):
                 }]
                 query = db.insert(self.dbObject.crystalscreenTable)
                 self.dbObject.connection.execute(query,values_list)
-            crystal_screen_progress.value = 0
+            self.crystal_screen_progress.value = 0

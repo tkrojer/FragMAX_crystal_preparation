@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS "Project" (
 	"Project_Name"	TEXT,
 	"Proposal_ID"	TEXT,
-	"Project_Description"	TEXT
+	"Project_Description"	TEXT,
+	"Project_Directory"     TEXT
 );
 CREATE TABLE IF NOT EXISTS "People" (
 	"Forename"	TEXT,
@@ -16,10 +17,10 @@ CREATE TABLE IF NOT EXISTS "People" (
 	"Country"	TEXT,
 	"Phone"	TEXT
 );
-CREATE TABLE IF NOT EXISTS "CrystalPlate_type" (
+CREATE TABLE IF NOT EXISTS "CrystalPlateType" (
 	"Plate_Name"	TEXT
 );
-INSERT INTO CrystalPlate_type VALUES('3-drop_SWISSCI');
+
 CREATE TABLE IF NOT EXISTS "Protein" (
 	"Protein_Name"	TEXT,
 	"Protein_Acronym"	TEXT,
@@ -36,13 +37,15 @@ CREATE TABLE IF NOT EXISTS "CompoundTable" (
 	"Smiles"	TEXT,
 	"InChI"	TEXT,
 	"CAS"	TEXT,
+	"Cocktail"  TEXT,
+	"Covalent"  TEXT,
 	PRIMARY KEY("Compound_ID")
 );
 CREATE TABLE IF NOT EXISTS "CompoundBatchTable" (
 	"CompoundBatch_ID"	TEXT,
 	"Compound_ID"	TEXT,
 	"Library_Name"	TEXT,
-	"CompoundPlate_ID"	TEXT,
+	"CompoundPlate_Name"    TEXT,
 	"CompoundPlate_Well" TEXT,
 	"CompoundPlate_Type" TEXT,
 	"State"	TEXT,
@@ -59,6 +62,11 @@ CREATE TABLE IF NOT EXISTS "MountedCrystals" (
 	"Status"	TEXT,
 	"Mount_Date"	TEXT,
 	"Soak_ID"	TEXT,
+	"Cryo"      TEXT,
+	"Cryo_Concentration"    TEXT,
+	"CompoundBatch_ID"  TEXT,
+	"Comment"   TEXT,
+	"Manual_Crystal_ID" TEXT,
 	PRIMARY KEY("Crystal_ID")
 );
 CREATE TABLE IF NOT EXISTS "CrystalForm" (
@@ -89,6 +97,7 @@ CREATE TABLE IF NOT EXISTS "SoakPlate" (
 	"SoakPlate_Name"	TEXT,
 	"SoakPlate_Well"	TEXT,
 	"SoakPlate_Subwell"	TEXT,
+	"CompoundPlate_Name"    TEXT,
 	"CompoundBatch_ID"	TEXT,
 	"Plate_Type"	TEXT,
 	"CrystalBuffer"	TEXT,
@@ -100,10 +109,8 @@ CREATE TABLE IF NOT EXISTS "SoakedCrystals" (
 	"Soak_ID"	TEXT,
 	"MarkedCrystal_ID"	TEXT,
 	"SoakPlate_Condition_ID"	TEXT,
-	"Soaked"	TEXT,
-	"Soak_Date"	TEXT,
-	"Soak_Behaviour"	TEXT,
-	"SoakBatch_ID"	TEXT,
+	"Soak_Time"	TEXT,
+	"Soak_Comment"	TEXT,
 	PRIMARY KEY("Soak_ID")
 );
 CREATE TABLE IF NOT EXISTS "CrystalScreen" (
@@ -118,6 +125,12 @@ CREATE TABLE IF NOT EXISTS "CrystalPlate" (
 	"Protein_Acronym"	TEXT,
 	"Protein_Concentration"	REAL,
 	"CrystalScreen_Name"	TEXT,
+	"Compound1Batch_ID" TEXT,
+	"Compound1_Volume"  REAL,
+	"Compound2Batch_ID" TEXT,
+	"Compound2_Volume"  REAL,
+	"Compound3Batch_ID" TEXT,
+	"Compound3_Volume"  REAL,
 	"Protein_Buffer"	TEXT,
 	"Temperature"	REAL,
 	"Plate_Type"	TEXT,
@@ -133,5 +146,6 @@ CREATE TABLE IF NOT EXISTS "CrystalPlate" (
 	"Subwell_D_Vol_Seed"	REAL,
 	PRIMARY KEY("CrystalPlate_barcode")
 );
+INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-3d');
 COMMIT;
 

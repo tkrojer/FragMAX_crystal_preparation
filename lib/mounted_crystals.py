@@ -90,7 +90,7 @@ class mounted_crystals(object):
         root.withdraw()
         root.call('wm', 'attributes', '.', '-topmost', True)
         b.files = filedialog.askopenfilename(multiple=True,
-                                             initialdir=os.path.join(workflow_folder, '3-mount'),
+                                             initialdir=os.path.join(self.settingsObject.workflow_folder, '3-mount'),
                                              title="Select file",
                                              filetypes=[("Text Files",
                                                      "*.csv")])
