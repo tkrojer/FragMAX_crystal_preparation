@@ -3,6 +3,7 @@ from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 import sqlalchemy as db
 from shutil import move
 from datetime import datetime
+import os
 
 
 class crystal_plate(object):
@@ -154,7 +155,7 @@ class crystal_plate(object):
 
 
     def save_plate_to_db(self, b):
-        self.logger.info('saving information for ' + select_barcode.value + ' to database')
+        self.logger.info('saving information for ' + self.select_barcode.value + ' to database')
         query = db.select([self.dbObject.crystalplateTable.columns.CrystalPlate_Barcode.distinct()])
         ResultProxy = self.dbObject.connection.execute(query)
         existing_barcodes = [x[0] for x in ResultProxy.fetchall()]
@@ -219,7 +220,7 @@ class crystal_plate(object):
         except ValueError:
             _subwell_d_seed = 0.0
 
-        if select_barcode.value in existing_barcodes:
+        if self.select_barcode.value in existing_barcodes:
             self.logger.warning('plate barcode ' + self.select_barcode.value + ' exists in database; updating records...')
             query = db.update(self.dbObject.crystalplateTable).values(
                 Protein_Acronym=self.select_protein.value,
