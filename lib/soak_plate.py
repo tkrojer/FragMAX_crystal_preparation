@@ -1,11 +1,14 @@
 import ipywidgets as widgets
-from ipywidgets import HBox, VBox, Layout, IntProgress, Label
-from IPython.display import display,clear_output
-from tkinter import Tk, filedialog
+#from ipywidgets import HBox, VBox, Layout, IntProgress, Label
+#from IPython.display import display,clear_output
+#from tkinter import Tk, filedialog
 import sqlalchemy as db
-import pandas as pd
+#import pandas as pd
 from datetime import datetime
 import misc
+import os
+import csv
+from shutil import move
 
 
 class soak_plate(object):
@@ -16,7 +19,7 @@ class soak_plate(object):
         self.dbObject = dbObject
 
         self.logger = logger
-        
+
         self.grid_widget = widgets.GridspecLayout(10, 4)
 
         self.grid_widget[0,0] = widgets.Button(description="Enter New Soak Plate Name", 
@@ -96,13 +99,13 @@ class soak_plate(object):
         ResultProxy = self.dbObject.connection.execute(query)
         existing_soakplates = [x[0] for x in ResultProxy.fetchall()]
 
-        df_template = pd.read_csv(crystal_plate_template)
-        for index, row in df_template.iterrows():
-            well = df_template.at[index, 'CrystalScreen_Well']
+#        df_template = pd.read_csv(self.crystal_plate_template)
+#        for index, row in df_template.iterrows():
+#            well = df_template.at[index, 'CrystalScreen_Well']
 
         query = db.select([self.dbObject.compoundbatchTable.columns.CompoundPlate_Well,
-                            compoundbatchTable.columns.CompoundBatch_ID]).where(
-                            compoundbatchTable.columns.CompoundPlate_Name == select_library_plate.value)
+                            self.dbObject.compoundbatchTable.columns.CompoundBatch_ID]).where(
+                            self.dbObject.compoundbatchTable.columns.CompoundPlate_Name == self.select_library_plate.value)
         ResultProxy = self.dbObject.connection.execute(query)
         results = ResultProxy.fetchall()
 
@@ -124,7 +127,7 @@ class soak_plate(object):
             cpd = r[1]
             soakplate_condition_id = self.select_soakplate.value + '-' + well
 
-            if select_soakplate.value in existing_soakplates:
+            if self.select_soakplate.value in existing_soakplates:
                 self.logger.warning('soakplate ' + self.select_soakplate.value + ' exists in database; updating records...')
                 query = db.update(self.dbObject.soakplateTable).values(
                     SoakPlate_Name=self.select_soakplate.value,
@@ -164,7 +167,7 @@ class soak_plate(object):
             }
             soakRows.append(soakRowDict)
 
-        self.save_soakplate_csv_files(soakRows, select_soakplate.value)
+        self.save_soakplate_csv_files(soakRows, self.select_soakplate.value)
 
 
     def save_soakplate_csv_files(self, soakRows, soakPlate):
@@ -180,3 +183,14 @@ class soak_plate(object):
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(soakRows)
+        out = ""
+        with open(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '_compound.csv')) as f:
+            for n, line in enumerate(f):
+                if n == 0:
+                    out = ";" + line
+                else:
+                    out += line
+        f = open(os.path.join(self.settingsObject.workflow_folder, '2-soak', soakPlate + '_compound.csv'), "w")
+        f.write(out)
+        f.close()
+
