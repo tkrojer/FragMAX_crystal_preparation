@@ -38,29 +38,29 @@ class mounted_crystals(object):
 
         self.mounted_crystals_sheet = TableDisplay(x)
 
-        self.grid_widget = widgets.GridspecLayout(10, 4)
+        self.grid_widget = widgets.GridspecLayout(2, 5)
 
-        self.grid_widget[0:8,0:3] = self.mounted_crystals_sheet
+#        self.grid_widget[0:8,0:3] = self.mounted_crystals_sheet
 
         update_mounted_crystal_table_button = widgets.Button(description='Update table')
         update_mounted_crystal_table_button.on_click(self.update_mounted_crystal_table)
-        self.grid_widget[0,3] = update_mounted_crystal_table_button
+        self.grid_widget[0,0] = update_mounted_crystal_table_button
 
         import_mounted_crystals_button = widgets.Button(description='Import from Shifter')
         import_mounted_crystals_button.on_click(self.import_mounted_crystals)
-        self.grid_widget[1,3] = import_mounted_crystals_button
+        self.grid_widget[0,1] = import_mounted_crystals_button
 
         import_manually_mounted_crystals_button = widgets.Button(description='Import manual')
 #        import_manually_mounted_crystals_button.on_click(self.import_manually_mounted_crystals)
-        self.grid_widget[2,3] = import_manually_mounted_crystals_button
+        self.grid_widget[0,2] = import_manually_mounted_crystals_button
 
         save_template_manually_mounted_crystals_button = widgets.Button(description='Save manual template')
 #        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
-        self.grid_widget[3,3] = save_template_manually_mounted_crystals_button
+        self.grid_widget[0,3] = save_template_manually_mounted_crystals_button
 
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI')
         #export_csv_for_exi_button.on_click(self.export_csv_for_exi)
-        self.grid_widget[4,3] = export_csv_for_exi_button
+        self.grid_widget[0,4] = export_csv_for_exi_button
 
     def update_mounted_crystal_table(self, b):
         query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,

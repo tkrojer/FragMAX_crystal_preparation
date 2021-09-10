@@ -12,6 +12,7 @@ import tips
 from shutil import copyfile
 from shutil import move
 from datetime import datetime
+import ntpath
 
 class inspect_plate(object):
     def __init__(self, settingsObject, dbObject, logger):
@@ -84,7 +85,8 @@ class inspect_plate(object):
                         self.inspected_wells_sheet.values[n][1] = "............"
                         self.inspected_wells_sheet.values[n][2] = "............"
                 self.inspected_wells_sheet.sendModel()
-                self.save_csv_file_to_soak_folder(b.files[0])
+                shifter_csv = ntpath.basename(b.files[0])
+                self.save_csv_file_to_soak_folder(shifter_csv)
         else:
             self.logger.error('cannot read file ' + b.files[0])
 
@@ -109,13 +111,14 @@ class inspect_plate(object):
             self.dbObject.connection.execute(query,values_list)
 
     def save_csv_file_to_soak_folder(self, shifter_csv):
-        self.logger('saving copy of shifter csv file to 2-soak folder...')
+        self.logger.info('saving copy of shifter csv file to 2-soak folder...')
         new_filename = shifter_csv.replace('_inspect.csv', '_crystal.csv')
         if os.path.isfile(os.path.join(self.settingsObject.workflow_folder, '2-soak', new_filename)):
             now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             self.logger.warning('file exists: {0!s}; moving existing file to backup folder'.format(new_filename))
             move(os.path.join(self.settingsObject.workflow_folder, '2-soak', new_filename),
                  os.path.join(self.settingsObject.workflow_folder, '2-soak', 'backup', new_filename + now))
+        self.logger.info('saving csv files as {0!a}'.format(new_filename))
         copyfile(os.path.join(self.settingsObject.workflow_folder, '1-inspect', shifter_csv),
                  os.path.join(self.settingsObject.workflow_folder, '2-soak', new_filename))
 
