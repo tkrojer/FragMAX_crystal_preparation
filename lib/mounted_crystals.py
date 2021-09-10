@@ -5,6 +5,8 @@ from tkinter import Tk, filedialog
 import sqlalchemy as db
 import pandas as pd
 from beakerx import *
+import os
+import re
 
 class mounted_crystals(object):
     def __init__(self, settingsObject, dbObject, logger):
