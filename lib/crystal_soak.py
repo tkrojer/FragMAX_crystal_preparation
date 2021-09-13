@@ -97,8 +97,12 @@ class crystal_soak(object):
                         self.prepare_crystal_mount_csv_file(crystal_plate_name)
                     self.update_crystal_mount_csv_file(crystal_plate_name, plate_type, crystal_plate_row, crystal_plate_column, crystal_plate_subwell)
 
+#                    soakplate_condition_id = compound_plate_name + '-' + compound_plate_row + \
+#                                             compound_plate_column + compound_plate_subwell
+
+                    # subwell is omitted for the time being since only one subwell is used for soaking
                     soakplate_condition_id = compound_plate_name + '-' + compound_plate_row + \
-                                             compound_plate_column + compound_plate_subwell
+                                             compound_plate_column
 
                     marked_crystal_id = crystal_plate_name + '-' + crystal_plate_row + \
                                         crystal_plate_column + crystal_plate_subwell

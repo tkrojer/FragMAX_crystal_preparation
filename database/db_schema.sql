@@ -59,13 +59,14 @@ CREATE TABLE IF NOT EXISTS "MountedCrystals" (
 	"Pin_Barcode"	TEXT,
 	"Puck_Name"	TEXT,
 	"Puck_Position"	TEXT,
-	"Status"	TEXT,
 	"Mount_Date"	TEXT,
-	"Soak_ID"	TEXT,
+	"SoakPlate_Condition_ID"	TEXT,
+	"MarkedCrystal_ID"	TEXT,
 	"Cryo"      TEXT,
 	"Cryo_Concentration"    TEXT,
 	"CompoundBatch_ID"  TEXT,
 	"Comment"   TEXT,
+	"Shipment"  TEXT,
 	"Manual_Crystal_ID" TEXT,
 	PRIMARY KEY("Crystal_ID")
 );

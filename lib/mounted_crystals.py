@@ -49,11 +49,11 @@ class mounted_crystals(object):
         self.grid_widget[0,0] = update_mounted_crystal_table_button
 
         import_mounted_crystals_button = widgets.Button(description='Import from Shifter')
-        import_mounted_crystals_button.on_click(self.import_mounted_crystals)
+        import_mounted_crystals_button.on_click(self.shifter_mounted_crystals)
         self.grid_widget[0,1] = import_mounted_crystals_button
 
         import_manually_mounted_crystals_button = widgets.Button(description='Import manual')
-#        import_manually_mounted_crystals_button.on_click(self.import_manually_mounted_crystals)
+        import_manually_mounted_crystals_button.on_click(self.manual_mounted_crystals)
         self.grid_widget[0,2] = import_manually_mounted_crystals_button
 
         save_template_manually_mounted_crystals_button = widgets.Button(description='Save manual template')
@@ -64,73 +64,126 @@ class mounted_crystals(object):
         #export_csv_for_exi_button.on_click(self.export_csv_for_exi)
         self.grid_widget[0,4] = export_csv_for_exi_button
 
-    def update_mounted_crystal_table(self, b):
-        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,
-                             self.dbObject.mountedcrystalTable.columns.CompoundBatch_ID,
-                             self.dbObject.mountedcrystalTable.columns.Pin_Barcode,
-                             self.dbObject.mountedcrystalTable.columns.Puck_Position,
-                             self.dbObject.mountedcrystalTable.columns.Puck_Name,
-                             self.dbObject.mountedcrystalTable.columns.Manual_Crystal_ID]).order_by(
-                             self.dbObject.mountedcrystalTable.columns.Crystal_ID.asc())
-        df = pd.read_sql_query(query, self.dbObject.engine)
-        for index, row in df.iterrows():
-            self.mounted_crystals_sheet.updateCell(index,"Crystal_ID",df.at[index,'Crystal_ID'])
-            if df.at[index,'CompoundBatch_ID'] is None:
-                self.mounted_crystals_sheet.values[index][1] = 'None'
-            else:
-                self.mounted_crystals_sheet.values[index][1] = df.at[index,'CompoundBatch_ID']
-            self.mounted_crystals_sheet.values[index][2] = df.at[index,'Pin_Barcode']
-            self.mounted_crystals_sheet.values[index][3] = df.at[index,'Puck_Position']
-            self.mounted_crystals_sheet.values[index][4] = df.at[index,'Puck_Name']
-            self.mounted_crystals_sheet.values[index][5] = df.at[index,'Manual_Crystal_ID']
-        self.mounted_crystals_sheet.sendModel()
 
+    def shifter_mounted_crystals(self, b):
+        folder = '3-mount'
+        self.import_mounted_crystals(folder)
 
-    def import_mounted_crystals(self, b):
+    def manual_mounted_crystals(self, b):
+        folder = '4-mount-manual'
+        self.import_mounted_crystals(folder)
+
+    def import_mounted_crystals(self, folder):
         clear_output()
         root = Tk()
         root.withdraw()
         root.call('wm', 'attributes', '.', '-topmost', True)
         b.files = filedialog.askopenfilename(multiple=True,
-                                             initialdir=os.path.join(self.settingsObject.workflow_folder, '3-mount'),
+                                             initialdir=os.path.join(self.settingsObject.workflow_folder, folder),
                                              title="Select file",
                                              filetypes=[("Text Files",
                                                      "*.csv")])
+        if folder == '3-mount':
+            self.logger.error('sorry, does not work')
+        elif folder == '4-mount-manual':
+            self.logger.info('reading CSV file of manually mounted crystals from CSV file: ' + b.files[0])
+            df = pd.read_csv(b.files[0], sep=';')
+            self.update_db_with_manually_mounted_crystals(df)
 
-        if os.path.isfile(b.files[0]):
-            self.logger.info('loading ' + b.files[0])
-            df = pd.DataFrame()
-            for line in open(b.files[0]):
-                if line.startswith(';'):
-                    continue
-                plate_name = re.split(r'[,;]+', line)[1]
-                plate_row = re.split(r'[,;]+', line)[3]
-                plate_column = '0' * (2 - len(re.split(r'[,;]+', line)[4])) + re.split(r'[,;]+', line)[4]
-                plate_subwell = re.split(r'[,;]+', line)[5]
-                mount_time = re.split(r'[,;]+', line)[9]
-                comment = re.split(r'[,;]+', line)[6]
 
-#        "Crystal_ID"
-#        "Pin_Barcode"
-#        "Puck_Name"
-#        "Puck_Position"
-#        "Status"
-#        "Mount_Date"
-#        "Soak_ID"
-#        "Cryo"
-#        "Cryo_Concentration"
-#        "CompoundBatch_ID"
-#        "Comment"
-#        "Manual_Crystal_ID"
+    def read_shifter_csv(self):
+        for line in open(b.files[0]):
+            if line.startswith(';'):
+                continue
+            plate_name = re.split(r'[,;]+', line)[1]
+            plate_row = re.split(r'[,;]+', line)[3]
+            plate_column = '0' * (2 - len(re.split(r'[,;]+', line)[4])) + re.split(r'[,;]+', line)[4]
+            plate_subwell = re.split(r'[,;]+', line)[5]
+            mount_time = re.split(r'[,;]+', line)[9]
+            comment = re.split(r'[,;]+', line)[6]
+            if 'fail' in comment.lower():
+                self.error('mounting failed; skipping...')
+                continue
+            puck_name = re.split(r'[,;]+', line)[11]
+            puck_position = re.split(r'[,;]+', line)[12]
 
+            marked_crystal_id = plate_name + '-' + plate_row + \
+                                plate_column + plate_subwell
+
+            CompoundBatch_ID = None
+            SoakPlate_Condition_ID = None
+
+            query = db.select([self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID]).where(
+                self.dbObject.soakedcrystalTable.columns.MarkedCrystal_ID == marked_crystal_id)
+            ResultProxy = self.dbObject.connection.execute(query)
+            result = ResultProxy.fetchall()
+            if result:
+                SoakPlate_Condition_ID = result[0][0]
+
+            if SoakPlate_Condition_ID:
+                query = self.db.select([dbObject.soakplateTable.columns.CompoundBatch_ID]).where(
+                    self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID == SoakPlate_Condition_ID)
+                ResultProxy = self.dbObject.connection.execute(query)
+                result = ResultProxy.fetchall()
+                if result:
+                    CompoundBatch_ID = result[0][0]
+
+            query = self.db.select([dbObject.mountedcrystalTable.columns.Crystal_ID]).where(
+                self.dbObject.mountedcrystalTable.columns.Mount_Date == mount_time)
+            ResultProxy = self.dbObject.connection.execute(query)
+            result = ResultProxy.fetchall()
+            if result:
+                self.logger.warning('mounted crystal ID is already in DB'.format(result[0][0]))
+            else:
+                # latest crystal ID
+                last_crystal_id = self.get_last_crystal_id(proteinacronym)
+                next_crystal_number = int(last_crystal_id.split('-')[1].replace('x', '')) + 1
+                Crystal_ID = str(proteinacronym) + '-x' + '0' * (4 - len(str(next_crystal_number))) + str(
+                    next_crystal_number)
+                values_list = [{
+                    'Crystal_ID':               Crystal_ID,
+                    "Pin_Barcode":              None,
+                    "Puck_Name":                puck_name,
+                    "Puck_Position":            puck_position,
+                    "Mount_Date":               mount_time,
+                    "Cryo":                     None,
+                    "Cryo_Concentration":       None,
+                    "CompoundBatch_ID":         CompoundBatch_ID,
+                    "Comment":                  comment,
+                    "Manual_Crystal_ID":        None,
+                    'MarkedCrystal_ID':         marked_crystal_id,
+                    'SoakPlate_Condition_ID':   SoakPlate_Condition_ID
+                }]
+                query = db.insert(self.dbObject.markedcrystalTable)
+                self.dbObject.connection.execute(query,values_list)
+
+
+
+    def get_last_crystal_id(self, proteinacronym):
+        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID.distinct()]).order_by(
+            self.dbObject.mountedcrystalTable.columns.Crystal_ID.desc()).limit(1)
+        ResultProxy = self.dbObject.connection.execute(query)
+        result = ResultProxy.fetchall()
+        if result:
+            last_crystal_id = result[0][0]
         else:
-            logger.error('cannot read file ' + b.files[0])
+            last_crystal_id = proteinacronym + '-x0000'
+        return last_crystal_id
+
+    def get_protein_acronym(self):
+        query = db.select([self.dbObject.proteinTable.columns.Protein_Acronym.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        result = ResultProxy.fetchall()
+        if result:
+            proteinacronym = result[0][0]
+        else:
+            proteinacronym = None
+        return proteinacronym
 
 
-    def insert_mounted_crystals_in_db(self, df):
+    def update_db_with_manually_mounted_crystals(self, df):
 
-        proteinacronym = None
-        # query protein acronym
+        proteinacronym = get_protein_acronym()
         if proteinacronym is None:
             self.logger.error('Please enter and save protein acronym in "Project Description" tab and then try again')
             pass
@@ -146,10 +199,7 @@ class mounted_crystals(object):
         marked_crystals = [x[0] for x in ResultProxy.fetchall()]
 
         # latest crystal ID
-        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID.distinct()]).order_by(
-            self.dbObject.mountedcrystalTable.columns.Crystal_ID.desc()).limit(1)
-        ResultProxy = self.dbObject.connection.execute(query)
-        last_crystal_id = ResultProxy.fetchall()[0][0]
+        last_crystal_id = self.get_last_crystal_id(proteinacronym)
         next_crystal_number = int(last_crystal_id.split('-')[1].replace('x', '')) + 1
 
         for index, row in df.iterrows():
@@ -160,7 +210,7 @@ class mounted_crystals(object):
             ResultProxy = connection.execute(query)
             existing_crystal_plates = [x[0] for x in ResultProxy.fetchall()]
             if barcode not in existing_crystal_plates:
-                logger.error(
+                self.logger.error(
                     'barcode {0!s} not registered in database; please add crystal plate before registering mounted crystals...'.format(
                         barcode))
                 continue
@@ -173,15 +223,15 @@ class mounted_crystals(object):
                 subwell = df.at[index, 'CrystalPlate_Subwell']
                 marked_crystal_id = barcode + '-' + well + subwell
                 if marked_crystal_id not in marked_crystals:
-                    logger.info('marking crystal for mounting/ soaking in database: ' + marked_crystal_id)
+                    self.logger.info('marking crystal for mounting/ soaking in database: ' + marked_crystal_id)
                     values_list = [{
                         'MarkedCrystal_ID': marked_crystal_id,
                         'CrystalPlate_Barcode': barcode,
                         'CrystalPlate_Well': well,
                         'CrystalPlate_Subwell': subwell
                     }]
-                    query = db.insert(markedcrystalTable)
-                    ResultProxy = connection.execute(query, values_list)
+                    query = db.insert(self.dbObject.markedcrystalTable)
+                    self.dbObject.connection.execute(query, values_list)
             except TypeError:
                 logger.error(
                     'there is something wrong with well and/ or subwell description: well = {0!s}, subwell = {1!s}; please correct!'.format(
@@ -189,8 +239,8 @@ class mounted_crystals(object):
                 continue
 
             if Manual_Crystal_ID in existing_manually_mounted_crystals:
-                logger.warning('updating records for manually mounted crystal: {0!s}'.format(well, condition))
-                query = db.update(mountedcrystalTable).values(
+                self.logger.warning('updating records for manually mounted crystal: {0!s}'.format(well, condition))
+                query = db.update(self.dbObject.mountedcrystalTable).values(
                     Pin_Barcode=df.at[index, 'Pin_Barcode'],
                     Puck_Name=df.at[index, 'Puck_Name'],
                     Puck_Position=df.at[index, 'Puck_Position'],
@@ -199,12 +249,12 @@ class mounted_crystals(object):
                     Cryo_Concentration=df.at[index, 'Cryo_Concentration'],
                     Comment=df.at[index, 'Comment']
                 ).where(
-                    mountedcrystalTable.columns.Manual_Crystal_ID == Manual_Crystal_ID)
-                results = connection.execute(query)
+                    self.dbObject.mountedcrystalTable.columns.Manual_Crystal_ID == Manual_Crystal_ID)
+                self.dbObject.connection.execute(query)
             else:
                 Crystal_ID = str(proteinacronym) + '-x' + '0' * (4 - len(str(next_crystal_number))) + str(
                     next_crystal_number)
-                logger.info('inserting new records for manually mounted crystal: {0!s} as {1!s}'.format(Manual_Crystal_ID,
+                self.logger.info('inserting new records for manually mounted crystal: {0!s} as {1!s}'.format(Manual_Crystal_ID,
                                                                                                     Crystal_ID))
                 values_list = [{
                     'Manual_Crystal_ID': Manual_Crystal_ID,
@@ -217,7 +267,10 @@ class mounted_crystals(object):
                     'Cryo_Concentration': df.at[index, 'Cryo_Concentration'],
                     'Comment': df.at[index, 'Comment']
                 }]
-                query = db.insert(mountedcrystalTable)
-                ResultProxy = connection.execute(query, values_list)
+                query = db.insert(self.dbObject.mountedcrystalTable)
+                self.dbObject.connection.execute(query, values_list)
 
                 next_crystal_number += 1
+
+    def update_mounted_crystal_table(self):
+        self.logger.info('implementation pending...')
