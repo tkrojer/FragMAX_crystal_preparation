@@ -13,3 +13,4 @@ class db_objects(object):
         self.compoundbatchTable = None
         self.soakedcrystalTable = None
         self.mountedcrystalTable = None
+

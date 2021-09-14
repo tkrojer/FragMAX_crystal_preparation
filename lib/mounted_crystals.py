@@ -67,13 +67,13 @@ class mounted_crystals(object):
 
     def shifter_mounted_crystals(self, b):
         folder = '3-mount'
-        self.import_mounted_crystals(folder)
+        self.import_mounted_crystals(folder, b)
 
     def manual_mounted_crystals(self, b):
         folder = '4-mount-manual'
-        self.import_mounted_crystals(folder)
+        self.import_mounted_crystals(folder, b)
 
-    def import_mounted_crystals(self, folder):
+    def import_mounted_crystals(self, folder, b):
         clear_output()
         root = Tk()
         root.withdraw()
@@ -85,14 +85,16 @@ class mounted_crystals(object):
                                                      "*.csv")])
         if folder == '3-mount':
             self.logger.error('sorry, does not work')
+            self.read_shifter_csv(b.files[0])
         elif folder == '4-mount-manual':
             self.logger.info('reading CSV file of manually mounted crystals from CSV file: ' + b.files[0])
             df = pd.read_csv(b.files[0], sep=';')
             self.update_db_with_manually_mounted_crystals(df)
 
 
-    def read_shifter_csv(self):
-        for line in open(b.files[0]):
+    def read_shifter_csv(self, shifter_csv_file):
+        proteinacronym = self.get_protein_acronym()
+        for line in open(shifter_csv_file):
             if line.startswith(';'):
                 continue
             plate_name = re.split(r'[,;]+', line)[1]
@@ -121,14 +123,14 @@ class mounted_crystals(object):
                 SoakPlate_Condition_ID = result[0][0]
 
             if SoakPlate_Condition_ID:
-                query = self.db.select([dbObject.soakplateTable.columns.CompoundBatch_ID]).where(
+                query = db.select([self.dbObject.soakplateTable.columns.CompoundBatch_ID]).where(
                     self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID == SoakPlate_Condition_ID)
                 ResultProxy = self.dbObject.connection.execute(query)
                 result = ResultProxy.fetchall()
                 if result:
                     CompoundBatch_ID = result[0][0]
 
-            query = self.db.select([dbObject.mountedcrystalTable.columns.Crystal_ID]).where(
+            query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID]).where(
                 self.dbObject.mountedcrystalTable.columns.Mount_Date == mount_time)
             ResultProxy = self.dbObject.connection.execute(query)
             result = ResultProxy.fetchall()
@@ -154,7 +156,7 @@ class mounted_crystals(object):
                     'MarkedCrystal_ID':         marked_crystal_id,
                     'SoakPlate_Condition_ID':   SoakPlate_Condition_ID
                 }]
-                query = db.insert(self.dbObject.markedcrystalTable)
+                query = db.insert(self.dbObject.mountedcrystalTable)
                 self.dbObject.connection.execute(query,values_list)
 
 

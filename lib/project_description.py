@@ -149,7 +149,7 @@ class project_description(object):
             self.logger.warning('DB file does not exist: ' + self.settings.db_file)
             self.logger.info('copying DB template file from ' + self.db_template + ' to ' + self.settings.db_file)
             copyfile(self.db_template, self.settings.db_file)
-        self.init_db()
+        self.check_db_exists()
 
 
     def init_db(self):
@@ -179,6 +179,30 @@ class project_description(object):
         self.dbObject.mountedcrystalTable = db.Table('MountedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.logger.info('finished initializing DB')
+
+
+    def check_db_exists(self):
+        self.logger.info("checking if database exists in {0!s}".format(self.settings.db_file))
+        if os.path.isfile(self.settings.db_file):
+            self.logger.info("found database file")
+            self.init_db()
+        else:
+            self.logger.warning("cannot find database file")
+            self.create_new_db()
+
+    def create_new_db(self):
+
+    # connection = sqlite3. connect(":memory:") ...
+    # cursor = connection. cursor()
+    # sql_file = open("sample.sql")
+    # sql_as_string = sql_file. read()
+    # cursor. executescript(sql_as_string)
+
+    def populate_compoundbatchTable(self):
+
+    def populate_compoundTable(self):
+
+
 
     def backup_db(self):
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
