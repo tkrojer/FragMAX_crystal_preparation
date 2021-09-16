@@ -148,5 +148,4 @@ CREATE TABLE IF NOT EXISTS "CrystalPlate" (
 	PRIMARY KEY("CrystalPlate_barcode")
 );
 INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-3d');
-COMMIT;
 

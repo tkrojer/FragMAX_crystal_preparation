@@ -7,6 +7,7 @@ import pandas as pd
 from beakerx import *
 import os
 import re
+from datetime import datetime
 
 class mounted_crystals(object):
     def __init__(self, settingsObject, dbObject, logger):
@@ -61,7 +62,7 @@ class mounted_crystals(object):
         self.grid_widget[0,3] = save_template_manually_mounted_crystals_button
 
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI')
-        #export_csv_for_exi_button.on_click(self.export_csv_for_exi)
+        export_csv_for_exi_button.on_click(self.export_csv_for_exi)
         self.grid_widget[0,4] = export_csv_for_exi_button
 
 
@@ -84,7 +85,7 @@ class mounted_crystals(object):
                                              filetypes=[("Text Files",
                                                      "*.csv")])
         if folder == '3-mount':
-            self.logger.error('sorry, does not work')
+            self.logger.info('reading CSV file of shifter mounted crystals from CSV file: ' + b.files[0])
             self.read_shifter_csv(b.files[0])
         elif folder == '4-mount-manual':
             self.logger.info('reading CSV file of manually mounted crystals from CSV file: ' + b.files[0])
@@ -276,3 +277,53 @@ class mounted_crystals(object):
 
     def update_mounted_crystal_table(self):
         self.logger.info('implementation pending...')
+
+    def update_shipment_in_db(self, shipment, Crystal_ID):
+        self.logger.info('updating shipment information for {0!s} in DB: {1!s}'.format(Crystal_ID, shipment))
+        query = db.update(self.dbObject.mountedcrystalTable).values(Shipment=shipment).where(
+            self.dbObject.mountedcrystalTable.columns.Crystal_ID == Crystal_ID)
+        self.dbObject.connection.execute(query)
+
+    def save_shipment_csv_file(self, shipment, exi_csv):
+        if exi_csv != '':
+            self.logger.info('saving CSV file for upload to EXI: {0!s}'.format(
+                os.path.join(self.settingsObject.workflow_folder, '5-exi', shipment + '.csv')))
+            f = open(os.path.join(self.settingsObject.workflow_folder, '5-exi', shipment + '.csv'), 'w')
+            f.write(exi_csv)
+            f.close()
+        else:
+            self.logger.error('CSV file is empty; aborting save...')
+
+    def export_csv_for_exi(self, b):
+        self.logger.info('preparing CSV file for upload to EXI...')
+        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,
+                           self.dbObject.mountedcrystalTable.columns.Puck_Name,
+                           self.dbObject.mountedcrystalTable.columns.Puck_Position]).\
+            where(self.dbObject.mountedcrystalTable.columns.Shipment == None).\
+            order_by(self.dbObject.mountedcrystalTable.columns.Puck_Name.asc(),
+                    self.dbObject.mountedcrystalTable.columns.Puck_Position.asc())
+        ResultProxy = self.dbObject.connection.execute(query)
+        result = ResultProxy.fetchall()
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        shipment = 'shipment_' + now
+        exi_csv = ''
+
+        # increment if 7 pucks in dewar
+        puckList = []
+        dewar_number = 1
+
+        for r in result:
+            Crystal_ID = r[0]
+            puck = r[1]
+            if puck not in puckList and len(puckList) < 8:
+                puckList.append(puck)
+            elif len(puckList) == 8:
+                puckList = [puck]
+                dewar_number += 1
+            position = r[2]
+            proteinacronym = Crystal_ID.split('-')[0]
+            sample = Crystal_ID.split('-')[1]
+            self.logger.info('{0!s} {1!s} {2!s} {3!s} {4!s}'.format(puck, position, Crystal_ID, proteinacronym, sample))
+            self.update_shipment_in_db(shipment, Crystal_ID)
+            exi_csv += 'Dewar{0!s},{1!s},Unipuck,{2!s},{3!s},{4!s},,,,,,,,\n'.format(dewar_number, puck, position, proteinacronym, sample)
+        self.save_shipment_csv_file(shipment, exi_csv)

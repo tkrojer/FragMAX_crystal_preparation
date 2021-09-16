@@ -7,13 +7,16 @@ import sqlalchemy as db
 from shutil import copyfile
 from shutil import move
 from datetime import datetime
+import sqlite3
+import csv
 
 import os
 import misc
 
 
 class project_description(object):
-    def __init__(self, settingsObject, dbObject, crystalplateObject, logger, lp3_project_folder, db_template):
+    def __init__(self, settingsObject, dbObject, crystalplateObject, logger, lp3_project_folder,
+                 db_sql, compoundTable_csv, compoundBatchTable_csv):
 
         self.settings = settingsObject
 
@@ -25,7 +28,11 @@ class project_description(object):
 
         self.lp3_project_folder = lp3_project_folder
 
-        self.db_template = db_template
+        self.db_sql = db_sql
+
+        self.compoundTable_csv = compoundTable_csv
+
+        self.compoundBatchTable_csv = compoundBatchTable_csv
 
         self.grid_widget = widgets.GridspecLayout(6, 4)
 
@@ -72,7 +79,7 @@ class project_description(object):
         if os.path.isdir(b.folder):
             self.settings.project_folder = b.folder
             self.default_folders()
-            self.set_db()
+            self.prepare_db()
             self.project_directory.value = str(self.settings.project_folder)
             self.read_project_from_db()
         else:
@@ -140,16 +147,13 @@ class project_description(object):
             os.mkdir(workflow_mount_manual_folder)
             os.mkdir(os.path.join(workflow_mount_manual_folder, 'backup'))
 
-    def set_db(self):
-        self.settings.db_file = os.path.join(self.settings.project_folder, 'database', 'fragmax.sqlite')
-        if os.path.isfile(self.settings.db_file):
-            self.logger.info('found DB file: ' + self.settings.db_file)
-            self.backup_db()
+        workflow_exi_folder = os.path.join(self.settings.project_folder, 'workflow', '5-exi')
+        if os.path.isdir(workflow_exi_folder):
+            self.logger.warning('workflow/5-exi folder exists: ' + workflow_exi_folder)
         else:
-            self.logger.warning('DB file does not exist: ' + self.settings.db_file)
-            self.logger.info('copying DB template file from ' + self.db_template + ' to ' + self.settings.db_file)
-            copyfile(self.db_template, self.settings.db_file)
-        self.check_db_exists()
+            self.logger.info('creating workflow/5-exi folder: ' + workflow_exi_folder)
+            os.mkdir(workflow_exi_folder)
+            os.mkdir(os.path.join(workflow_exi_folder, 'backup'))
 
 
     def init_db(self):
@@ -181,9 +185,10 @@ class project_description(object):
         self.logger.info('finished initializing DB')
 
 
-    def check_db_exists(self):
+    def prepare_db(self):
+        self.settings.db_file = os.path.join(self.settings.db_dir, 'fragmax.sqlite')
         self.logger.info("checking if database exists in {0!s}".format(self.settings.db_file))
-        if os.path.isfile(self.settings.db_file):
+        if os.path.isfile(str(self.settings.db_file)):
             self.logger.info("found database file")
             self.init_db()
         else:
@@ -191,18 +196,37 @@ class project_description(object):
             self.create_new_db()
 
     def create_new_db(self):
-
-    # connection = sqlite3. connect(":memory:") ...
-    # cursor = connection. cursor()
-    # sql_file = open("sample.sql")
-    # sql_as_string = sql_file. read()
-    # cursor. executescript(sql_as_string)
+        self.logger.info('creating new database file in {0!s}'.format(self.settings.db_file))
+        connect = sqlite3.connect(self.settings.db_file)
+        cursor = connect.cursor()
+        sql_file = open(self.db_sql)
+        self.logger.info('--> ' + self.db_sql)
+        sql_as_string = sql_file.read()
+        cursor.executescript(sql_as_string)
+        connect.commit()
+        self.populate_compoundTable()
+        self.populate_compoundbatchTable()
+        self.init_db()
 
     def populate_compoundbatchTable(self):
+        self.logger.info('populating compoundBatchTable with {0!s}'.format(self.compoundBatchTable_csv))
+        connect = sqlite3.connect(self.settings.db_file)
+        cursor = connect.cursor()
+        csv_file = open(self.compoundBatchTable_csv)
+        rows = csv.reader(csv_file)
+        next(rows, None)  # skip the headers
+        cursor.executemany("INSERT INTO CompoundBatchTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rows)
+        connect.commit()
 
     def populate_compoundTable(self):
-
-
+        self.logger.info('populating compoundTable with {0!s}'.format(self.compoundTable_csv))
+        connect = sqlite3.connect(self.settings.db_file)
+        cursor = connect.cursor()
+        csv_file = open(self.compoundTable_csv)
+        rows = csv.reader(csv_file)
+        next(rows, None)  # skip the headers
+        cursor.executemany("INSERT INTO CompoundTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", rows)
+        connect.commit()
 
     def backup_db(self):
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
