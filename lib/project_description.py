@@ -212,21 +212,31 @@ class project_description(object):
         self.logger.info('populating compoundBatchTable with {0!s}'.format(self.compoundBatchTable_csv))
         connect = sqlite3.connect(self.settings.db_file)
         cursor = connect.cursor()
-        csv_file = open(self.compoundBatchTable_csv)
-        rows = csv.reader(csv_file)
-        next(rows, None)  # skip the headers
-        cursor.executemany("INSERT INTO CompoundBatchTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rows)
+        with open(self.compoundBatchTable_csv) as f:
+            data = csv.DictReader(f)
+            cols = data.fieldnames
+            sql = 'insert into "CompoundBatchTable" values ( {vals} )'.format(
+                vals=','.join('?' for col in cols))
+            cursor.executemany(sql, (list(map(row.get, cols)) for row in data))
         connect.commit()
+#        csv_file = open(self.compoundBatchTable_csv)
+#        rows = csv.reader(csv_file)
+#        next(rows, None)  # skip the headers
+#        cursor.executemany("INSERT INTO CompoundBatchTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rows)
+#        connect.commit()
 
     def populate_compoundTable(self):
         self.logger.info('populating compoundTable with {0!s}'.format(self.compoundTable_csv))
         connect = sqlite3.connect(self.settings.db_file)
         cursor = connect.cursor()
-        csv_file = open(self.compoundTable_csv)
-        rows = csv.reader(csv_file)
-        next(rows, None)  # skip the headers
-        cursor.executemany("INSERT INTO CompoundTable VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", rows)
+        with open(self.compoundTable_csv) as f:
+            data = csv.DictReader(f)
+            cols = data.fieldnames
+            sql = 'insert into "CompoundTable" values ( {vals} )'.format(
+                vals=','.join('?' for col in cols))
+            cursor.executemany(sql, (list(map(row.get, cols)) for row in data))
         connect.commit()
+
 
     def backup_db(self):
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

@@ -18,9 +18,9 @@ class mounted_crystals(object):
 
         self.logger = logger
 
-        n_rows_mounted_crystals = 1000
+        self.n_rows_mounted_crystals = 1000
 
-        headerList_mounted_crystals = [
+        self.headerList_mounted_crystals = [
         'Crystal_ID',
         'CompoundBatch_ID',
         'Pin_Barcode',
@@ -31,10 +31,10 @@ class mounted_crystals(object):
 
         x = []
 
-        for i in range(n_rows_mounted_crystals):
+        for i in range(self.n_rows_mounted_crystals):
             m = {}
-            for j in range(len(headerList_mounted_crystals)):
-                key = headerList_mounted_crystals[j]
+            for j in range(len(self.headerList_mounted_crystals)):
+                key = self.headerList_mounted_crystals[j]
                 value = "............"     # cannot be space
                 m[key] = value
             x.append(m)
@@ -98,20 +98,25 @@ class mounted_crystals(object):
         for line in open(shifter_csv_file):
             if line.startswith(';'):
                 continue
-            plate_name = re.split(r'[,;]+', line)[1]
-            plate_row = re.split(r'[,;]+', line)[3]
-            plate_column = '0' * (2 - len(re.split(r'[,;]+', line)[4])) + re.split(r'[,;]+', line)[4]
-            plate_subwell = re.split(r'[,;]+', line)[5]
-            mount_time = re.split(r'[,;]+', line)[9]
-            comment = re.split(r'[,;]+', line)[6]
-            if 'fail' in comment.lower():
-                self.error('mounting failed; skipping...')
-                continue
-            puck_name = re.split(r'[,;]+', line)[11]
-            puck_position = re.split(r'[,;]+', line)[12]
+#            self.logger.info(str(line.split(';')))
+            try:
+                plate_name = re.split(r'[,;]+', line)[1]
+                plate_row = re.split(r'[,;]+', line)[3]
+                plate_column = '0' * (2 - len(re.split(r'[,;]+', line)[4])) + re.split(r'[,;]+', line)[4]
+                plate_subwell = re.split(r'[,;]+', line)[5]
+                mount_time = re.split(r'[,;]+', line)[9]
+                comment = re.split(r'[,;]+', line)[6]
+                if 'fail' in comment.lower():
+                    self.logger.error('mounting failed; skipping...')
+                    continue
+                puck_name = re.split(r'[,;]+', line)[11]
+                puck_position = re.split(r'[,;]+', line)[12]
 
-            marked_crystal_id = plate_name + '-' + plate_row + \
-                                plate_column + plate_subwell
+                marked_crystal_id = plate_name + '-' + plate_row + \
+                                    plate_column + plate_subwell
+            except IndexError:
+                self.logger.warning('seems there are marked but not mounted crystals in file:')
+                self.logger.info(str(line.split(';')))
 
             CompoundBatch_ID = None
             SoakPlate_Condition_ID = None
@@ -275,8 +280,42 @@ class mounted_crystals(object):
 
                 next_crystal_number += 1
 
-    def update_mounted_crystal_table(self):
-        self.logger.info('implementation pending...')
+    def reset_mounted_crystal_table(self):
+        self.logger.info('resetting table...')
+        for i in range(self.n_rows_mounted_crystals):
+            for n in range(len(self.headerList_mounted_crystals)):
+                self.mounted_crystals_sheet.values[i][n] = "............"
+        self.mounted_crystals_sheet.sendModel()
+
+    def get_mounted_crystals_from_db(self):
+        self.logger.info('fetching mounted crystal information from database...')
+        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,
+                           self.dbObject.soakplateTable.columns.CompoundBatch_ID,
+                           self.dbObject.mountedcrystalTable.columns.Pin_Barcode,
+                           self.dbObject.mountedcrystalTable.columns.Puck_Position,
+                           self.dbObject.mountedcrystalTable.columns.Puck_Name,
+                           self.dbObject.mountedcrystalTable.columns.Manual_Crystal_ID]
+                          ).where(
+                           self.dbObject.mountedcrystalTable.columns.SoakPlate_Condition_ID ==
+                           self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID,
+                          ).order_by(
+                           self.dbObject.mountedcrystalTable.columns.Crystal_ID.asc())
+        ResultProxy = self.dbObject.connection.execute(query)
+        result = ResultProxy.fetchall()
+        return result
+
+
+    def update_mounted_crystal_table(self, b):
+        self.reset_mounted_crystal_table()
+        result = self.get_mounted_crystals_from_db()
+
+        for i in range(len(result)):
+            for n in range(len(self.headerList_mounted_crystals)):
+                self.mounted_crystals_sheet.values[i][n] = result[i][n]
+        self.mounted_crystals_sheet.sendModel()
+
+
+        self.logger.info(str(result))
 
     def update_shipment_in_db(self, shipment, Crystal_ID):
         self.logger.info('updating shipment information for {0!s} in DB: {1!s}'.format(Crystal_ID, shipment))
