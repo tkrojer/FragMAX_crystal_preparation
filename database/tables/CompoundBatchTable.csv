@@ -1,261 +1,97 @@
 ﻿CompoundBatch_ID,Compound_ID,Library_Name,CompoundPlate_Name,CompoundPlate_Well,CompoundPlate_Type,State,Solvent,Concentration,Comment
-F00001a,F00001,FragMAXlib,Fmlib_plate_1_dmso,A01,,clear,DMSO,100mM,nope
-F00002a,F00002,FragMAXlib,Fmlib_plate_1_dmso,A02,,clear,DMSO,100mM,nope
-F00003a,F00003,FragMAXlib,Fmlib_plate_1_dmso,A03,,clear,DMSO,100mM,nope
-F00004a,F00004,FragMAXlib,Fmlib_plate_1_dmso,A04,,clear,DMSO,100mM,nope
-F00005a,F00005,FragMAXlib,Fmlib_plate_1_dmso,A05,,clear,DMSO,100mM,nope
-F00006a,F00006,FragMAXlib,Fmlib_plate_1_dmso,A06,,clear,DMSO,100mM,nope
-F00007a,F00007,FragMAXlib,Fmlib_plate_1_dmso,A07,,clear,DMSO,100mM,nope
-F00008a,F00008,FragMAXlib,Fmlib_plate_1_dmso,A08,,clear,DMSO,100mM,nope
-F00009a,F00009,FragMAXlib,Fmlib_plate_1_dmso,A09,,clear,DMSO,100mM,nope
-F00010a,F00010,FragMAXlib,Fmlib_plate_1_dmso,A10,,clear,DMSO,100mM,nope
-F00011a,F00011,FragMAXlib,Fmlib_plate_1_dmso,A11,,clear,DMSO,100mM,nope
-F00012a,F00012,FragMAXlib,Fmlib_plate_1_dmso,A12,,clear,DMSO,100mM,nope
-F00013a,F00013,FragMAXlib,Fmlib_plate_1_dmso,B01,,clear,DMSO,100mM,nope
-F00014a,F00014,FragMAXlib,Fmlib_plate_1_dmso,B02,,clear,DMSO,100mM,nope
-F00015a,F00015,FragMAXlib,Fmlib_plate_1_dmso,B03,,clear,DMSO,100mM,nope
-F00016a,F00016,FragMAXlib,Fmlib_plate_1_dmso,B04,,clear,DMSO,100mM,nope
-F00017a,F00017,FragMAXlib,Fmlib_plate_1_dmso,B05,,clear,DMSO,100mM,nope
-F00018a,F00018,FragMAXlib,Fmlib_plate_1_dmso,B06,,clear,DMSO,100mM,nope
-F00019a,F00019,FragMAXlib,Fmlib_plate_1_dmso,B07,,clear,DMSO,100mM,nope
-F00020a,F00020,FragMAXlib,Fmlib_plate_1_dmso,B08,,clear,DMSO,100mM,nope
-F00021a,F00021,FragMAXlib,Fmlib_plate_1_dmso,B09,,clear,DMSO,100mM,nope
-F00022a,F00022,FragMAXlib,Fmlib_plate_1_dmso,B10,,clear,DMSO,100mM,nope
-F00023a,F00023,FragMAXlib,Fmlib_plate_1_dmso,B11,,clear,DMSO,100mM,nope
-F00024a,F00024,FragMAXlib,Fmlib_plate_1_dmso,B12,,clear,DMSO,100mM,nope
-F00025a,F00025,FragMAXlib,Fmlib_plate_1_dmso,C01,,clear,DMSO,100mM,nope
-F00026a,F00026,FragMAXlib,Fmlib_plate_1_dmso,C02,,clear,DMSO,100mM,nope
-F00027a,F00027,FragMAXlib,Fmlib_plate_1_dmso,C03,,clear,DMSO,100mM,nope
-F00028a,F00028,FragMAXlib,Fmlib_plate_1_dmso,C04,,clear,DMSO,100mM,nope
-F00029a,F00029,FragMAXlib,Fmlib_plate_1_dmso,C05,,clear,DMSO,100mM,nope
-F00030a,F00030,FragMAXlib,Fmlib_plate_1_dmso,C06,,clear,DMSO,100mM,nope
-F00031a,F00031,FragMAXlib,Fmlib_plate_1_dmso,C07,,clear,DMSO,100mM,nope
-F00032a,F00032,FragMAXlib,Fmlib_plate_1_dmso,C08,,clear,DMSO,100mM,nope
-F00033a,F00033,FragMAXlib,Fmlib_plate_1_dmso,C09,,clear,DMSO,100mM,nope
-F00034a,F00034,FragMAXlib,Fmlib_plate_1_dmso,C10,,clear,DMSO,100mM,nope
-F00035a,F00035,FragMAXlib,Fmlib_plate_1_dmso,C11,,clear,DMSO,100mM,nope
-F00036a,F00036,FragMAXlib,Fmlib_plate_1_dmso,C12,,clear,DMSO,100mM,nope
-F00037a,F00037,FragMAXlib,Fmlib_plate_1_dmso,D01,,clear,DMSO,100mM,nope
-F00038a,F00038,FragMAXlib,Fmlib_plate_1_dmso,D02,,clear,DMSO,100mM,nope
-F00039a,F00039,FragMAXlib,Fmlib_plate_1_dmso,D03,,clear,DMSO,100mM,nope
-F00040a,F00040,FragMAXlib,Fmlib_plate_1_dmso,D04,,clear,DMSO,100mM,nope
-F00041a,F00041,FragMAXlib,Fmlib_plate_1_dmso,D05,,clear,DMSO,100mM,nope
-F00042a,F00042,FragMAXlib,Fmlib_plate_1_dmso,D06,,clear,DMSO,100mM,nope
-F00043a,F00043,FragMAXlib,Fmlib_plate_1_dmso,D07,,clear,DMSO,100mM,nope
-F00044a,F00044,FragMAXlib,Fmlib_plate_1_dmso,D08,,clear,DMSO,100mM,nope
-F00045a,F00045,FragMAXlib,Fmlib_plate_1_dmso,D09,,clear,DMSO,100mM,nope
-F00046a,F00046,FragMAXlib,Fmlib_plate_1_dmso,D10,,clear,DMSO,100mM,nope
-F00047a,F00047,FragMAXlib,Fmlib_plate_1_dmso,D11,,clear,DMSO,100mM,nope
-F00048a,F00048,FragMAXlib,Fmlib_plate_1_dmso,D12,,clear,DMSO,100mM,nope
-F00049a,F00049,FragMAXlib,Fmlib_plate_1_dmso,E01,,clear,DMSO,100mM,nope
-F00050a,F00050,FragMAXlib,Fmlib_plate_1_dmso,E02,,clear,DMSO,100mM,nope
-F00051a,F00051,FragMAXlib,Fmlib_plate_1_dmso,E03,,clear,DMSO,100mM,nope
-F00052a,F00052,FragMAXlib,Fmlib_plate_1_dmso,E04,,clear,DMSO,100mM,nope
-F00053a,F00053,FragMAXlib,Fmlib_plate_1_dmso,E05,,clear,DMSO,100mM,nope
-F00054a,F00054,FragMAXlib,Fmlib_plate_1_dmso,E06,,clear,DMSO,100mM,nope
-F00055a,F00055,FragMAXlib,Fmlib_plate_1_dmso,E07,,clear,DMSO,100mM,nope
-F00056a,F00056,FragMAXlib,Fmlib_plate_1_dmso,E08,,clear,DMSO,100mM,nope
-F00057a,F00057,FragMAXlib,Fmlib_plate_1_dmso,E09,,clear,DMSO,100mM,nope
-F00058a,F00058,FragMAXlib,Fmlib_plate_1_dmso,E10,,clear,DMSO,100mM,nope
-F00059a,F00059,FragMAXlib,Fmlib_plate_1_dmso,E11,,clear,DMSO,100mM,nope
-F00060a,F00060,FragMAXlib,Fmlib_plate_1_dmso,E12,,clear,DMSO,100mM,nope
-F00061a,F00061,FragMAXlib,Fmlib_plate_1_dmso,F01,,clear,DMSO,100mM,nope
-F00062a,F00062,FragMAXlib,Fmlib_plate_1_dmso,F02,,clear,DMSO,100mM,nope
-F00063a,F00063,FragMAXlib,Fmlib_plate_1_dmso,F03,,clear,DMSO,100mM,nope
-F00064a,F00064,FragMAXlib,Fmlib_plate_1_dmso,F04,,clear,DMSO,100mM,nope
-F00065a,F00065,FragMAXlib,Fmlib_plate_1_dmso,F05,,clear,DMSO,100mM,nope
-F00066a,F00066,FragMAXlib,Fmlib_plate_1_dmso,F06,,clear,DMSO,100mM,nope
-F00067a,F00067,FragMAXlib,Fmlib_plate_1_dmso,F07,,clear,DMSO,100mM,nope
-F00068a,F00068,FragMAXlib,Fmlib_plate_1_dmso,F08,,clear,DMSO,100mM,nope
-F00069a,F00069,FragMAXlib,Fmlib_plate_1_dmso,F09,,clear,DMSO,100mM,nope
-F00070a,F00070,FragMAXlib,Fmlib_plate_1_dmso,F10,,clear,DMSO,100mM,nope
-F00071a,F00071,FragMAXlib,Fmlib_plate_1_dmso,F11,,clear,DMSO,100mM,nope
-F00072a,F00072,FragMAXlib,Fmlib_plate_1_dmso,F12,,clear,DMSO,100mM,nope
-F00073a,F00073,FragMAXlib,Fmlib_plate_1_dmso,G01,,clear,DMSO,100mM,nope
-F00074a,F00074,FragMAXlib,Fmlib_plate_1_dmso,G02,,clear,DMSO,100mM,nope
-F00075a,F00075,FragMAXlib,Fmlib_plate_1_dmso,G03,,clear,DMSO,100mM,nope
-F00076a,F00076,FragMAXlib,Fmlib_plate_1_dmso,G04,,clear,DMSO,100mM,nope
-F00077a,F00077,FragMAXlib,Fmlib_plate_1_dmso,G05,,clear,DMSO,100mM,nope
-F00078a,F00078,FragMAXlib,Fmlib_plate_1_dmso,G06,,clear,DMSO,100mM,nope
-F00079a,F00079,FragMAXlib,Fmlib_plate_1_dmso,G07,,clear,DMSO,100mM,nope
-F00080a,F00080,FragMAXlib,Fmlib_plate_1_dmso,G08,,clear,DMSO,100mM,nope
-F00081a,F00081,FragMAXlib,Fmlib_plate_1_dmso,G09,,clear,DMSO,100mM,nope
-F00082a,F00082,FragMAXlib,Fmlib_plate_1_dmso,G10,,clear,DMSO,100mM,nope
-F00083a,F00083,FragMAXlib,Fmlib_plate_1_dmso,G11,,clear,DMSO,100mM,nope
-F00084a,F00084,FragMAXlib,Fmlib_plate_1_dmso,G12,,clear,DMSO,100mM,nope
-F00085a,F00085,FragMAXlib,Fmlib_plate_1_dmso,H01,,clear,DMSO,100mM,nope
-F00086a,F00086,FragMAXlib,Fmlib_plate_1_dmso,H02,,clear,DMSO,100mM,nope
-F00087a,F00087,FragMAXlib,Fmlib_plate_1_dmso,H03,,clear,DMSO,100mM,nope
-F00088a,F00088,FragMAXlib,Fmlib_plate_1_dmso,H04,,clear,DMSO,100mM,nope
-F00089a,F00089,FragMAXlib,Fmlib_plate_1_dmso,H05,,clear,DMSO,100mM,nope
-F00090a,F00090,FragMAXlib,Fmlib_plate_1_dmso,H06,,clear,DMSO,100mM,nope
-F00091a,F00091,FragMAXlib,Fmlib_plate_1_dmso,H07,,clear,DMSO,100mM,nope
-F00092a,F00092,FragMAXlib,Fmlib_plate_1_dmso,H08,,clear,DMSO,100mM,nope
-F00093a,F00093,FragMAXlib,Fmlib_plate_1_dmso,H09,,clear,DMSO,100mM,nope
-F00094a,F00094,FragMAXlib,Fmlib_plate_1_dmso,H10,,clear,DMSO,100mM,nope
-F00095a,F00095,FragMAXlib,Fmlib_plate_1_dmso,H11,,clear,DMSO,100mM,nope
-F00096a,F00096,FragMAXlib,Fmlib_plate_1_dmso,H12,,clear,DMSO,100mM,nope
-F00097a,F00097,FragMAXlib,Fmlib_plate_2_dmso,A01,,clear,DMSO,100mM,nope
-F00098a,F00098,FragMAXlib,Fmlib_plate_2_dmso,A02,,clear,DMSO,100mM,nope
-F00099a,F00099,FragMAXlib,Fmlib_plate_2_dmso,A03,,clear,DMSO,100mM,nope
-F00100a,F00100,FragMAXlib,Fmlib_plate_2_dmso,A04,,clear,DMSO,100mM,nope
-F00101a,F00101,FragMAXlib,Fmlib_plate_2_dmso,A05,,clear,DMSO,100mM,nope
-F00102a,F00102,FragMAXlib,Fmlib_plate_2_dmso,A06,,clear,DMSO,100mM,nope
-F00103a,F00103,FragMAXlib,Fmlib_plate_2_dmso,A07,,clear,DMSO,100mM,nope
-F00104a,F00104,FragMAXlib,Fmlib_plate_2_dmso,A08,,clear,DMSO,100mM,nope
-F00105a,F00105,FragMAXlib,Fmlib_plate_2_dmso,A09,,clear,DMSO,100mM,nope
-F00106a,F00106,FragMAXlib,Fmlib_plate_2_dmso,A10,,clear,DMSO,100mM,nope
-F00107a,F00107,FragMAXlib,Fmlib_plate_2_dmso,A11,,clear,DMSO,100mM,nope
-F00108a,F00108,FragMAXlib,Fmlib_plate_2_dmso,A12,,clear,DMSO,100mM,nope
-F00109a,F00109,FragMAXlib,Fmlib_plate_2_dmso,B01,,clear,DMSO,100mM,nope
-F00110a,F00110,FragMAXlib,Fmlib_plate_2_dmso,B02,,clear,DMSO,100mM,nope
-F00111a,F00111,FragMAXlib,Fmlib_plate_2_dmso,B03,,clear,DMSO,100mM,nope
-F00112a,F00112,FragMAXlib,Fmlib_plate_2_dmso,B04,,clear,DMSO,100mM,nope
-F00113a,F00113,FragMAXlib,Fmlib_plate_2_dmso,B05,,clear,DMSO,100mM,nope
-F00114a,F00114,FragMAXlib,Fmlib_plate_2_dmso,B06,,clear,DMSO,100mM,nope
-F00115a,F00115,FragMAXlib,Fmlib_plate_2_dmso,B07,,clear,DMSO,100mM,nope
-F00116a,F00116,FragMAXlib,Fmlib_plate_2_dmso,B08,,clear,DMSO,100mM,nope
-F00117a,F00117,FragMAXlib,Fmlib_plate_2_dmso,B09,,clear,DMSO,100mM,nope
-F00118a,F00118,FragMAXlib,Fmlib_plate_2_dmso,B10,,clear,DMSO,100mM,nope
-F00119a,F00119,FragMAXlib,Fmlib_plate_2_dmso,B11,,clear,DMSO,100mM,nope
-F00120a,F00120,FragMAXlib,Fmlib_plate_2_dmso,B12,,clear,DMSO,100mM,nope
-F00121a,F00121,FragMAXlib,Fmlib_plate_2_dmso,C01,,clear,DMSO,100mM,nope
-F00122a,F00122,FragMAXlib,Fmlib_plate_2_dmso,C02,,clear,DMSO,100mM,nope
-F00123a,F00123,FragMAXlib,Fmlib_plate_2_dmso,C03,,clear,DMSO,100mM,nope
-F00124a,F00124,FragMAXlib,Fmlib_plate_2_dmso,C04,,clear,DMSO,100mM,nope
-F00125a,F00125,FragMAXlib,Fmlib_plate_2_dmso,C05,,clear,DMSO,100mM,nope
-F00126a,F00126,FragMAXlib,Fmlib_plate_2_dmso,C06,,clear,DMSO,100mM,nope
-F00127a,F00127,FragMAXlib,Fmlib_plate_2_dmso,C07,,clear,DMSO,100mM,nope
-F00128a,F00128,FragMAXlib,Fmlib_plate_2_dmso,C08,,clear,DMSO,100mM,nope
-F00129a,F00129,FragMAXlib,Fmlib_plate_2_dmso,C09,,clear,DMSO,100mM,nope
-F00130a,F00130,FragMAXlib,Fmlib_plate_2_dmso,C10,,clear,DMSO,100mM,nope
-F00001b,F00001,FragMAXlib,Fmlib_plate_1_edo,A01,,clear,EDDO,20mM,nope
-F00002b,F00002,FragMAXlib,Fmlib_plate_1_edo,A02,,clear,EDDO,20mM,nope
-F00003b,F00003,FragMAXlib,Fmlib_plate_1_edo,A03,,clear,EDDO,20mM,nope
-F00004b,F00004,FragMAXlib,Fmlib_plate_1_edo,A04,,clear,EDDO,20mM,nope
-F00005b,F00005,FragMAXlib,Fmlib_plate_1_edo,A05,,clear,EDDO,20mM,nope
-F00006b,F00006,FragMAXlib,Fmlib_plate_1_edo,A06,,clear,EDDO,20mM,nope
-F00007b,F00007,FragMAXlib,Fmlib_plate_1_edo,A07,,clear,EDDO,20mM,nope
-F00008b,F00008,FragMAXlib,Fmlib_plate_1_edo,A08,,clear,EDDO,20mM,nope
-F00009b,F00009,FragMAXlib,Fmlib_plate_1_edo,A09,,clear,EDDO,20mM,nope
-F00010b,F00010,FragMAXlib,Fmlib_plate_1_edo,A10,,clear,EDDO,20mM,nope
-F00011b,F00011,FragMAXlib,Fmlib_plate_1_edo,A11,,clear,EDDO,20mM,nope
-F00012b,F00012,FragMAXlib,Fmlib_plate_1_edo,A12,,clear,EDDO,20mM,nope
-F00013b,F00013,FragMAXlib,Fmlib_plate_1_edo,B01,,clear,EDDO,20mM,nope
-F00014b,F00014,FragMAXlib,Fmlib_plate_1_edo,B02,,clear,EDDO,20mM,nope
-F00015b,F00015,FragMAXlib,Fmlib_plate_1_edo,B03,,clear,EDDO,20mM,nope
-F00016b,F00016,FragMAXlib,Fmlib_plate_1_edo,B04,,clear,EDDO,20mM,nope
-F00017b,F00017,FragMAXlib,Fmlib_plate_1_edo,B05,,clear,EDDO,20mM,nope
-F00018b,F00018,FragMAXlib,Fmlib_plate_1_edo,B06,,clear,EDDO,20mM,nope
-F00019b,F00019,FragMAXlib,Fmlib_plate_1_edo,B07,,clear,EDDO,20mM,nope
-F00020b,F00020,FragMAXlib,Fmlib_plate_1_edo,B08,,clear,EDDO,20mM,nope
-F00021b,F00021,FragMAXlib,Fmlib_plate_1_edo,B09,,clear,EDDO,20mM,nope
-F00022b,F00022,FragMAXlib,Fmlib_plate_1_edo,B10,,clear,EDDO,20mM,nope
-F00023b,F00023,FragMAXlib,Fmlib_plate_1_edo,B11,,clear,EDDO,20mM,nope
-F00024b,F00024,FragMAXlib,Fmlib_plate_1_edo,B12,,clear,EDDO,20mM,nope
-F00025b,F00025,FragMAXlib,Fmlib_plate_1_edo,C01,,clear,EDDO,20mM,nope
-F00026b,F00026,FragMAXlib,Fmlib_plate_1_edo,C02,,clear,EDDO,20mM,nope
-F00027b,F00027,FragMAXlib,Fmlib_plate_1_edo,C03,,clear,EDDO,20mM,nope
-F00028b,F00028,FragMAXlib,Fmlib_plate_1_edo,C04,,clear,EDDO,20mM,nope
-F00029b,F00029,FragMAXlib,Fmlib_plate_1_edo,C05,,clear,EDDO,20mM,nope
-F00030b,F00030,FragMAXlib,Fmlib_plate_1_edo,C06,,clear,EDDO,20mM,nope
-F00031b,F00031,FragMAXlib,Fmlib_plate_1_edo,C07,,clear,EDDO,20mM,nope
-F00032b,F00032,FragMAXlib,Fmlib_plate_1_edo,C08,,clear,EDDO,20mM,nope
-F00033b,F00033,FragMAXlib,Fmlib_plate_1_edo,C09,,clear,EDDO,20mM,nope
-F00034b,F00034,FragMAXlib,Fmlib_plate_1_edo,C10,,clear,EDDO,20mM,nope
-F00035b,F00035,FragMAXlib,Fmlib_plate_1_edo,C11,,clear,EDDO,20mM,nope
-F00036b,F00036,FragMAXlib,Fmlib_plate_1_edo,C12,,clear,EDDO,20mM,nope
-F00037b,F00037,FragMAXlib,Fmlib_plate_1_edo,D01,,clear,EDDO,20mM,nope
-F00038b,F00038,FragMAXlib,Fmlib_plate_1_edo,D02,,clear,EDDO,20mM,nope
-F00039b,F00039,FragMAXlib,Fmlib_plate_1_edo,D03,,clear,EDDO,20mM,nope
-F00040b,F00040,FragMAXlib,Fmlib_plate_1_edo,D04,,clear,EDDO,20mM,nope
-F00041b,F00041,FragMAXlib,Fmlib_plate_1_edo,D05,,clear,EDDO,20mM,nope
-F00042b,F00042,FragMAXlib,Fmlib_plate_1_edo,D06,,clear,EDDO,20mM,nope
-F00043b,F00043,FragMAXlib,Fmlib_plate_1_edo,D07,,clear,EDDO,20mM,nope
-F00044b,F00044,FragMAXlib,Fmlib_plate_1_edo,D08,,clear,EDDO,20mM,nope
-F00045b,F00045,FragMAXlib,Fmlib_plate_1_edo,D09,,clear,EDDO,20mM,nope
-F00046b,F00046,FragMAXlib,Fmlib_plate_1_edo,D10,,clear,EDDO,20mM,nope
-F00047b,F00047,FragMAXlib,Fmlib_plate_1_edo,D11,,clear,EDDO,20mM,nope
-F00048b,F00048,FragMAXlib,Fmlib_plate_1_edo,D12,,clear,EDDO,20mM,nope
-F00049b,F00049,FragMAXlib,Fmlib_plate_1_edo,E01,,clear,EDDO,20mM,nope
-F00050b,F00050,FragMAXlib,Fmlib_plate_1_edo,E02,,clear,EDDO,20mM,nope
-F00051b,F00051,FragMAXlib,Fmlib_plate_1_edo,E03,,clear,EDDO,20mM,nope
-F00052b,F00052,FragMAXlib,Fmlib_plate_1_edo,E04,,clear,EDDO,20mM,nope
-F00053b,F00053,FragMAXlib,Fmlib_plate_1_edo,E05,,clear,EDDO,20mM,nope
-F00054b,F00054,FragMAXlib,Fmlib_plate_1_edo,E06,,clear,EDDO,20mM,nope
-F00055b,F00055,FragMAXlib,Fmlib_plate_1_edo,E07,,clear,EDDO,20mM,nope
-F00056b,F00056,FragMAXlib,Fmlib_plate_1_edo,E08,,clear,EDDO,20mM,nope
-F00057b,F00057,FragMAXlib,Fmlib_plate_1_edo,E09,,clear,EDDO,20mM,nope
-F00058b,F00058,FragMAXlib,Fmlib_plate_1_edo,E10,,clear,EDDO,20mM,nope
-F00059b,F00059,FragMAXlib,Fmlib_plate_1_edo,E11,,clear,EDDO,20mM,nope
-F00060b,F00060,FragMAXlib,Fmlib_plate_1_edo,E12,,clear,EDDO,20mM,nope
-F00061b,F00061,FragMAXlib,Fmlib_plate_1_edo,F01,,clear,EDDO,20mM,nope
-F00062b,F00062,FragMAXlib,Fmlib_plate_1_edo,F02,,clear,EDDO,20mM,nope
-F00063b,F00063,FragMAXlib,Fmlib_plate_1_edo,F03,,clear,EDDO,20mM,nope
-F00064b,F00064,FragMAXlib,Fmlib_plate_1_edo,F04,,clear,EDDO,20mM,nope
-F00065b,F00065,FragMAXlib,Fmlib_plate_1_edo,F05,,clear,EDDO,20mM,nope
-F00066b,F00066,FragMAXlib,Fmlib_plate_1_edo,F06,,clear,EDDO,20mM,nope
-F00067b,F00067,FragMAXlib,Fmlib_plate_1_edo,F07,,clear,EDDO,20mM,nope
-F00068b,F00068,FragMAXlib,Fmlib_plate_1_edo,F08,,clear,EDDO,20mM,nope
-F00069b,F00069,FragMAXlib,Fmlib_plate_1_edo,F09,,clear,EDDO,20mM,nope
-F00070b,F00070,FragMAXlib,Fmlib_plate_1_edo,F10,,clear,EDDO,20mM,nope
-F00071b,F00071,FragMAXlib,Fmlib_plate_1_edo,F11,,clear,EDDO,20mM,nope
-F00072b,F00072,FragMAXlib,Fmlib_plate_1_edo,F12,,clear,EDDO,20mM,nope
-F00073b,F00073,FragMAXlib,Fmlib_plate_1_edo,G01,,clear,EDDO,20mM,nope
-F00074b,F00074,FragMAXlib,Fmlib_plate_1_edo,G02,,clear,EDDO,20mM,nope
-F00075b,F00075,FragMAXlib,Fmlib_plate_1_edo,G03,,clear,EDDO,20mM,nope
-F00076b,F00076,FragMAXlib,Fmlib_plate_1_edo,G04,,clear,EDDO,20mM,nope
-F00077b,F00077,FragMAXlib,Fmlib_plate_1_edo,G05,,clear,EDDO,20mM,nope
-F00078b,F00078,FragMAXlib,Fmlib_plate_1_edo,G06,,clear,EDDO,20mM,nope
-F00079b,F00079,FragMAXlib,Fmlib_plate_1_edo,G07,,clear,EDDO,20mM,nope
-F00080b,F00080,FragMAXlib,Fmlib_plate_1_edo,G08,,clear,EDDO,20mM,nope
-F00081b,F00081,FragMAXlib,Fmlib_plate_1_edo,G09,,clear,EDDO,20mM,nope
-F00082b,F00082,FragMAXlib,Fmlib_plate_1_edo,G10,,clear,EDDO,20mM,nope
-F00083b,F00083,FragMAXlib,Fmlib_plate_1_edo,G11,,clear,EDDO,20mM,nope
-F00084b,F00084,FragMAXlib,Fmlib_plate_1_edo,G12,,clear,EDDO,20mM,nope
-F00085b,F00085,FragMAXlib,Fmlib_plate_1_edo,H01,,clear,EDDO,20mM,nope
-F00086b,F00086,FragMAXlib,Fmlib_plate_1_edo,H02,,clear,EDDO,20mM,nope
-F00087b,F00087,FragMAXlib,Fmlib_plate_1_edo,H03,,clear,EDDO,20mM,nope
-F00088b,F00088,FragMAXlib,Fmlib_plate_1_edo,H04,,clear,EDDO,20mM,nope
-F00089b,F00089,FragMAXlib,Fmlib_plate_1_edo,H05,,clear,EDDO,20mM,nope
-F00090b,F00090,FragMAXlib,Fmlib_plate_1_edo,H06,,clear,EDDO,20mM,nope
-F00091b,F00091,FragMAXlib,Fmlib_plate_1_edo,H07,,clear,EDDO,20mM,nope
-F00092b,F00092,FragMAXlib,Fmlib_plate_1_edo,H08,,clear,EDDO,20mM,nope
-F00093b,F00093,FragMAXlib,Fmlib_plate_1_edo,H09,,clear,EDDO,20mM,nope
-F00094b,F00094,FragMAXlib,Fmlib_plate_1_edo,H10,,clear,EDDO,20mM,nope
-F00095b,F00095,FragMAXlib,Fmlib_plate_1_edo,H11,,clear,EDDO,20mM,nope
-F00096b,F00096,FragMAXlib,Fmlib_plate_1_edo,H12,,clear,EDDO,20mM,nope
-F00097b,F00097,FragMAXlib,Fmlib_plate_2_edo,A01,,clear,EDDO,20mM,nope
-F00098b,F00098,FragMAXlib,Fmlib_plate_2_edo,A02,,clear,EDDO,20mM,nope
-F00099b,F00099,FragMAXlib,Fmlib_plate_2_edo,A03,,clear,EDDO,20mM,nope
-F00100b,F00100,FragMAXlib,Fmlib_plate_2_edo,A04,,clear,EDDO,20mM,nope
-F00101b,F00101,FragMAXlib,Fmlib_plate_2_edo,A05,,clear,EDDO,20mM,nope
-F00102b,F00102,FragMAXlib,Fmlib_plate_2_edo,A06,,clear,EDDO,20mM,nope
-F00103b,F00103,FragMAXlib,Fmlib_plate_2_edo,A07,,clear,EDDO,20mM,nope
-F00104b,F00104,FragMAXlib,Fmlib_plate_2_edo,A08,,clear,EDDO,20mM,nope
-F00105b,F00105,FragMAXlib,Fmlib_plate_2_edo,A09,,clear,EDDO,20mM,nope
-F00106b,F00106,FragMAXlib,Fmlib_plate_2_edo,A10,,clear,EDDO,20mM,nope
-F00107b,F00107,FragMAXlib,Fmlib_plate_2_edo,A11,,clear,EDDO,20mM,nope
-F00108b,F00108,FragMAXlib,Fmlib_plate_2_edo,A12,,clear,EDDO,20mM,nope
-F00109b,F00109,FragMAXlib,Fmlib_plate_2_edo,B01,,clear,EDDO,20mM,nope
-F00110b,F00110,FragMAXlib,Fmlib_plate_2_edo,B02,,clear,EDDO,20mM,nope
-F00111b,F00111,FragMAXlib,Fmlib_plate_2_edo,B03,,clear,EDDO,20mM,nope
-F00112b,F00112,FragMAXlib,Fmlib_plate_2_edo,B04,,clear,EDDO,20mM,nope
-F00113b,F00113,FragMAXlib,Fmlib_plate_2_edo,B05,,clear,EDDO,20mM,nope
-F00114b,F00114,FragMAXlib,Fmlib_plate_2_edo,B06,,clear,EDDO,20mM,nope
-F00115b,F00115,FragMAXlib,Fmlib_plate_2_edo,B07,,clear,EDDO,20mM,nope
-F00116b,F00116,FragMAXlib,Fmlib_plate_2_edo,B08,,clear,EDDO,20mM,nope
-F00117b,F00117,FragMAXlib,Fmlib_plate_2_edo,B09,,clear,EDDO,20mM,nope
-F00118b,F00118,FragMAXlib,Fmlib_plate_2_edo,B10,,clear,EDDO,20mM,nope
-F00119b,F00119,FragMAXlib,Fmlib_plate_2_edo,B11,,clear,EDDO,20mM,nope
-F00120b,F00120,FragMAXlib,Fmlib_plate_2_edo,B12,,clear,EDDO,20mM,nope
-F00121b,F00121,FragMAXlib,Fmlib_plate_2_edo,C01,,clear,EDDO,20mM,nope
-F00122b,F00122,FragMAXlib,Fmlib_plate_2_edo,C02,,clear,EDDO,20mM,nope
-F00123b,F00123,FragMAXlib,Fmlib_plate_2_edo,C03,,clear,EDDO,20mM,nope
-F00124b,F00124,FragMAXlib,Fmlib_plate_2_edo,C04,,clear,EDDO,20mM,nope
-F00125b,F00125,FragMAXlib,Fmlib_plate_2_edo,C05,,clear,EDDO,20mM,nope
-F00126b,F00126,FragMAXlib,Fmlib_plate_2_edo,C06,,clear,EDDO,20mM,nope
-F00127b,F00127,FragMAXlib,Fmlib_plate_2_edo,C07,,clear,EDDO,20mM,nope
-F00128b,F00128,FragMAXlib,Fmlib_plate_2_edo,C08,,clear,EDDO,20mM,nope
-F00129b,F00129,FragMAXlib,Fmlib_plate_2_edo,C09,,clear,EDDO,20mM,nope
-F00130b,F00130,FragMAXlib,Fmlib_plate_2_edo,C10,,clear,EDDO,20mM,nope
+VT00249-b0,VT00249,FragMAXlib,FMLv03-DMSO,A01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00245-b0,VT00245,FragMAXlib,FMLv03-DMSO,A02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00220-b0,VT00220,FragMAXlib,FMLv03-DMSO,A03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00087-b0,VT00087,FragMAXlib,FMLv03-DMSO,A04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00225-b0,VT00225,FragMAXlib,FMLv03-DMSO,A05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00162-b0,VT00162,FragMAXlib,FMLv03-DMSO,A06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00049-b0,VT00049,FragMAXlib,FMLv03-DMSO,A07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00257-b0,VT00257,FragMAXlib,FMLv03-DMSO,A08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00084-b0,VT00084,FragMAXlib,FMLv03-DMSO,A09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00190-b0,VT00190,FragMAXlib,FMLv03-DMSO,A10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00232-b0,VT00232,FragMAXlib,FMLv03-DMSO,A11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00033-b0,VT00033,FragMAXlib,FMLv03-DMSO,A12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00264-b0,VT00264,FragMAXlib,FMLv03-DMSO,B01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00169-b0,VT00169,FragMAXlib,FMLv03-DMSO,B02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00128-b0,VT00128,FragMAXlib,FMLv03-DMSO,B03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00219-b0,VT00219,FragMAXlib,FMLv03-DMSO,B04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00260-b0,VT00260,FragMAXlib,FMLv03-DMSO,B05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00175-b0,VT00175,FragMAXlib,FMLv03-DMSO,B06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00227-b0,VT00227,FragMAXlib,FMLv03-DMSO,B07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00241-b0,VT00241,FragMAXlib,FMLv03-DMSO,B08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00165-b0,VT00165,FragMAXlib,FMLv03-DMSO,B09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00191-b0,VT00191,FragMAXlib,FMLv03-DMSO,B10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00213-b0,VT00213,FragMAXlib,FMLv03-DMSO,B11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00254-b0,VT00254,FragMAXlib,FMLv03-DMSO,B12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00178-b0,VT00178,FragMAXlib,FMLv03-DMSO,C01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00085-b0,VT00085,FragMAXlib,FMLv03-DMSO,C02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00082-b0,VT00082,FragMAXlib,FMLv03-DMSO,C03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00086-b0,VT00086,FragMAXlib,FMLv03-DMSO,C04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00251-b0,VT00251,FragMAXlib,FMLv03-DMSO,C05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00259-b0,VT00259,FragMAXlib,FMLv03-DMSO,C06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00150-b0,VT00150,FragMAXlib,FMLv03-DMSO,C07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00221-b0,VT00221,FragMAXlib,FMLv03-DMSO,C08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00083-b0,VT00083,FragMAXlib,FMLv03-DMSO,C09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00261-b0,VT00261,FragMAXlib,FMLv03-DMSO,C10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00240-b0,VT00240,FragMAXlib,FMLv03-DMSO,C11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00034-b0,VT00034,FragMAXlib,FMLv03-DMSO,C12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00188-b0,VT00188,FragMAXlib,FMLv03-DMSO,D01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00248-b0,VT00248,FragMAXlib,FMLv03-DMSO,D02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00048-b0,VT00048,FragMAXlib,FMLv03-DMSO,D03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00056-b0,VT00056,FragMAXlib,FMLv03-DMSO,D04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00064-b0,VT00064,FragMAXlib,FMLv03-DMSO,D05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00172-b0,VT00172,FragMAXlib,FMLv03-DMSO,D06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00058-b0,VT00058,FragMAXlib,FMLv03-DMSO,D07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00025-b0,VT00025,FragMAXlib,FMLv03-DMSO,D08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00193-b0,VT00193,FragMAXlib,FMLv03-DMSO,D09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00218-b0,VT00218,FragMAXlib,FMLv03-DMSO,D10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00234-b0,VT00234,FragMAXlib,FMLv03-DMSO,D11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00180-b0,VT00180,FragMAXlib,FMLv03-DMSO,D12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00224-b0,VT00224,FragMAXlib,FMLv03-DMSO,E01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00246-b0,VT00246,FragMAXlib,FMLv03-DMSO,E02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00036-b0,VT00036,FragMAXlib,FMLv03-DMSO,E03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00252-b0,VT00252,FragMAXlib,FMLv03-DMSO,E04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00215-b0,VT00215,FragMAXlib,FMLv03-DMSO,E05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00233-b0,VT00233,FragMAXlib,FMLv03-DMSO,E06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00236-b0,VT00236,FragMAXlib,FMLv03-DMSO,E07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00096-b0,VT00096,FragMAXlib,FMLv03-DMSO,E08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00239-b0,VT00239,FragMAXlib,FMLv03-DMSO,E09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00029-b0,VT00029,FragMAXlib,FMLv03-DMSO,E10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00216-b0,VT00216,FragMAXlib,FMLv03-DMSO,E11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00089-b0,VT00089,FragMAXlib,FMLv03-DMSO,E12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00207-b0,VT00207,FragMAXlib,FMLv03-DMSO,F01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00167-b0,VT00167,FragMAXlib,FMLv03-DMSO,F02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00253-b0,VT00253,FragMAXlib,FMLv03-DMSO,F03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00155-b0,VT00155,FragMAXlib,FMLv03-DMSO,F04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00247-b0,VT00247,FragMAXlib,FMLv03-DMSO,F05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00181-b0,VT00181,FragMAXlib,FMLv03-DMSO,F06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00250-b0,VT00250,FragMAXlib,FMLv03-DMSO,F07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00143-b0,VT00143,FragMAXlib,FMLv03-DMSO,F08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00066-b0,VT00066,FragMAXlib,FMLv03-DMSO,F09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00258-b0,VT00258,FragMAXlib,FMLv03-DMSO,F10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00059-b0,VT00059,FragMAXlib,FMLv03-DMSO,F11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00038-b0,VT00038,FragMAXlib,FMLv03-DMSO,F12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00154-b0,VT00154,FragMAXlib,FMLv03-DMSO,G01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00164-b0,VT00164,FragMAXlib,FMLv03-DMSO,G02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00226-b0,VT00226,FragMAXlib,FMLv03-DMSO,G03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00229-b0,VT00229,FragMAXlib,FMLv03-DMSO,G04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00123-b0,VT00123,FragMAXlib,FMLv03-DMSO,G05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00077-b0,VT00077,FragMAXlib,FMLv03-DMSO,G06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00019-b0,VT00019,FragMAXlib,FMLv03-DMSO,G07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00127-b0,VT00127,FragMAXlib,FMLv03-DMSO,G08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00122-b0,VT00122,FragMAXlib,FMLv03-DMSO,G09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00212-b0,VT00212,FragMAXlib,FMLv03-DMSO,G10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00230-b0,VT00230,FragMAXlib,FMLv03-DMSO,G11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00173-b0,VT00173,FragMAXlib,FMLv03-DMSO,G12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00113-b0,VT00113,FragMAXlib,FMLv03-DMSO,H01,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00198-b0,VT00198,FragMAXlib,FMLv03-DMSO,H02,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00243-b0,VT00243,FragMAXlib,FMLv03-DMSO,H03,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00022-b0,VT00022,FragMAXlib,FMLv03-DMSO,H04,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00118-b0,VT00118,FragMAXlib,FMLv03-DMSO,H05,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00228-b0,VT00228,FragMAXlib,FMLv03-DMSO,H06,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00235-b0,VT00235,FragMAXlib,FMLv03-DMSO,H07,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00068-b0,VT00068,FragMAXlib,FMLv03-DMSO,H08,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00238-b0,VT00238,FragMAXlib,FMLv03-DMSO,H09,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00079-b0,VT00079,FragMAXlib,FMLv03-DMSO,H10,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00265-b0,VT00265,FragMAXlib,FMLv03-DMSO,H11,SwissCI-MRC-3d,clear,DMSO,1000 mM,
+VT00268-b0,VT00268,FragMAXlib,FMLv03-DMSO,H12,SwissCI-MRC-3d,clear,DMSO,1000 mM,
