@@ -41,7 +41,7 @@ class mounted_crystals(object):
 
         self.mounted_crystals_sheet = TableDisplay(x)
 
-        self.grid_widget = widgets.GridspecLayout(2, 5)
+        self.grid_widget = widgets.GridspecLayout(2, 6)
 
 #        self.grid_widget[0:8,0:3] = self.mounted_crystals_sheet
 
@@ -64,6 +64,10 @@ class mounted_crystals(object):
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI')
         export_csv_for_exi_button.on_click(self.export_csv_for_exi)
         self.grid_widget[0,4] = export_csv_for_exi_button
+
+        export_csv_for_fragmaxapp_button = widgets.Button(description='Export CSV for FragMAXapp')
+        export_csv_for_fragmaxapp_button.on_click(self.export_csv_for_fragmaxapp)
+        self.grid_widget[0,5] = export_csv_for_fragmaxapp_button
 
 
     def shifter_mounted_crystals(self, b):
@@ -366,3 +370,79 @@ class mounted_crystals(object):
             self.update_shipment_in_db(shipment, Crystal_ID)
             exi_csv += 'Dewar{0!s},{1!s},Unipuck,{2!s},{3!s},{4!s},,,,,,,,\n'.format(dewar_number, puck, position, proteinacronym, sample)
         self.save_shipment_csv_file(shipment, exi_csv)
+
+    def save_fragmax_csv_file(self, fragmax_csv):
+        print('hallo')
+
+
+    def export_csv_for_fragmaxapp(self, b):
+        self.logger.info('preparing CSV file for upload to FragMAXapp...')
+
+#        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,
+#                           self.dbObject.mountedcrystalTable.columns.Shipment,
+#                           self.dbObject.soakplateTable.columns.CompoundBatch_ID,
+#                           self.dbObject.compoundbatchTable.columns.Library_Name,
+#                           self.dbObject.markedcrystalTable.columns.CrystalPlate_Barcode,
+#                           ])
+#        query = query.select_from(self.dbObject.mountedcrystalTable.join(
+#            self.dbObject.soakedcrystalTable, self.dbObject.mountedcrystalTable.columns.SoakPlate_Condition_ID ==
+#                                              self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID).join(
+#            self.dbObject.soakplateTable, self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID ==
+#                                          self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID).join(
+#            self.dbObject.compoundbatchTable, self.dbObject.soakplateTable.columns.CompoundBatch_ID ==
+#                                              self.dbObject.compoundbatchTable.columns.CompoundBatch_ID).join(
+#            self.dbObject.markedcrystalTable, self.dbObject.mountedcrystalTable.columns.MarkedCrystal_ID ==
+#                                         self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID)).order_by(
+#            self.dbObject.mountedcrystalTable.columns.Crystal_ID)
+
+
+        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,
+                           self.dbObject.mountedcrystalTable.columns.Shipment,
+                           self.dbObject.soakplateTable.columns.CompoundBatch_ID,
+                           self.dbObject.compoundbatchTable.columns.Library_Name,
+                           self.crystalscreenTable.columns.CrystalScreen_Condition,
+                           self.dbObject.mountedcrystalTable.columns.Mount_Date,
+                           self.dbObject.soakedcrystalTable.columns.Soak_Time
+                           ])
+        query = query.select_from(self.dbObject.mountedcrystalTable.join(
+            self.dbObject.soakedcrystalTable, self.dbObject.mountedcrystalTable.columns.SoakPlate_Condition_ID ==
+                                              self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID).join(
+            self.dbObject.soakplateTable, self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID ==
+                                          self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID).join(
+            self.dbObject.compoundbatchTable, self.dbObject.soakplateTable.columns.CompoundBatch_ID ==
+                                              self.dbObject.compoundbatchTable.columns.CompoundBatch_ID).join(
+            self.dbObject.markedcrystalTable, self.dbObject.mountedcrystalTable.columns.MarkedCrystal_ID ==
+                                         self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID).join(
+            self.dbObject.crystalscreenTable, self.dbObject.markedcrystalTable.columns.CrystalScreen_ID ==
+                                              self.dbObject.crystalscreenTable.columns.CrystalScreen_ID)).order_by(
+            self.dbObject.mountedcrystalTable.columns.Crystal_ID)
+
+
+
+        ResultProxy = self.dbObject.connection.execute(query)
+        crystals = ResultProxy.fetchall()
+        fragmax_csv = ''
+        shipmentList = []
+        for c in crystals:
+            crystalID = c[0]
+            shipment = c[1]
+            compound = c[2]
+            library = c[3]
+            condition = c[4]
+            try:
+                soak_start = datetime.strptime(c[5], '%d/%m/%Y %H:%M:%S')
+                soak_end = datetime.strptime(c[6], '%d/%m/%Y %H:%M:%S')
+                diff = soak_end - soak_start
+                soak_time = str(int(diff.total_seconds()))
+            except TypeError:
+                soak_time = '0'
+
+            if not shipmentList:
+                shipmentList.append(shipment)
+            if shipment not in shipmentList:
+                self.save_fragmax_csv_file(fragmax_csv)
+                fragmax_csv = ''
+            fragmax_csv += '{0!s},{1!s},{2!s},"VAPOR DIFFUSION, SITTING DROP",,,,,,,,\n'.format(crystalID,library,compound)
+            'X0001,, , "VAPOR DIFFUSION, SITTING DROP", 7.4, 86.3, cloudy, 0.42, DMS, 5.4,,'
+        if fragmax_csv:
+            self.save_fragmax_csv_file(fragmax_csv)

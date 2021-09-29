@@ -25,10 +25,31 @@ CREATE TABLE IF NOT EXISTS "Protein" (
 	"Protein_Name"	TEXT,
 	"Protein_Acronym"	TEXT,
 	"Organsism"	TEXT,
-	"Expression_Host"	TEXT,
-	"Sequence"	TEXT,
 	PRIMARY KEY("Protein_Acronym")
 );
+
+CREATE TABLE IF NOT EXISTS "ProteinBatch" (
+	"ProteinBatch_ID"	TEXT,
+	"Protein_Acronym"	TEXT,
+	"ProteinBatch_Supplier_ID"	TEXT,
+	"Clone_ID"	TEXT,
+	"Expression_Host"	TEXT,
+	"Sequence"	TEXT,
+	"Buffer"	TEXT,
+	"Concentration"	TEXT,
+	"Date_received"	TEXT,
+	"QC_DLS_raw"	TEXT,
+	"QC_DLS_image"	TEXT,
+	"QC_UV-VIS_raw"	TEXT,
+	"QC_UV-VIS_imgae"	TEXT,
+	"QC_SDS-PAGE_image"	TEXT,
+	"QC_SEC_raw"	TEXT,
+	"QC_SEC_image"	TEXT,
+	"Comment"	TEXT,
+	PRIMARY KEY("ProteinBatch_ID"),
+	FOREIGN KEY("Protein_Acronym") REFERENCES "Protein"("Protein_Acronym")
+);
+
 CREATE TABLE IF NOT EXISTS "CompoundTable" (
 	"Compound_ID"	TEXT,
 	"Compound_Name"	TEXT,
@@ -52,7 +73,8 @@ CREATE TABLE IF NOT EXISTS "CompoundBatchTable" (
 	"Solvent"	TEXT,
 	"Concentration"	REAL,
 	"Comment"	TEXT,
-	PRIMARY KEY("CompoundBatch_ID")
+	PRIMARY KEY("CompoundBatch_ID"),
+	FOREIGN KEY("Compound_ID") REFERENCES "CompoundTable"("Compound_ID")
 );
 CREATE TABLE IF NOT EXISTS "MountedCrystals" (
 	"Crystal_ID"	TEXT,
@@ -68,7 +90,8 @@ CREATE TABLE IF NOT EXISTS "MountedCrystals" (
 	"Comment"   TEXT,
 	"Shipment"  TEXT,
 	"Manual_Crystal_ID" TEXT,
-	PRIMARY KEY("Crystal_ID")
+	PRIMARY KEY("Crystal_ID"),
+	FOREIGN KEY("MarkedCrystal_ID") REFERENCES "MarkedCrystals"("MarkedCrystal_ID")
 );
 CREATE TABLE IF NOT EXISTS "CrystalForm" (
 	"Crystal_Form"	TEXT,
@@ -88,10 +111,12 @@ CREATE TABLE IF NOT EXISTS "SpaceGroupTable" (
 );
 CREATE TABLE IF NOT EXISTS "MarkedCrystals" (
 	"MarkedCrystal_ID"	TEXT,
+	"CrystalScreen_ID"  TEXT,
 	"CrystalPlate_Barcode"	TEXT,
 	"CrystalPlate_Well"	TEXT,
 	"CrystalPlate_Subwell"	TEXT,
-	PRIMARY KEY("MarkedCrystal_ID")
+	PRIMARY KEY("MarkedCrystal_ID"),
+	FOREIGN KEY("CrystalScreen_ID") REFERENCES "CrystalScreen"("CrystalScreen_ID")
 );
 CREATE TABLE IF NOT EXISTS "SoakPlate" (
 	"SoakPlate_Condition_ID"	TEXT,
@@ -104,7 +129,8 @@ CREATE TABLE IF NOT EXISTS "SoakPlate" (
 	"CrystalBuffer"	TEXT,
 	"CrystalBuffer_Vol"	REAL,
 	"Compound_Vol"	REAL,
-	PRIMARY KEY("SoakPlate_Condition_ID")
+	PRIMARY KEY("SoakPlate_Condition_ID"),
+	FOREIGN KEY("CompoundBatch_ID") REFERENCES "CompoundBatchTable"("CompoundBatch_ID")
 );
 CREATE TABLE IF NOT EXISTS "SoakedCrystals" (
 	"Soak_ID"	TEXT,
@@ -112,7 +138,9 @@ CREATE TABLE IF NOT EXISTS "SoakedCrystals" (
 	"SoakPlate_Condition_ID"	TEXT,
 	"Soak_Time"	TEXT,
 	"Soak_Comment"	TEXT,
-	PRIMARY KEY("Soak_ID")
+	PRIMARY KEY("Soak_ID"),
+	FOREIGN KEY("SoakPlate_Condition_ID") REFERENCES "SoakPlate"("SoakPlate_Condition_ID"),
+	FOREIGN KEY("MarkedCrystal_ID") REFERENCES "MarkedCrystals"("MarkedCrystal_ID")
 );
 CREATE TABLE IF NOT EXISTS "CrystalScreen" (
 	"CrystalScreen_ID"	TEXT,
@@ -123,7 +151,7 @@ CREATE TABLE IF NOT EXISTS "CrystalScreen" (
 );
 CREATE TABLE IF NOT EXISTS "CrystalPlate" (
 	"CrystalPlate_Barcode"	TEXT,
-	"Protein_Acronym"	TEXT,
+	"ProteinBatch_ID"	TEXT,
 	"Protein_Concentration"	REAL,
 	"CrystalScreen_Name"	TEXT,
 	"Compound1Batch_ID" TEXT,
@@ -145,7 +173,17 @@ CREATE TABLE IF NOT EXISTS "CrystalPlate" (
 	"Subwell_D_Vol_Protein"	REAL,
 	"Subwell_D_Vol_Reservoir"	REAL,
 	"Subwell_D_Vol_Seed"	REAL,
-	PRIMARY KEY("CrystalPlate_barcode")
+	PRIMARY KEY("CrystalPlate_barcode"),
+	FOREIGN KEY("ProteinBatch_ID") REFERENCES "ProteinBatch"("ProteinBatch_ID"),
+	FOREIGN KEY("CrystalPlate_Barcode") REFERENCES "MarkedCrystals"("CrystalPlate_Barcode"),
+	FOREIGN KEY("CrystalScreen_Name") REFERENCES "CrystalScreen"("CrystalScreen_Name")
+);
+CREATE TABLE IF NOT EXISTS "Diary" (
+	"Entry_ID"	TEXT,
+	"EntryName"	TEXT,
+	"Date_created"	TEXT,
+	"Date_modified"	TEXT,
+	PRIMARY KEY("Entry_ID")
 );
 INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-3d');
 

@@ -168,6 +168,8 @@ class project_description(object):
 
         self.dbObject.proteinTable = db.Table('Protein', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
+        self.dbObject.proteinBatchTable = db.Table('ProteinBatch', metadata, autoload=True, autoload_with=self.dbObject.engine)
+
         self.dbObject.crystal_plate_typeTable = db.Table('CrystalPlateType', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.dbObject.crystalplateTable = db.Table('CrystalPlate', metadata, autoload=True, autoload_with=self.dbObject.engine)
@@ -181,6 +183,8 @@ class project_description(object):
         self.dbObject.soakedcrystalTable = db.Table('SoakedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.dbObject.mountedcrystalTable = db.Table('MountedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
+
+        self.dbObject.diaryTable = db.Table('Diary', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.logger.info('finished initializing DB')
 
@@ -319,11 +323,11 @@ class project_description(object):
 
 
     def update_crystal_plate_widgets(self):
-        query = db.select([self.dbObject.proteinTable.columns.Protein_Acronym.distinct()])
+        query = db.select([self.dbObject.proteinBatchTable.columns.ProteinBatch_ID.distinct()])
         ResultProxy = self.dbObject.connection.execute(query)
-        existing_protein = [x[0] for x in ResultProxy.fetchall()]
-        self.logger.info('found the following protein acronyms in database: ' + str(existing_protein))
-        self.crystalplateObject.select_protein.options = existing_protein
+        existing_protein_batches = [x[0] for x in ResultProxy.fetchall()]
+        self.logger.info('found the following protein batches in database: ' + str(existing_protein_batches))
+        self.crystalplateObject.select_protein_batch.options = existing_protein_batches
 
         query = db.select([self.dbObject.crystal_plate_typeTable.columns.Plate_Name.distinct()])
         ResultProxy = self.dbObject.connection.execute(query)
