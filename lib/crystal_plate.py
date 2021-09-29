@@ -47,9 +47,9 @@ class crystal_plate(object):
         self.protein_concentration = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
         self.grid_widget_upper[3,1] = self.protein_concentration
 
-        self.grid_widget_upper[4,0] = Label("Protein", layout=Layout(display="flex", justify_content="center"))
-        self.select_protein = widgets.Dropdown()
-        self.grid_widget_upper[4,1] = self.select_protein
+        self.grid_widget_upper[4,0] = Label("Protein Batch", layout=Layout(display="flex", justify_content="center"))
+        self.select_protein_batch = widgets.Dropdown()
+        self.grid_widget_upper[4,1] = self.select_protein_batch
 
         self.grid_widget_upper[5,0] = Label("Temperature (K)", layout=Layout(display="flex", justify_content="center"))
         self.temperature = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
@@ -223,7 +223,7 @@ class crystal_plate(object):
         if self.select_barcode.value in existing_barcodes:
             self.logger.warning('plate barcode ' + self.select_barcode.value + ' exists in database; updating records...')
             query = db.update(self.dbObject.crystalplateTable).values(
-                Protein_Acronym=self.select_protein.value,
+                ProteinBatch_ID=self.select_protein_batch.value,
                 Protein_Concentration=_protein_concentration,
                 CrystalScreen_Name=self.select_screen_for_plate.value,
                 Protein_Buffer=self.protein_buffer.value,
@@ -245,7 +245,7 @@ class crystal_plate(object):
             self.logger.info('plate barcode ' + self.select_barcode.value + ' does not exist in database; inserting records...')
             values_list = [{
                 'CrystalPlate_Barcode': self.select_barcode.value,
-                'Protein_Acronym': self.select_protein.value,
+                'ProteinBatch_ID': self.select_protein_batch.value,
                 'Protein_Concentration': _protein_concentration,
                 'CrystalScreen_Name': self.select_screen_for_plate.value,
                 'Protein_Buffer': self.protein_buffer.value,

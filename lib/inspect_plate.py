@@ -44,6 +44,17 @@ class inspect_plate(object):
 
 #        self.vbox_cystal_image = widgets.VBox(children=[])
 
+    def get_crystal_screen_name(self, barcode):
+        query = db.select([self.dbObject.crystalplateTable.columns.CrystalScreen_Name]).where(
+            self.dbObject.crystalplateTable.columns.CrystalPlate_Barcode == barcode)
+        ResultProxy = self.dbObject.connection.execute(query)
+        try:
+            screen_name = ResultProxy.fetchall()[0][0]
+            self.logger.info('--> {0!s}'.format(screen_name))
+        except IndexError:
+            screen_name = ''
+        return screen_name
+
 
     def import_shifter_marked_crystals(self, b):
         clear_output()
@@ -72,8 +83,12 @@ class inspect_plate(object):
                     subwell = re.split(r'[ ,;]+', line)[5]
                     well = row + column
                     marked_crystal_id = barcode + '-' + well + subwell
-                    self.update_marked_crystal_in_db(marked_crystal_id, barcode, well, subwell)
-#                    wellList.append(well + subwell)
+                    screen_name = self.get_crystal_screen_name(barcode)
+                    if screen_name:
+                        crystal_screen_id = screen_name + '-' + well
+                    else:
+                        crystal_screen_id = ''
+                    self.update_marked_crystal_in_db(marked_crystal_id, barcode, well, subwell, crystal_screen_id)
                     self.inspected_wells_sheet.values[n][0] = barcode
                     self.inspected_wells_sheet.values[n][1] = well
                     self.inspected_wells_sheet.values[n][2] = subwell
@@ -92,7 +107,7 @@ class inspect_plate(object):
 
 #        self.show_marked_crystals(wellList)
 
-    def update_marked_crystal_in_db(self, marked_crystal_id, barcode, well, subwell):
+    def update_marked_crystal_in_db(self, marked_crystal_id, barcode, well, subwell, crystal_screen_id):
         query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
         ResultProxy = self.dbObject.connection.execute(query)
         marked_crystals = [x[0] for x in ResultProxy.fetchall()]
@@ -105,7 +120,8 @@ class inspect_plate(object):
                 'MarkedCrystal_ID':      marked_crystal_id,
                 'CrystalPlate_Barcode':  barcode,
                 'CrystalPlate_Well':     well,
-                'CrystalPlate_Subwell':  subwell
+                'CrystalPlate_Subwell':  subwell,
+                'CrystalScreen_ID':      crystal_screen_id
                     }]
             query = db.insert(self.dbObject.markedcrystalTable)
             self.dbObject.connection.execute(query,values_list)
