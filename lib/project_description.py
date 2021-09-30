@@ -155,6 +155,14 @@ class project_description(object):
             os.mkdir(workflow_exi_folder)
             os.mkdir(os.path.join(workflow_exi_folder, 'backup'))
 
+        workflow_fragmaxapp_folder = os.path.join(self.settings.project_folder, 'workflow', '6-fragmaxapp')
+        if os.path.isdir(workflow_fragmaxapp_folder):
+            self.logger.warning('workflow/6-fragmaxapp folder exists: ' + workflow_fragmaxapp_folder)
+        else:
+            self.logger.info('creating workflow/6-fragmaxapp folder: ' + workflow_fragmaxapp_folder)
+            os.mkdir(workflow_fragmaxapp_folder)
+            os.mkdir(os.path.join(workflow_fragmaxapp_folder, 'backup'))
+
 
     def init_db(self):
         self.logger.info('initializing DB...')
@@ -172,6 +180,8 @@ class project_description(object):
 
         self.dbObject.crystal_plate_typeTable = db.Table('CrystalPlateType', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
+        self.dbObject.crystallizationMethodTable = db.Table('CrystallizationMethod', metadata, autoload=True, autoload_with=self.dbObject.engine)
+
         self.dbObject.crystalplateTable = db.Table('CrystalPlate', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.dbObject.markedcrystalTable = db.Table('MarkedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
@@ -185,6 +195,22 @@ class project_description(object):
         self.dbObject.mountedcrystalTable = db.Table('MountedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.dbObject.diaryTable = db.Table('Diary', metadata, autoload=True, autoload_with=self.dbObject.engine)
+
+        self.logger.info('defining joined tables...')
+
+        self.dbObject.joined_tables = self.dbObject.mountedcrystalTable.join(
+            self.dbObject.soakedcrystalTable, self.dbObject.mountedcrystalTable.columns.SoakPlate_Condition_ID ==
+                                              self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID, isouter=True).join(
+            self.dbObject.soakplateTable, self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID ==
+                                          self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID, isouter=True).join(
+            self.dbObject.compoundbatchTable, self.dbObject.soakplateTable.columns.CompoundBatch_ID ==
+                                              self.dbObject.compoundbatchTable.columns.CompoundBatch_ID, isouter=True).join(
+            self.dbObject.markedcrystalTable, self.dbObject.mountedcrystalTable.columns.MarkedCrystal_ID ==
+                                         self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID, isouter=True).join(
+            self.dbObject.crystalscreenTable, self.dbObject.markedcrystalTable.columns.CrystalScreen_ID ==
+                                              self.dbObject.crystalscreenTable.columns.CrystalScreen_ID, isouter=True).join(
+            self.dbObject.crystalplateTable, self.dbObject.markedcrystalTable.columns.CrystalPlate_Barcode ==
+                                              self.dbObject.crystalplateTable.columns.CrystalPlate_Barcode, isouter=True)
 
         self.logger.info('finished initializing DB')
 
@@ -335,3 +361,8 @@ class project_description(object):
         self.logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
         self.crystalplateObject.select_plate_type.options = existing_plate_types
 
+        query = db.select([self.dbObject.crystallizationMethodTable.columns.Method.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        existing_methods = [x[0] for x in ResultProxy.fetchall()]
+        self.logger.info('found the following crystallization methods in database: ' + str(existing_methods))
+        self.crystalplateObject.select_method.options = existing_methods

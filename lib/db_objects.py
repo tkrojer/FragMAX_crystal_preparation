@@ -8,6 +8,7 @@ class db_objects(object):
         self.proteinTable = None
         self.proteinBatchTable = None
         self.crystal_plate_typeTable = None
+        self.crystallizationMethodTable = None
         self.crystalplateTable = None
         self.markedcrystalTable = None
         self.soakplateTable = None
@@ -15,4 +16,7 @@ class db_objects(object):
         self.soakedcrystalTable = None
         self.mountedcrystalTable = None
         self.diaryTable = None
+
+        self.joined_tables = None
+
 

@@ -17,8 +17,13 @@ CREATE TABLE IF NOT EXISTS "People" (
 	"Country"	TEXT,
 	"Phone"	TEXT
 );
+
 CREATE TABLE IF NOT EXISTS "CrystalPlateType" (
 	"Plate_Name"	TEXT
+);
+
+CREATE TABLE IF NOT EXISTS "CrystallizationMethod" (
+	"Method"	TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "Protein" (
@@ -154,6 +159,7 @@ CREATE TABLE IF NOT EXISTS "CrystalPlate" (
 	"ProteinBatch_ID"	TEXT,
 	"Protein_Concentration"	REAL,
 	"CrystalScreen_Name"	TEXT,
+	"Crystallization_Method"    TEXT,
 	"Compound1Batch_ID" TEXT,
 	"Compound1_Volume"  REAL,
 	"Compound2Batch_ID" TEXT,
@@ -185,5 +191,8 @@ CREATE TABLE IF NOT EXISTS "Diary" (
 	"Date_modified"	TEXT,
 	PRIMARY KEY("Entry_ID")
 );
+
 INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-3d');
+
+INSERT INTO CrystallizationMethod VALUES('VAPOR DIFFUSION, SITTING DROP');
 

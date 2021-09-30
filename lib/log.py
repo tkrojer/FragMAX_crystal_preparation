@@ -12,7 +12,7 @@ class OutputWidgetHandler(logging.Handler):
             'height': '160px',
             'border': '1px solid black'
         }
-        self.out = widgets.Output(layout=layout)
+        self.out = widgets.Output(layout=layout, overflow_y='auto')
 
     def emit(self, record):
         """ Overload of logging.Handler method """

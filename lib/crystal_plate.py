@@ -67,6 +67,10 @@ class crystal_plate(object):
         self.select_plate_type = widgets.Dropdown()
         self.grid_widget_upper[8,1] = self.select_plate_type
 
+        self.grid_widget_upper[9,0] = Label("Method", layout=Layout(display="flex", justify_content="center"))
+        self.select_method = widgets.Dropdown()
+        self.grid_widget_upper[9,1] = self.select_method
+
         file = open("images/swiss_ci_layout.png", "rb")
         image = file.read()
         swissci = widgets.Image(value=image, format='png', width=200, height=200)
@@ -229,6 +233,7 @@ class crystal_plate(object):
                 Protein_Buffer=self.protein_buffer.value,
                 Temperature=_temperature,
                 Plate_Type=self.select_plate_type.value,
+                Crystallization_Method=self.select_method.value,
                 Reservoir_Volume=_reservoir_volume,
                 Subwell_A_Vol_Protein=_subwell_a_protein,
                 Subwell_A_Vol_Reservoir=_subwell_a_reservoir,
@@ -251,6 +256,7 @@ class crystal_plate(object):
                 'Protein_Buffer': self.protein_buffer.value,
                 'Temperature': _temperature,
                 'Plate_Type': self.select_plate_type.value,
+                'Crystallization_Method': self.select_method.value,
                 'Reservoir_Volume': _reservoir_volume,
                 'Subwell_A_Vol_Protein': _subwell_a_protein,
                 'Subwell_A_Vol_Reservoir': _subwell_a_reservoir,
