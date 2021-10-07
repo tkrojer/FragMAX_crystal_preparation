@@ -111,13 +111,16 @@ class mounted_crystals(object):
     def read_shifter_csv(self, shifter_csv_file):
         proteinacronym = self.get_protein_acronym()
         known_plate_types = self.get_known_plate_types()
-        for line in open(shifter_csv_file):
+        for line in open(shifter_csv_file, encoding='utf-8-sig'):
+            # need to do this because excel puts a hidden \ufeff character at the beginning of the file
+            self.logger.info(line)
             if line.startswith(';'):
                 continue
             if line.startswith('"'):
                 continue
             try:
                 plate_type = re.split(r'[,;]+', line)[0]
+                self.logger.warning(repr(plate_type))
                 if plate_type not in known_plate_types:
                     self.logger.error('cannot find plate type {0!s} in database; skipping row...'.format(plate_type))
                     continue

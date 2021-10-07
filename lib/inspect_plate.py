@@ -74,7 +74,7 @@ class inspect_plate(object):
             else:
                 self.logger.info('loading ' + b.files[0])
                 n = 0
-                for line in open(b.files[0]):
+                for line in open(b.files[0], encoding='utf-8-sig'):
                     if line.startswith(';'):
                         continue
                     barcode = re.split(r'[ ,;]+', line)[1]

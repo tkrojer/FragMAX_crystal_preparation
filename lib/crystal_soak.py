@@ -65,7 +65,7 @@ class crystal_soak(object):
         if soak_csv.endswith('_compound.csv'):
             self.logger.info('reading {0!s} file...'.format(soak_csv))
             crystal_plate_list = []
-            for line in open(soak_csv):
+            for line in open(soak_csv, encoding='utf-8-sig'):
                 if line.startswith(';'):
                     continue
                 elif line.startswith('PlateType'):
@@ -118,7 +118,7 @@ class crystal_soak(object):
     def update_crystal_mount_csv_file(self, crystal_plate_name, plate_type, row, column, subwell):
         # check if barcode, row, column, subwell exisit
         found_well = False
-        for line in open(os.path.join(self.settingsObject.workflow_folder, '3-mount', crystal_plate_name + '_mount.csv')):
+        for line in open(os.path.join(self.settingsObject.workflow_folder, '3-mount', crystal_plate_name + '_mount.csv'), encoding='utf-8-sig'):
             plate_name = re.split(r'[,;]+', line)[1]
             plate_row = re.split(r'[,;]+', line)[3]
             plate_column = re.split(r'[,;]+', line)[4]
