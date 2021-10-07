@@ -18,14 +18,6 @@ CREATE TABLE IF NOT EXISTS "People" (
 	"Phone"	TEXT
 );
 
-CREATE TABLE IF NOT EXISTS "CrystalPlateType" (
-	"Plate_Name"	TEXT
-);
-
-CREATE TABLE IF NOT EXISTS "CrystallizationMethod" (
-	"Method"	TEXT
-);
-
 CREATE TABLE IF NOT EXISTS "Protein" (
 	"Protein_Name"	TEXT,
 	"Protein_Acronym"	TEXT,
@@ -134,6 +126,7 @@ CREATE TABLE IF NOT EXISTS "SoakPlate" (
 	"CrystalBuffer"	TEXT,
 	"CrystalBuffer_Vol"	REAL,
 	"Compound_Vol"	REAL,
+	"Soak_Method"   TEXT,
 	PRIMARY KEY("SoakPlate_Condition_ID"),
 	FOREIGN KEY("CompoundBatch_ID") REFERENCES "CompoundBatchTable"("CompoundBatch_ID")
 );
@@ -192,7 +185,24 @@ CREATE TABLE IF NOT EXISTS "Diary" (
 	PRIMARY KEY("Entry_ID")
 );
 
+CREATE TABLE IF NOT EXISTS "CrystalPlateType" (
+	"Plate_Name"	TEXT
+);
+
 INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-3d');
 
+CREATE TABLE IF NOT EXISTS "CrystallizationMethod" (
+	"Method"	TEXT
+);
+
 INSERT INTO CrystallizationMethod VALUES('VAPOR DIFFUSION, SITTING DROP');
+
+CREATE TABLE IF NOT EXISTS "SoakMethod" (
+	"Method"	TEXT
+);
+
+INSERT INTO SoakMethod VALUES('Shifter transfer');
+INSERT INTO SoakMethod VALUES('Mosquito transfer');
+INSERT INTO SoakMethod VALUES('Multichannel pipette transfer');
+INSERT INTO SoakMethod VALUES('Single pipette transfer');
 

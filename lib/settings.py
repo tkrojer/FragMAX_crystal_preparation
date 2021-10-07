@@ -6,3 +6,4 @@ class settings(object):
         self.crystal_image_folder = None
         self.crystal_screen_folder = None
         self.workflow_folder = None
+        self.eln_folder = None

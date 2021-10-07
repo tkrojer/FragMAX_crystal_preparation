@@ -13,6 +13,7 @@ class db_objects(object):
         self.markedcrystalTable = None
         self.soakplateTable = None
         self.compoundbatchTable = None
+        self.compoundTable = None
         self.soakedcrystalTable = None
         self.mountedcrystalTable = None
         self.diaryTable = None

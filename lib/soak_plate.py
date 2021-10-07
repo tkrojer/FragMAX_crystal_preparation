@@ -137,7 +137,8 @@ class soak_plate(object):
                     CompoundPlate_Name=self.select_library_plate.value,
                     CrystalBuffer=self.soakplate_reservoir.value,
                     CrystalBuffer_Vol=_soakplate_reservoir_volume,
-                    Compound_Vol=_soakplate_compound_volume
+                    Compound_Vol=_soakplate_compound_volume,
+                    Soak_Method='Shifter transfer'
                 ).where(self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID == soakplate_condition_id)
                 self.dbObject.connection.execute(query)
             else:
@@ -151,7 +152,8 @@ class soak_plate(object):
                     'CompoundPlate_Name': self.select_library_plate.value,
                     'CrystalBuffer': self.soakplate_reservoir.value,
                     'CrystalBuffer_Vol': _soakplate_reservoir_volume,
-                    'Compound_Vol': _soakplate_compound_volume
+                    'Compound_Vol': _soakplate_compound_volume,
+                    'Soak_Method': 'Shifter transfer'
                 }]
                 query = db.insert(self.dbObject.soakplateTable)
                 self.dbObject.connection.execute(query, values_list)

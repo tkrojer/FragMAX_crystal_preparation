@@ -163,6 +163,13 @@ class project_description(object):
             os.mkdir(workflow_fragmaxapp_folder)
             os.mkdir(os.path.join(workflow_fragmaxapp_folder, 'backup'))
 
+        self.settings.eln_folder = os.path.join(self.settings.project_folder,'eln')
+        if os.path.isdir(self.settings.eln_folder):
+            self.logger.warning('eln folder exists: ' + self.settings.eln_folder)
+        else:
+            self.logger.info('eln image folder: ' + self.settings.eln_folder)
+            os.mkdir(self.settings.eln_folder)
+
 
     def init_db(self):
         self.logger.info('initializing DB...')
@@ -190,6 +197,8 @@ class project_description(object):
 
         self.dbObject.compoundbatchTable = db.Table('CompoundBatchTable', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
+        self.dbObject.compoundTable = db.Table('CompoundTable', metadata, autoload=True, autoload_with=self.dbObject.engine)
+
         self.dbObject.soakedcrystalTable = db.Table('SoakedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
 
         self.dbObject.mountedcrystalTable = db.Table('MountedCrystals', metadata, autoload=True, autoload_with=self.dbObject.engine)
@@ -205,6 +214,8 @@ class project_description(object):
                                           self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID, isouter=True).join(
             self.dbObject.compoundbatchTable, self.dbObject.soakplateTable.columns.CompoundBatch_ID ==
                                               self.dbObject.compoundbatchTable.columns.CompoundBatch_ID, isouter=True).join(
+            self.dbObject.compoundTable, self.dbObject.compoundbatchTable.columns.Compound_ID ==
+                                              self.dbObject.compoundTable.columns.Compound_ID, isouter=True).join(
             self.dbObject.markedcrystalTable, self.dbObject.mountedcrystalTable.columns.MarkedCrystal_ID ==
                                          self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID, isouter=True).join(
             self.dbObject.crystalscreenTable, self.dbObject.markedcrystalTable.columns.CrystalScreen_ID ==
@@ -219,6 +230,7 @@ class project_description(object):
         self.settings.db_file = os.path.join(self.settings.db_dir, 'fragmax.sqlite')
         self.logger.info("checking if database exists in {0!s}".format(self.settings.db_file))
         if os.path.isfile(str(self.settings.db_file)):
+            self.backup_db()
             self.logger.info("found database file")
             self.init_db()
         else:

@@ -15,7 +15,6 @@ class protein_batch(object):
 
         self.last_tab = 0
         self.protein_batch_tab_list = []
-
         self.protein_batch_tab_dict = {}
 
         self.top_grid_widget = widgets.GridspecLayout(2, 3)

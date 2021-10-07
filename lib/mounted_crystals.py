@@ -97,16 +97,34 @@ class mounted_crystals(object):
             self.update_db_with_manually_mounted_crystals(df)
 
 
+    def get_known_plate_types(self):
+        self.logger.info('reading known plate types from database...')
+        query = db.select([self.dbObject.crystal_plate_typeTable.columns.Plate_Name.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        known_plate_types = [x[0] for x in ResultProxy.fetchall()]
+        self.logger.info('found the following plate types in database: {0!s}'.format(known_plate_types))
+        return known_plate_types
+
+
+
+
     def read_shifter_csv(self, shifter_csv_file):
         proteinacronym = self.get_protein_acronym()
+        known_plate_types = self.get_known_plate_types()
         for line in open(shifter_csv_file):
             if line.startswith(';'):
                 continue
-#            self.logger.info(str(line.split(';')))
+            if line.startswith('"'):
+                continue
             try:
+                plate_type = re.split(r'[,;]+', line)[0]
+                if plate_type not in known_plate_types:
+                    self.logger.error('cannot find plate type {0!s} in database; skipping row...'.format(plate_type))
+                    continue
                 plate_name = re.split(r'[,;]+', line)[1]
                 plate_row = re.split(r'[,;]+', line)[3]
                 plate_column = '0' * (2 - len(re.split(r'[,;]+', line)[4])) + re.split(r'[,;]+', line)[4]
+                plate_well = plate_row + plate_column
                 plate_subwell = re.split(r'[,;]+', line)[5]
                 mount_time = re.split(r'[,;]+', line)[9]
                 comment = re.split(r'[,;]+', line)[6]
@@ -168,8 +186,25 @@ class mounted_crystals(object):
                 }]
                 query = db.insert(self.dbObject.mountedcrystalTable)
                 self.dbObject.connection.execute(query,values_list)
+                self.update_markedcrystalTable(marked_crystal_id, plate_name, plate_well, plate_subwell)
 
+    def update_markedcrystalTable(self, marked_crystal_id, barcode, well, subwell):
+        query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        marked_crystals = [x[0] for x in ResultProxy.fetchall()]
 
+        if marked_crystal_id not in marked_crystals:
+            self.logger.info('marking crystal for mounting/ soaking in database: ' + marked_crystal_id)
+            values_list = [{
+                'MarkedCrystal_ID': marked_crystal_id,
+                'CrystalPlate_Barcode': barcode,
+                'CrystalPlate_Well': well,
+                'CrystalPlate_Subwell': subwell
+            }]
+            query = db.insert(self.dbObject.markedcrystalTable)
+            self.dbObject.connection.execute(query, values_list)
+        else:
+            self.logger.info('marked crystal entry {0!a} exists in database'.format(marked_crystal_id))
 
     def get_last_crystal_id(self, proteinacronym):
         query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID.distinct()]).order_by(
@@ -206,9 +241,9 @@ class mounted_crystals(object):
         ResultProxy = self.dbObject.connection.execute(query)
         existing_manually_mounted_crystals = [x[0] for x in ResultProxy.fetchall()]
 
-        query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
-        ResultProxy = self.dbObject.connection.execute(query)
-        marked_crystals = [x[0] for x in ResultProxy.fetchall()]
+#        query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
+#        ResultProxy = self.dbObject.connection.execute(query)
+#        marked_crystals = [x[0] for x in ResultProxy.fetchall()]
 
         # latest crystal ID
         last_crystal_id = self.get_last_crystal_id(proteinacronym)
@@ -390,7 +425,7 @@ class mounted_crystals(object):
         query = db.select([
             self.dbObject.mountedcrystalTable.columns.Crystal_ID,
             self.dbObject.mountedcrystalTable.columns.Shipment,
-            self.dbObject.soakplateTable.columns.CompoundBatch_ID,
+            self.dbObject.compoundbatchTable.columns.Compound_ID,
             self.dbObject.compoundbatchTable.columns.Library_Name,
             self.dbObject.crystalscreenTable.columns.CrystalScreen_Condition,
             self.dbObject.mountedcrystalTable.columns.Mount_Date,
@@ -405,7 +440,7 @@ class mounted_crystals(object):
 
         ResultProxy = self.dbObject.connection.execute(query)
         crystals = ResultProxy.fetchall()
-        fragmax_csv = ''
+        fragmax_csv = 'SampleID,FragmentLibrary,FragmentCode\n'
         shipmentList = []
         foundCrystals = False
         for c in crystals:
@@ -436,8 +471,11 @@ class mounted_crystals(object):
                 self.logger.info('one')
                 self.save_fragmax_csv_file(shipment, fragmax_csv)
                 fragmax_csv = ''
-            fragmax_csv += '{0!s},{1!s},{2!s},"{3!s}","n/a",{4!s},{5!s},,,,,\n'.format(
-                crystalID, library, compound, method, temperature, condition)
+#            fragmax_csv += '{0!s},{1!s},{2!s},"{3!s}","n/a",{4!s},{5!s},,,,,\n'.format(
+#                crystalID, library, compound, method, temperature, condition)
+
+
+            fragmax_csv += '{0!s},,\n'.format(crystalID)
 #            'X0001,, , "VAPOR DIFFUSION, SITTING DROP", 7.4, 86.3, cloudy, 0.42, DMS, 5.4,,'
         if fragmax_csv:
             self.logger.info('two')
