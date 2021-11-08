@@ -5,19 +5,25 @@ from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 
 from datetime import datetime
 
+import sqlalchemy as db
+
 class eln_entry(object):
-    def __init__(self, settingsObject, logger):
+    def __init__(self, settingsObject, logger, dbObject):
 
         self.settings = settingsObject
 
         self.logger = logger
 
-        self.last_eln_tab = 0
+        self.dbObject = dbObject
+
+        self.last_tab = 0
+
         self.eln_tab_list = []
         self.eln_tab_dict = {}
 
         self.top_grid_widget = widgets.GridspecLayout(2, 3)
-        self.read_eln_from_db_button = widgets.Button(description='Load Entries from DB', style= {'button_color':'orange'})
+        self.read_eln_from_db_button = widgets.Button(description='Load Entries from DB',
+                                                      style= {'button_color':'orange'})
         self.top_grid_widget[0, 0] = self.read_eln_from_db_button
         self.read_eln_from_db_button.on_click(self.read_eln_from_db)
 
@@ -47,32 +53,37 @@ class eln_entry(object):
 #        # attachments
 
     def add_eln_entry(self, b):
-        self.add_eln('', '', '')
+        self.add_eln('', '', str(self.last_tab))
 
 
     def add_eln(self, title, comment, entry_id):
         self.eln_tab_list.append(self.add_tab_widget(title, comment, entry_id))
         self.tab.children = self.eln_tab_list
         self.tab.set_title(self.last_tab, 'entry {0!s}'.format(self.last_tab))
-        self.last_eln_tab += 1
+        self.last_tab += 1
 
     def add_tab_widget(self, t, c, i):
-
         eln_id = i
 
-        title = widgets.Text(value=t, layout=widgets.Layout(height="auto", width="200"))
-        comment = widgets.Textarea(value=c, layout=widgets.Layout(height="1000", width="200"))
+        title = widgets.Text(value=t, layout=widgets.Layout(height="auto", width="500px"))
+        comment = widgets.Textarea(value=c, layout=widgets.Layout(height="auto", width="500px"))
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         self.eln_tab_dict[eln_id] = []
 
         self.eln_tab_dict[eln_id].append(title)
         self.eln_tab_dict[eln_id].append(comment)
+        self.eln_tab_dict[eln_id].append(now)
 
-        grid_widget = widgets.GridspecLayout(10, 10)
-        grid_widget[1, 0] = Label("Title", layout=Layout(display="flex", justify_content="center"))
-        grid_widget[1, 1:] = title
-        grid_widget[2, 0] = Label("Comment", layout=Layout(display="flex", justify_content="center"))
-        grid_widget[2:, 1:] = comment
+
+        grid_widget = widgets.GridspecLayout(4, 10)
+        grid_widget[1, 0] = Label("Date created:", layout=Layout(display="flex", justify_content="center"))
+        grid_widget[1, 1:] = Label(str(now),
+                                  layout=Layout(display="flex", justify_content="center"))
+        grid_widget[2, 0] = Label("Title:", layout=Layout(display="flex", justify_content="center"))
+        grid_widget[2, 1:] = title
+        grid_widget[3, 0] = Label("Comment:", layout=Layout(display="flex", justify_content="center"))
+        grid_widget[3:10, 1:] = comment
 
         vbox = VBox(children=[grid_widget])
         return vbox
@@ -81,7 +92,7 @@ class eln_entry(object):
         if not os.path.isdir(os.path.join(self.settings.eln_folder, id)):
             os.mkdir(os.path.join(self.settings.eln_folder, id))
         if not os.path.isdir(os.path.join(self.settings.eln_folder, id, 'attachments')):
-            os.mkir(os.path.join(self.settings.eln_folder, id, 'attachments'))
+            os.mkdir(os.path.join(self.settings.eln_folder, id, 'attachments'))
 
         self.logger.info('saving title and comments to {0!s}'.format(os.path.join(self.settings.eln_folder, id)))
 
@@ -98,11 +109,12 @@ class eln_entry(object):
         ResultProxy = self.dbObject.connection.execute(query)
         existing_entries = [x[0] for x in ResultProxy.fetchall()]
 
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         for id in self.eln_tab_dict:
             title = self.eln_tab_dict[id][0].value
             comment = self.eln_tab_dict[id][1].value
+            now = self.eln_tab_dict[id][2]
 
             if id in existing_entries:
                 self.logger.warning(
@@ -122,6 +134,8 @@ class eln_entry(object):
                 }]
                 query = db.insert(self.dbObject.diaryTable).prefix_with("OR REPLACE")
                 self.dbObject.connection.execute(query, values_list)
+
+            self.save_text_to_eln_folder(id, title, comment)
 
     def read_eln_from_db(self, b):
         print('hallo')

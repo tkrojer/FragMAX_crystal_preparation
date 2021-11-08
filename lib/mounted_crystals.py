@@ -69,6 +69,9 @@ class mounted_crystals(object):
         export_csv_for_fragmaxapp_button.on_click(self.export_csv_for_fragmaxapp)
         self.grid_widget[0,5] = export_csv_for_fragmaxapp_button
 
+        export_csv_summary_button = widgets.Button(description='Export CSV for FragMAXapp')
+        export_csv_summary_button.on_click(self.export_csv_summary)
+        self.grid_widget[0,5] = export_csv_summary_button
 
     def shifter_mounted_crystals(self, b):
         folder = '3-mount'
@@ -112,6 +115,7 @@ class mounted_crystals(object):
         proteinacronym = self.get_protein_acronym()
         known_plate_types = self.get_known_plate_types()
         for line in open(shifter_csv_file, encoding='utf-8-sig'):
+            self.logger.info(line)
             # need to do this because excel puts a hidden \ufeff character at the beginning of the file
             if line.startswith(';'):
                 continue
@@ -127,6 +131,7 @@ class mounted_crystals(object):
                 plate_row = re.split(r'[,;]+', line)[3]
                 plate_column = '0' * (2 - len(re.split(r'[,;]+', line)[4])) + re.split(r'[,;]+', line)[4]
                 plate_well = plate_row + plate_column
+                self.logger.info('-> {0!s}'.format(plate_well))
                 plate_subwell = re.split(r'[,;]+', line)[5]
                 mount_time = re.split(r'[,;]+', line)[9]
                 comment = re.split(r'[,;]+', line)[6]
@@ -450,7 +455,11 @@ class mounted_crystals(object):
             crystalID = c[0]
             shipment = c[1]
             compound = c[2]
+            if not compound:
+                compound = ''
             library = c[3]
+            if not library:
+                library = ''
             condition = c[4]
             temperature = str(c[7])
             method = c[8]
@@ -461,26 +470,17 @@ class mounted_crystals(object):
                 soak_time = str(int(diff.total_seconds()))
             except TypeError:
                 soak_time = '0'
-
-#"""
-#crystalID,fragmentLibrary,fragmentCode,crystallizationMethod,crystallizationPH,crystallizationTemperature,crystallizationCondition,compoundConcentration,solvent,solventConcentration,soakTime,soakCondition
-#"""
-
-
             if not shipmentList:
                 shipmentList.append(shipment)
             if shipment not in shipmentList:
-                self.logger.info('one')
-                self.save_fragmax_csv_file(shipment, fragmax_csv)
-                fragmax_csv = ''
-#            fragmax_csv += '{0!s},{1!s},{2!s},"{3!s}","n/a",{4!s},{5!s},,,,,\n'.format(
-#                crystalID, library, compound, method, temperature, condition)
-
-
-            fragmax_csv += '{0!s},,\n'.format(crystalID)
-#            'X0001,, , "VAPOR DIFFUSION, SITTING DROP", 7.4, 86.3, cloudy, 0.42, DMS, 5.4,,'
+                self.save_fragmax_csv_file(shipmentList[len(shipmentList)-2], fragmax_csv)
+                shipmentList.append(shipment)
+                fragmax_csv = 'SampleID,FragmentLibrary,FragmentCode\n'
+            fragmax_csv += '{0!s},{1!s},{2!s}\n'.format(crystalID, library, compound)
         if fragmax_csv:
-            self.logger.info('two')
             self.save_fragmax_csv_file(shipment, fragmax_csv)
         if not foundCrystals:
             self.logger.error('did not find any crystals, make sure that you exported samples for EXI!')
+
+    def export_csv_summary(self):
+        print('hallo')

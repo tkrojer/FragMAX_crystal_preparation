@@ -66,12 +66,16 @@ class crystal_soak(object):
             self.logger.info('reading {0!s} file...'.format(soak_csv))
             crystal_plate_list = []
             for line in open(soak_csv, encoding='utf-8-sig'):
+                self.logger.warning(line)
                 if line.startswith(';'):
                     continue
                 elif line.startswith('PlateType'):
                     continue
                 # crystal_id is irrelevant, but if field is blank then nothing was transferred
                 crystal_id = re.split(r'[,;]+', line)[7].replace(' ','')
+#                self.logger.info('crystal ID: {0!s}'.format(crystal_id))
+                self.logger.info('current line: {0!s}'.format(re.split(r'[,;]+', line)))
+#                self.logger.info(len(re.split(r'[,;]+', line)))
                 if crystal_id == '':
                     continue
                 try:
@@ -107,8 +111,11 @@ class crystal_soak(object):
                     marked_crystal_id = crystal_plate_name + '-' + crystal_plate_row + \
                                         crystal_plate_column + crystal_plate_subwell
 
+                    self.logger.info('marked crystal ID: {0!s} - soak condition ID: {1!s}'.format(marked_crystal_id, soakplate_condition_id))
+
                     self.update_database(soakplate_condition_id, marked_crystal_id, soak_time, comment)
-                except IndexError:
+                except IndexError as e:
+                    self.logger.error(e)
                     continue
 
         else:
@@ -119,6 +126,12 @@ class crystal_soak(object):
         # check if barcode, row, column, subwell exisit
         found_well = False
         for line in open(os.path.join(self.settingsObject.workflow_folder, '3-mount', crystal_plate_name + '_mount.csv'), encoding='utf-8-sig'):
+            if line.startswith(';'):
+                continue
+            if line.startswith('"'):
+                continue
+            if line.startswith("Column1"):
+                continue
             plate_name = re.split(r'[,;]+', line)[1]
             plate_row = re.split(r'[,;]+', line)[3]
             plate_column = re.split(r'[,;]+', line)[4]
@@ -157,7 +170,7 @@ class crystal_soak(object):
         if soak_id in existing_soak_ids:
             self.logger.warning('soak ID exists: {0!s}; skipping...'.format(soak_id))
         else:
-            self.logger.info('inserting soak ID in database: {0!s}; skipping...'.format(soak_id))
+            self.logger.info('inserting soak ID in database: {0!s}'.format(soak_id))
             values_list = [{
                 'Soak_ID':                  soak_id,
                 'MarkedCrystal_ID':         marked_crystal_id,

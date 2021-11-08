@@ -18,9 +18,9 @@ class protein_batch(object):
         self.protein_batch_tab_dict = {}
 
         self.top_grid_widget = widgets.GridspecLayout(2, 3)
-        self.read_batch_to_db_button = widgets.Button(description='Load Batches from DB', style= {'button_color':'orange'})
-        self.top_grid_widget[0, 0] = self.read_batch_to_db_button
-        self.read_batch_to_db_button.on_click(self.read_batch_to_db)
+        self.read_batch_from_db_button = widgets.Button(description='Load Batches from DB', style= {'button_color':'orange'})
+        self.top_grid_widget[0, 0] = self.read_batch_from_db_button
+        self.read_batch_from_db_button.on_click(self.read_batch_from_db)
 
         self.add_batch_button = widgets.Button(description='Add protein batch')
         self.top_grid_widget[0, 1] = self.add_batch_button
@@ -33,9 +33,12 @@ class protein_batch(object):
 
 
     def add_batch(self, b):
+        self.logger.info('checking if protein batch(es) exist in database...')
+        self.check_existing_batch_in_db()
         self.add_batch_tab(None, '', '', None, '', '', '', '')
 
     def add_batch_tab(self, proteinbatch, expression_host, comment, date, supplier_id, sequence, buffer, concentration):
+        self.logger.info('creating new tab...')
         self.protein_batch_tab_list.append(self.add_tab_widget(proteinbatch, expression_host, comment, date, supplier_id, sequence, buffer, concentration))
         self.tab.children = self.protein_batch_tab_list
         self.tab.set_title(self.last_tab, 'batch {0!s}'.format(self.last_tab))
@@ -160,32 +163,45 @@ class protein_batch(object):
         result = ResultProxy.fetchall()
         return result
 
+    def read_batch_from_db(self, b):
+        self.check_existing_batch_in_db()
 
-    def read_batch_to_db(self, b):
+    def check_existing_batch_in_db(self):
         result = self.get_batches_from_db()
         for b in result:
+            self.logger.error('b: {0!s}'.format(b))
             proteinbatch = b[0]
             expression_host = b[1]
             comment = b[2]
-            year = int(b[3].split('-')[0])
-            month = int(b[3].split('-')[1])
-            day = int(b[3].split('-')[2])
+            try:
+                year = int(b[3].split('-')[0])
+                month = int(b[3].split('-')[1])
+                day = int(b[3].split('-')[2])
+            except AttributeError:
+                self.logger.warning('protein batch receiving date is not defined')
+                year = 2000
+                month = 1
+                day = 1
             date = datetime.date(year, month, day)
             supplier_id = b[4]
             sequence = b[5]
             buffer = b[6]
             concentration = b[7]
-            if proteinbatch in self.protein_batch_tab_dict:
-                self.protein_batch_tab_dict[batch][0].value = expression_host
-                self.protein_batch_tab_dict[batch][1].value = comment
-                self.protein_batch_tab_dict[batch][2].value = b[3]
-                self.protein_batch_tab_dict[batch][3].value = b[4]
-                self.protein_batch_tab_dict[batch][4].value = b[5]
-                self.protein_batch_tab_dict[batch][5].value = b[6]
-                self.protein_batch_tab_dict[batch][6].value = b[7]
-            else:
-                self.add_batch_tab(proteinbatch, expression_host, comment, date, supplier_id, sequence, buffer, concentration)
-
+#            if proteinbatch in self.protein_batch_tab_dict:
+#                print(self.protein_batch_tab_dict)
+#                print('im hererereerer')
+#                self.protein_batch_tab_dict[proteinbatch][0].value = expression_host
+#                self.protein_batch_tab_dict[proteinbatch][1].value = comment
+#                self.protein_batch_tab_dict[proteinbatch][2].value = b[3]
+#                self.protein_batch_tab_dict[proteinbatch][3].value = b[4]
+#                self.protein_batch_tab_dict[proteinbatch][4].value = b[5]
+#                self.protein_batch_tab_dict[proteinbatch][5].value = b[6]
+#                self.protein_batch_tab_dict[proteinbatch][6].value = b[7]
+#            else:
+#                self.add_batch_tab(proteinbatch, expression_host, comment, date, supplier_id, sequence, buffer, concentration)
+            if proteinbatch not in self.protein_batch_tab_dict:
+                self.add_batch_tab(proteinbatch, expression_host, comment, date, supplier_id, sequence, buffer,
+                                   concentration)
 
     def update_crystal_plate_widgets(self):
         query = db.select([self.dbObject.proteinBatchTable.columns.ProteinBatch_ID.distinct()])
