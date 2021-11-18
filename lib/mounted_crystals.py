@@ -41,7 +41,7 @@ class mounted_crystals(object):
 
         self.mounted_crystals_sheet = TableDisplay(x)
 
-        self.grid_widget = widgets.GridspecLayout(2, 6)
+        self.grid_widget = widgets.GridspecLayout(2, 7)
 
 #        self.grid_widget[0:8,0:3] = self.mounted_crystals_sheet
 
@@ -58,7 +58,7 @@ class mounted_crystals(object):
         self.grid_widget[0,2] = import_manually_mounted_crystals_button
 
         save_template_manually_mounted_crystals_button = widgets.Button(description='Save manual template')
-#        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
+        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
         self.grid_widget[0,3] = save_template_manually_mounted_crystals_button
 
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI')
@@ -69,9 +69,9 @@ class mounted_crystals(object):
         export_csv_for_fragmaxapp_button.on_click(self.export_csv_for_fragmaxapp)
         self.grid_widget[0,5] = export_csv_for_fragmaxapp_button
 
-        export_csv_summary_button = widgets.Button(description='Export CSV for FragMAXapp')
+        export_csv_summary_button = widgets.Button(description='Export summary CSV')
         export_csv_summary_button.on_click(self.export_csv_summary)
-        self.grid_widget[0,5] = export_csv_summary_button
+        self.grid_widget[0,6] = export_csv_summary_button
 
     def shifter_mounted_crystals(self, b):
         folder = '3-mount'
@@ -237,7 +237,7 @@ class mounted_crystals(object):
 
     def update_db_with_manually_mounted_crystals(self, df):
 
-        proteinacronym = get_protein_acronym()
+        proteinacronym = self.get_protein_acronym()
         if proteinacronym is None:
             self.logger.error('Please enter and save protein acronym in "Project Description" tab and then try again')
             pass
@@ -248,20 +248,20 @@ class mounted_crystals(object):
         ResultProxy = self.dbObject.connection.execute(query)
         existing_manually_mounted_crystals = [x[0] for x in ResultProxy.fetchall()]
 
-#        query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        marked_crystals = [x[0] for x in ResultProxy.fetchall()]
+        query = db.select([self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID.distinct()])
+        ResultProxy = self.dbObject.connection.execute(query)
+        marked_crystals = [x[0] for x in ResultProxy.fetchall()]
 
         # latest crystal ID
         last_crystal_id = self.get_last_crystal_id(proteinacronym)
         next_crystal_number = int(last_crystal_id.split('-')[1].replace('x', '')) + 1
 
         for index, row in df.iterrows():
-            Manual_Crystal_ID = df.at[index, 'Manual_ID']
+            Manual_Crystal_ID = df.at[index, 'Manual_Crystal_ID']
 
             barcode = df.at[index, 'CrystalPlate_Barcode']
-            query = db.select([crystalplateTable.columns.CrystalPlate_Barcode.distinct()])
-            ResultProxy = connection.execute(query)
+            query = db.select([self.dbObject.crystalplateTable.columns.CrystalPlate_Barcode.distinct()])
+            ResultProxy = self.dbObject.connection.execute(query)
             existing_crystal_plates = [x[0] for x in ResultProxy.fetchall()]
             if barcode not in existing_crystal_plates:
                 self.logger.error(
@@ -456,6 +456,12 @@ class mounted_crystals(object):
             shipment = c[1]
             compound = c[2]
             if not compound:
+                # manually mounted crystals have a compound ID in the mounted crystal table
+#                query = db.select([
+#                    self.dbObject.mountedcrystalTable.columns.CompoundBatch_ID
+#                ]).where(self.dbObject.mountedcrystalTable.columns.Crystal_ID == crystalID)
+#                ResultProxy = self.dbObject.connection.execute(query)
+#                cpdID = ResultProxy.fetchall()
                 compound = ''
             library = c[3]
             if not library:
@@ -482,5 +488,39 @@ class mounted_crystals(object):
         if not foundCrystals:
             self.logger.error('did not find any crystals, make sure that you exported samples for EXI!')
 
-    def export_csv_summary(self):
-        print('hallo')
+    def export_csv_summary(self, b):
+        query = db.select([
+            self.dbObject.mountedcrystalTable.columns.Crystal_ID,
+            self.dbObject.compoundbatchTable.columns.Compound_ID,
+            self.dbObject.compoundTable.columns.Smiles
+        ]).order_by(
+            self.dbObject.mountedcrystalTable.columns.Crystal_ID)
+
+        query = query.select_from(self.dbObject.joined_tables)
+
+        ResultProxy = self.dbObject.connection.execute(query)
+        crystals = ResultProxy.fetchall()
+        csvOut = ''
+        for c in crystals:
+            crystalID = c[0]
+            cpdID = c[1]
+            if not cpdID:
+                cpdID = ''
+            smiles = c[2]
+            if not smiles:
+                smiles = ''
+            csvOut += crystalID + ',' + cpdID + ',' + smiles + '\n'
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.logger.info('saving CSV summary {0!s}'.format(
+            os.path.join(self.settingsObject.workflow_folder, '7-summary', 'summary_' + now + '.csv')))
+        f = open(os.path.join(self.settingsObject.workflow_folder, '7-summary', 'summary_' + now + '.csv'), 'w')
+        f.write(csvOut)
+        f.close()
+
+    def save_template_manually_mounted_crystals(self, b):
+        self.logger.info('saving CSV file for manually mounted crystals in workflow/4-mount-manual...')
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        csvHeader = 'Manual_Crystal_ID;CompoundBatch_ID;Puck_Name;Puck_Position;Pin_Barcode;Mount_Date;Cryo;Cryo_Concentration;CrystalPlate_Barcode;CrystalPlate_Well;CrystalPlate_Subwell;Comment\n'
+        f = open(os.path.join(self.settingsObject.workflow_folder, '4-mount-manual', 'mount_' + now + '.csv'), 'w')
+        f.write(csvHeader)
+        f.close()

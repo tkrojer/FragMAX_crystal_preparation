@@ -1,134 +1,304 @@
-"CompoundBatch_ID","Compound_ID","Library_Name","CompoundPlate_Name","CompoundPlate_Well","CompoundPlate_Type","State","Solvent","Concentration","Comment"
-"VT00249-b0","VT00249","FragMAXlib","FMLv03-DMSO","A01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00245-b0","VT00245","FragMAXlib","FMLv03-DMSO","A02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00220-b0","VT00220","FragMAXlib","FMLv03-DMSO","A03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00087-b0","VT00087","FragMAXlib","FMLv03-DMSO","A04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00225-b0","VT00225","FragMAXlib","FMLv03-DMSO","A05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00162-b0","VT00162","FragMAXlib","FMLv03-DMSO","A06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00049-b0","VT00049","FragMAXlib","FMLv03-DMSO","A07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00257-b0","VT00257","FragMAXlib","FMLv03-DMSO","A08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00084-b0","VT00084","FragMAXlib","FMLv03-DMSO","A09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00190-b0","VT00190","FragMAXlib","FMLv03-DMSO","A10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00232-b0","VT00232","FragMAXlib","FMLv03-DMSO","A11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00033-b0","VT00033","FragMAXlib","FMLv03-DMSO","A12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00264-b0","VT00264","FragMAXlib","FMLv03-DMSO","B01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00169-b0","VT00169","FragMAXlib","FMLv03-DMSO","B02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00128-b0","VT00128","FragMAXlib","FMLv03-DMSO","B03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00219-b0","VT00219","FragMAXlib","FMLv03-DMSO","B04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00260-b0","VT00260","FragMAXlib","FMLv03-DMSO","B05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00175-b0","VT00175","FragMAXlib","FMLv03-DMSO","B06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00227-b0","VT00227","FragMAXlib","FMLv03-DMSO","B07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00241-b0","VT00241","FragMAXlib","FMLv03-DMSO","B08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00165-b0","VT00165","FragMAXlib","FMLv03-DMSO","B09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00191-b0","VT00191","FragMAXlib","FMLv03-DMSO","B10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00213-b0","VT00213","FragMAXlib","FMLv03-DMSO","B11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00254-b0","VT00254","FragMAXlib","FMLv03-DMSO","B12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00178-b0","VT00178","FragMAXlib","FMLv03-DMSO","C01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00085-b0","VT00085","FragMAXlib","FMLv03-DMSO","C02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00082-b0","VT00082","FragMAXlib","FMLv03-DMSO","C03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00086-b0","VT00086","FragMAXlib","FMLv03-DMSO","C04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00251-b0","VT00251","FragMAXlib","FMLv03-DMSO","C05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00259-b0","VT00259","FragMAXlib","FMLv03-DMSO","C06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00150-b0","VT00150","FragMAXlib","FMLv03-DMSO","C07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00221-b0","VT00221","FragMAXlib","FMLv03-DMSO","C08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00083-b0","VT00083","FragMAXlib","FMLv03-DMSO","C09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00261-b0","VT00261","FragMAXlib","FMLv03-DMSO","C10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00240-b0","VT00240","FragMAXlib","FMLv03-DMSO","C11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00034-b0","VT00034","FragMAXlib","FMLv03-DMSO","C12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00188-b0","VT00188","FragMAXlib","FMLv03-DMSO","D01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00248-b0","VT00248","FragMAXlib","FMLv03-DMSO","D02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00048-b0","VT00048","FragMAXlib","FMLv03-DMSO","D03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00056-b0","VT00056","FragMAXlib","FMLv03-DMSO","D04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00064-b0","VT00064","FragMAXlib","FMLv03-DMSO","D05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00172-b0","VT00172","FragMAXlib","FMLv03-DMSO","D06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00058-b0","VT00058","FragMAXlib","FMLv03-DMSO","D07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00025-b0","VT00025","FragMAXlib","FMLv03-DMSO","D08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00193-b0","VT00193","FragMAXlib","FMLv03-DMSO","D09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00218-b0","VT00218","FragMAXlib","FMLv03-DMSO","D10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00234-b0","VT00234","FragMAXlib","FMLv03-DMSO","D11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00180-b0","VT00180","FragMAXlib","FMLv03-DMSO","D12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00224-b0","VT00224","FragMAXlib","FMLv03-DMSO","E01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00246-b0","VT00246","FragMAXlib","FMLv03-DMSO","E02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00036-b0","VT00036","FragMAXlib","FMLv03-DMSO","E03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00252-b0","VT00252","FragMAXlib","FMLv03-DMSO","E04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00215-b0","VT00215","FragMAXlib","FMLv03-DMSO","E05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00233-b0","VT00233","FragMAXlib","FMLv03-DMSO","E06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00236-b0","VT00236","FragMAXlib","FMLv03-DMSO","E07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00096-b0","VT00096","FragMAXlib","FMLv03-DMSO","E08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00239-b0","VT00239","FragMAXlib","FMLv03-DMSO","E09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00029-b0","VT00029","FragMAXlib","FMLv03-DMSO","E10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00216-b0","VT00216","FragMAXlib","FMLv03-DMSO","E11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00089-b0","VT00089","FragMAXlib","FMLv03-DMSO","E12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00207-b0","VT00207","FragMAXlib","FMLv03-DMSO","F01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00167-b0","VT00167","FragMAXlib","FMLv03-DMSO","F02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00253-b0","VT00253","FragMAXlib","FMLv03-DMSO","F03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00155-b0","VT00155","FragMAXlib","FMLv03-DMSO","F04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00247-b0","VT00247","FragMAXlib","FMLv03-DMSO","F05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00181-b0","VT00181","FragMAXlib","FMLv03-DMSO","F06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00250-b0","VT00250","FragMAXlib","FMLv03-DMSO","F07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00143-b0","VT00143","FragMAXlib","FMLv03-DMSO","F08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00066-b0","VT00066","FragMAXlib","FMLv03-DMSO","F09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00258-b0","VT00258","FragMAXlib","FMLv03-DMSO","F10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00059-b0","VT00059","FragMAXlib","FMLv03-DMSO","F11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00038-b0","VT00038","FragMAXlib","FMLv03-DMSO","F12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00154-b0","VT00154","FragMAXlib","FMLv03-DMSO","G01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00164-b0","VT00164","FragMAXlib","FMLv03-DMSO","G02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00226-b0","VT00226","FragMAXlib","FMLv03-DMSO","G03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00229-b0","VT00229","FragMAXlib","FMLv03-DMSO","G04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00123-b0","VT00123","FragMAXlib","FMLv03-DMSO","G05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00077-b0","VT00077","FragMAXlib","FMLv03-DMSO","G06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00019-b0","VT00019","FragMAXlib","FMLv03-DMSO","G07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00127-b0","VT00127","FragMAXlib","FMLv03-DMSO","G08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00122-b0","VT00122","FragMAXlib","FMLv03-DMSO","G09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00212-b0","VT00212","FragMAXlib","FMLv03-DMSO","G10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00230-b0","VT00230","FragMAXlib","FMLv03-DMSO","G11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00173-b0","VT00173","FragMAXlib","FMLv03-DMSO","G12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00113-b0","VT00113","FragMAXlib","FMLv03-DMSO","H01","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00198-b0","VT00198","FragMAXlib","FMLv03-DMSO","H02","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00243-b0","VT00243","FragMAXlib","FMLv03-DMSO","H03","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00022-b0","VT00022","FragMAXlib","FMLv03-DMSO","H04","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00118-b0","VT00118","FragMAXlib","FMLv03-DMSO","H05","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00228-b0","VT00228","FragMAXlib","FMLv03-DMSO","H06","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00235-b0","VT00235","FragMAXlib","FMLv03-DMSO","H07","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00068-b0","VT00068","FragMAXlib","FMLv03-DMSO","H08","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00238-b0","VT00238","FragMAXlib","FMLv03-DMSO","H09","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00079-b0","VT00079","FragMAXlib","FMLv03-DMSO","H10","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00265-b0","VT00265","FragMAXlib","FMLv03-DMSO","H11","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"VT00268-b0","VT00268","FragMAXlib","FMLv03-DMSO","H12","SwissCI-MRC-3d","clear","DMSO","1000 mM",""
-"DMSO-b001","DMSO","Solvent","Solvent-tolerance-1_mosquito","A01","SwissCI-MRC-3d","clear","DMSO","5%",""
-"DMSO-b002","DMSO","Solvent","Solvent-tolerance-1_mosquito","A02","SwissCI-MRC-3d","clear","DMSO","10%",""
-"DMSO-b003","DMSO","Solvent","Solvent-tolerance-1_mosquito","A03","SwissCI-MRC-3d","clear","DMSO","15%",""
-"DMSO-b004","DMSO","Solvent","Solvent-tolerance-1_mosquito","A04","SwissCI-MRC-3d","clear","DMSO","20%",""
-"DMSO-b005","DMSO","Solvent","Solvent-tolerance-1_mosquito","A05","SwissCI-MRC-3d","clear","DMSO","25%",""
-"DMSO-b006","DMSO","Solvent","Solvent-tolerance-1_mosquito","A06","SwissCI-MRC-3d","clear","DMSO","30%",""
-"DMSO-b007","DMSO","Solvent","Solvent-tolerance-1_mosquito","B01","SwissCI-MRC-3d","clear","DMSO","5%",""
-"DMSO-b008","DMSO","Solvent","Solvent-tolerance-1_mosquito","B02","SwissCI-MRC-3d","clear","DMSO","10%",""
-"DMSO-b009","DMSO","Solvent","Solvent-tolerance-1_mosquito","B03","SwissCI-MRC-3d","clear","DMSO","15%",""
-"DMSO-b010","DMSO","Solvent","Solvent-tolerance-1_mosquito","B04","SwissCI-MRC-3d","clear","DMSO","20%",""
-"DMSO-b011","DMSO","Solvent","Solvent-tolerance-1_mosquito","B05","SwissCI-MRC-3d","clear","DMSO","25%",""
-"DMSO-b012","DMSO","Solvent","Solvent-tolerance-1_mosquito","B06","SwissCI-MRC-3d","clear","DMSO","30%",""
-"DMSO-b013","DMSO","Solvent","Solvent-tolerance-1_mosquito","C01","SwissCI-MRC-3d","clear","DMSO","5%",""
-"DMSO-b014","DMSO","Solvent","Solvent-tolerance-1_mosquito","C02","SwissCI-MRC-3d","clear","DMSO","10%",""
-"DMSO-b015","DMSO","Solvent","Solvent-tolerance-1_mosquito","C03","SwissCI-MRC-3d","clear","DMSO","15%",""
-"DMSO-b016","DMSO","Solvent","Solvent-tolerance-1_mosquito","C04","SwissCI-MRC-3d","clear","DMSO","20%",""
-"DMSO-b017","DMSO","Solvent","Solvent-tolerance-1_mosquito","C05","SwissCI-MRC-3d","clear","DMSO","25%",""
-"DMSO-b018","DMSO","Solvent","Solvent-tolerance-1_mosquito","C06","SwissCI-MRC-3d","clear","DMSO","30%",""
-"EDO-b001","EDO","Solvent","Solvent-tolerance-1_mosquito","D01","SwissCI-MRC-3d","clear","EDO","5%",""
-"EDO-b002","EDO","Solvent","Solvent-tolerance-1_mosquito","D02","SwissCI-MRC-3d","clear","EDO","10%",""
-"EDO-b003","EDO","Solvent","Solvent-tolerance-1_mosquito","D03","SwissCI-MRC-3d","clear","EDO","15%",""
-"EDO-b004","EDO","Solvent","Solvent-tolerance-1_mosquito","D04","SwissCI-MRC-3d","clear","EDO","20%",""
-"EDO-b005","EDO","Solvent","Solvent-tolerance-1_mosquito","D05","SwissCI-MRC-3d","clear","EDO","25%",""
-"EDO-b006","EDO","Solvent","Solvent-tolerance-1_mosquito","D06","SwissCI-MRC-3d","clear","EDO","30%",""
-"EDO-b007","EDO","Solvent","Solvent-tolerance-1_mosquito","E01","SwissCI-MRC-3d","clear","EDO","5%",""
-"EDO-b008","EDO","Solvent","Solvent-tolerance-1_mosquito","E02","SwissCI-MRC-3d","clear","EDO","10%",""
-"EDO-b009","EDO","Solvent","Solvent-tolerance-1_mosquito","E03","SwissCI-MRC-3d","clear","EDO","15%",""
-"EDO-b010","EDO","Solvent","Solvent-tolerance-1_mosquito","E04","SwissCI-MRC-3d","clear","EDO","20%",""
-"EDO-b011","EDO","Solvent","Solvent-tolerance-1_mosquito","E05","SwissCI-MRC-3d","clear","EDO","25%",""
-"EDO-b012","EDO","Solvent","Solvent-tolerance-1_mosquito","E06","SwissCI-MRC-3d","clear","EDO","30%",""
-"EDO-b013","EDO","Solvent","Solvent-tolerance-1_mosquito","F01","SwissCI-MRC-3d","clear","EDO","5%",""
-"EDO-b014","EDO","Solvent","Solvent-tolerance-1_mosquito","F02","SwissCI-MRC-3d","clear","EDO","10%",""
-"EDO-b015","EDO","Solvent","Solvent-tolerance-1_mosquito","F03","SwissCI-MRC-3d","clear","EDO","15%",""
-"EDO-b016","EDO","Solvent","Solvent-tolerance-1_mosquito","F04","SwissCI-MRC-3d","clear","EDO","20%",""
-"EDO-b017","EDO","Solvent","Solvent-tolerance-1_mosquito","F05","SwissCI-MRC-3d","clear","EDO","25%",""
-"EDO-b018","EDO","Solvent","Solvent-tolerance-1_mosquito","F06","SwissCI-MRC-3d","clear","EDO","30%",""
-
+﻿CompoundBatch_ID;Compound_ID;Library_Name;CompoundPlate_Name;CompoundPlate_Well;CompoundPlate_Type;State;Solvent;Concentration;Comment
+VT00249-b0;VT00249;FragMAXlib;FMLv03-DMSO;A01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00245-b0;VT00245;FragMAXlib;FMLv03-DMSO;A02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00220-b0;VT00220;FragMAXlib;FMLv03-DMSO;A03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00087-b0;VT00087;FragMAXlib;FMLv03-DMSO;A04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00225-b0;VT00225;FragMAXlib;FMLv03-DMSO;A05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00162-b0;VT00162;FragMAXlib;FMLv03-DMSO;A06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00049-b0;VT00049;FragMAXlib;FMLv03-DMSO;A07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00257-b0;VT00257;FragMAXlib;FMLv03-DMSO;A08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00084-b0;VT00084;FragMAXlib;FMLv03-DMSO;A09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00190-b0;VT00190;FragMAXlib;FMLv03-DMSO;A10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00232-b0;VT00232;FragMAXlib;FMLv03-DMSO;A11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00033-b0;VT00033;FragMAXlib;FMLv03-DMSO;A12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00264-b0;VT00264;FragMAXlib;FMLv03-DMSO;B01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00169-b0;VT00169;FragMAXlib;FMLv03-DMSO;B02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00128-b0;VT00128;FragMAXlib;FMLv03-DMSO;B03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00219-b0;VT00219;FragMAXlib;FMLv03-DMSO;B04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00260-b0;VT00260;FragMAXlib;FMLv03-DMSO;B05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00175-b0;VT00175;FragMAXlib;FMLv03-DMSO;B06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00227-b0;VT00227;FragMAXlib;FMLv03-DMSO;B07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00241-b0;VT00241;FragMAXlib;FMLv03-DMSO;B08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00165-b0;VT00165;FragMAXlib;FMLv03-DMSO;B09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00191-b0;VT00191;FragMAXlib;FMLv03-DMSO;B10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00213-b0;VT00213;FragMAXlib;FMLv03-DMSO;B11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00254-b0;VT00254;FragMAXlib;FMLv03-DMSO;B12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00178-b0;VT00178;FragMAXlib;FMLv03-DMSO;C01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00085-b0;VT00085;FragMAXlib;FMLv03-DMSO;C02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00082-b0;VT00082;FragMAXlib;FMLv03-DMSO;C03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00086-b0;VT00086;FragMAXlib;FMLv03-DMSO;C04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00251-b0;VT00251;FragMAXlib;FMLv03-DMSO;C05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00259-b0;VT00259;FragMAXlib;FMLv03-DMSO;C06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00150-b0;VT00150;FragMAXlib;FMLv03-DMSO;C07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00221-b0;VT00221;FragMAXlib;FMLv03-DMSO;C08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00083-b0;VT00083;FragMAXlib;FMLv03-DMSO;C09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00261-b0;VT00261;FragMAXlib;FMLv03-DMSO;C10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00240-b0;VT00240;FragMAXlib;FMLv03-DMSO;C11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00034-b0;VT00034;FragMAXlib;FMLv03-DMSO;C12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00188-b0;VT00188;FragMAXlib;FMLv03-DMSO;D01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00248-b0;VT00248;FragMAXlib;FMLv03-DMSO;D02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00048-b0;VT00048;FragMAXlib;FMLv03-DMSO;D03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00056-b0;VT00056;FragMAXlib;FMLv03-DMSO;D04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00064-b0;VT00064;FragMAXlib;FMLv03-DMSO;D05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00172-b0;VT00172;FragMAXlib;FMLv03-DMSO;D06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00058-b0;VT00058;FragMAXlib;FMLv03-DMSO;D07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00025-b0;VT00025;FragMAXlib;FMLv03-DMSO;D08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00193-b0;VT00193;FragMAXlib;FMLv03-DMSO;D09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00218-b0;VT00218;FragMAXlib;FMLv03-DMSO;D10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00234-b0;VT00234;FragMAXlib;FMLv03-DMSO;D11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00180-b0;VT00180;FragMAXlib;FMLv03-DMSO;D12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00224-b0;VT00224;FragMAXlib;FMLv03-DMSO;E01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00246-b0;VT00246;FragMAXlib;FMLv03-DMSO;E02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00036-b0;VT00036;FragMAXlib;FMLv03-DMSO;E03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00252-b0;VT00252;FragMAXlib;FMLv03-DMSO;E04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00215-b0;VT00215;FragMAXlib;FMLv03-DMSO;E05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00233-b0;VT00233;FragMAXlib;FMLv03-DMSO;E06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00236-b0;VT00236;FragMAXlib;FMLv03-DMSO;E07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00096-b0;VT00096;FragMAXlib;FMLv03-DMSO;E08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00239-b0;VT00239;FragMAXlib;FMLv03-DMSO;E09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00029-b0;VT00029;FragMAXlib;FMLv03-DMSO;E10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00216-b0;VT00216;FragMAXlib;FMLv03-DMSO;E11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00089-b0;VT00089;FragMAXlib;FMLv03-DMSO;E12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00207-b0;VT00207;FragMAXlib;FMLv03-DMSO;F01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00167-b0;VT00167;FragMAXlib;FMLv03-DMSO;F02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00253-b0;VT00253;FragMAXlib;FMLv03-DMSO;F03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00155-b0;VT00155;FragMAXlib;FMLv03-DMSO;F04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00247-b0;VT00247;FragMAXlib;FMLv03-DMSO;F05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00181-b0;VT00181;FragMAXlib;FMLv03-DMSO;F06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00250-b0;VT00250;FragMAXlib;FMLv03-DMSO;F07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00143-b0;VT00143;FragMAXlib;FMLv03-DMSO;F08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00066-b0;VT00066;FragMAXlib;FMLv03-DMSO;F09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00258-b0;VT00258;FragMAXlib;FMLv03-DMSO;F10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00059-b0;VT00059;FragMAXlib;FMLv03-DMSO;F11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00038-b0;VT00038;FragMAXlib;FMLv03-DMSO;F12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00154-b0;VT00154;FragMAXlib;FMLv03-DMSO;G01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00164-b0;VT00164;FragMAXlib;FMLv03-DMSO;G02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00226-b0;VT00226;FragMAXlib;FMLv03-DMSO;G03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00229-b0;VT00229;FragMAXlib;FMLv03-DMSO;G04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00123-b0;VT00123;FragMAXlib;FMLv03-DMSO;G05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00077-b0;VT00077;FragMAXlib;FMLv03-DMSO;G06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00019-b0;VT00019;FragMAXlib;FMLv03-DMSO;G07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00127-b0;VT00127;FragMAXlib;FMLv03-DMSO;G08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00122-b0;VT00122;FragMAXlib;FMLv03-DMSO;G09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00212-b0;VT00212;FragMAXlib;FMLv03-DMSO;G10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00230-b0;VT00230;FragMAXlib;FMLv03-DMSO;G11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00173-b0;VT00173;FragMAXlib;FMLv03-DMSO;G12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00113-b0;VT00113;FragMAXlib;FMLv03-DMSO;H01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00198-b0;VT00198;FragMAXlib;FMLv03-DMSO;H02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00243-b0;VT00243;FragMAXlib;FMLv03-DMSO;H03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00022-b0;VT00022;FragMAXlib;FMLv03-DMSO;H04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00118-b0;VT00118;FragMAXlib;FMLv03-DMSO;H05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00228-b0;VT00228;FragMAXlib;FMLv03-DMSO;H06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00235-b0;VT00235;FragMAXlib;FMLv03-DMSO;H07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00068-b0;VT00068;FragMAXlib;FMLv03-DMSO;H08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00238-b0;VT00238;FragMAXlib;FMLv03-DMSO;H09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00079-b0;VT00079;FragMAXlib;FMLv03-DMSO;H10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00265-b0;VT00265;FragMAXlib;FMLv03-DMSO;H11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00268-b0;VT00268;FragMAXlib;FMLv03-DMSO;H12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+DMSO-b001;DMSO;Solvent;Solvent-tolerance-1_mosquito;A01;SwissCI-MRC-3d;clear;DMSO;5%;
+DMSO-b002;DMSO;Solvent;Solvent-tolerance-1_mosquito;A02;SwissCI-MRC-3d;clear;DMSO;10%;
+DMSO-b003;DMSO;Solvent;Solvent-tolerance-1_mosquito;A03;SwissCI-MRC-3d;clear;DMSO;15%;
+DMSO-b004;DMSO;Solvent;Solvent-tolerance-1_mosquito;A04;SwissCI-MRC-3d;clear;DMSO;20%;
+DMSO-b005;DMSO;Solvent;Solvent-tolerance-1_mosquito;A05;SwissCI-MRC-3d;clear;DMSO;25%;
+DMSO-b006;DMSO;Solvent;Solvent-tolerance-1_mosquito;A06;SwissCI-MRC-3d;clear;DMSO;30%;
+DMSO-b007;DMSO;Solvent;Solvent-tolerance-1_mosquito;B01;SwissCI-MRC-3d;clear;DMSO;5%;
+DMSO-b008;DMSO;Solvent;Solvent-tolerance-1_mosquito;B02;SwissCI-MRC-3d;clear;DMSO;10%;
+DMSO-b009;DMSO;Solvent;Solvent-tolerance-1_mosquito;B03;SwissCI-MRC-3d;clear;DMSO;15%;
+DMSO-b010;DMSO;Solvent;Solvent-tolerance-1_mosquito;B04;SwissCI-MRC-3d;clear;DMSO;20%;
+DMSO-b011;DMSO;Solvent;Solvent-tolerance-1_mosquito;B05;SwissCI-MRC-3d;clear;DMSO;25%;
+DMSO-b012;DMSO;Solvent;Solvent-tolerance-1_mosquito;B06;SwissCI-MRC-3d;clear;DMSO;30%;
+DMSO-b013;DMSO;Solvent;Solvent-tolerance-1_mosquito;C01;SwissCI-MRC-3d;clear;DMSO;5%;
+DMSO-b014;DMSO;Solvent;Solvent-tolerance-1_mosquito;C02;SwissCI-MRC-3d;clear;DMSO;10%;
+DMSO-b015;DMSO;Solvent;Solvent-tolerance-1_mosquito;C03;SwissCI-MRC-3d;clear;DMSO;15%;
+DMSO-b016;DMSO;Solvent;Solvent-tolerance-1_mosquito;C04;SwissCI-MRC-3d;clear;DMSO;20%;
+DMSO-b017;DMSO;Solvent;Solvent-tolerance-1_mosquito;C05;SwissCI-MRC-3d;clear;DMSO;25%;
+DMSO-b018;DMSO;Solvent;Solvent-tolerance-1_mosquito;C06;SwissCI-MRC-3d;clear;DMSO;30%;
+EDO-b001;EDO;Solvent;Solvent-tolerance-1_mosquito;D01;SwissCI-MRC-3d;clear;EDO;5%;
+EDO-b002;EDO;Solvent;Solvent-tolerance-1_mosquito;D02;SwissCI-MRC-3d;clear;EDO;10%;
+EDO-b003;EDO;Solvent;Solvent-tolerance-1_mosquito;D03;SwissCI-MRC-3d;clear;EDO;15%;
+EDO-b004;EDO;Solvent;Solvent-tolerance-1_mosquito;D04;SwissCI-MRC-3d;clear;EDO;20%;
+EDO-b005;EDO;Solvent;Solvent-tolerance-1_mosquito;D05;SwissCI-MRC-3d;clear;EDO;25%;
+EDO-b006;EDO;Solvent;Solvent-tolerance-1_mosquito;D06;SwissCI-MRC-3d;clear;EDO;30%;
+EDO-b007;EDO;Solvent;Solvent-tolerance-1_mosquito;E01;SwissCI-MRC-3d;clear;EDO;5%;
+EDO-b008;EDO;Solvent;Solvent-tolerance-1_mosquito;E02;SwissCI-MRC-3d;clear;EDO;10%;
+EDO-b009;EDO;Solvent;Solvent-tolerance-1_mosquito;E03;SwissCI-MRC-3d;clear;EDO;15%;
+EDO-b010;EDO;Solvent;Solvent-tolerance-1_mosquito;E04;SwissCI-MRC-3d;clear;EDO;20%;
+EDO-b011;EDO;Solvent;Solvent-tolerance-1_mosquito;E05;SwissCI-MRC-3d;clear;EDO;25%;
+EDO-b012;EDO;Solvent;Solvent-tolerance-1_mosquito;E06;SwissCI-MRC-3d;clear;EDO;30%;
+EDO-b013;EDO;Solvent;Solvent-tolerance-1_mosquito;F01;SwissCI-MRC-3d;clear;EDO;5%;
+EDO-b014;EDO;Solvent;Solvent-tolerance-1_mosquito;F02;SwissCI-MRC-3d;clear;EDO;10%;
+EDO-b015;EDO;Solvent;Solvent-tolerance-1_mosquito;F03;SwissCI-MRC-3d;clear;EDO;15%;
+EDO-b016;EDO;Solvent;Solvent-tolerance-1_mosquito;F04;SwissCI-MRC-3d;clear;EDO;20%;
+EDO-b017;EDO;Solvent;Solvent-tolerance-1_mosquito;F05;SwissCI-MRC-3d;clear;EDO;25%;
+EDO-b018;EDO;Solvent;Solvent-tolerance-1_mosquito;F06;SwissCI-MRC-3d;clear;EDO;30%;
+VT00002-b01;VT00002;FragMAXlib;FML_alpha_DMSO_200;A01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00015-b01;VT00015;FragMAXlib;FML_alpha_DMSO_200;A02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00019-b01;VT00019;FragMAXlib;FML_alpha_DMSO_200;A03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00022-b01;VT00022;FragMAXlib;FML_alpha_DMSO_200;A04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00025-b01;VT00025;FragMAXlib;FML_alpha_DMSO_200;A05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00029-b01;VT00029;FragMAXlib;FML_alpha_DMSO_200;A06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00033-b01;VT00033;FragMAXlib;FML_alpha_DMSO_200;A07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00034-b01;VT00034;FragMAXlib;FML_alpha_DMSO_200;A08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00036-b01;VT00036;FragMAXlib;FML_alpha_DMSO_200;A09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00038-b01;VT00038;FragMAXlib;FML_alpha_DMSO_200;A10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00039-b01;VT00039;FragMAXlib;FML_alpha_DMSO_200;A11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00048-b01;VT00048;FragMAXlib;FML_alpha_DMSO_200;A12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00049-b01;VT00049;FragMAXlib;FML_alpha_DMSO_200;B01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00053-b01;VT00053;FragMAXlib;FML_alpha_DMSO_200;B02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00056-b01;VT00056;FragMAXlib;FML_alpha_DMSO_200;B03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00058-b01;VT00058;FragMAXlib;FML_alpha_DMSO_200;B04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00059-b01;VT00059;FragMAXlib;FML_alpha_DMSO_200;B05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00064-b01;VT00064;FragMAXlib;FML_alpha_DMSO_200;B06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00065-b01;VT00065;FragMAXlib;FML_alpha_DMSO_200;B07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00066-b01;VT00066;FragMAXlib;FML_alpha_DMSO_200;B08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00068-b01;VT00068;FragMAXlib;FML_alpha_DMSO_200;B09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00077-b01;VT00077;FragMAXlib;FML_alpha_DMSO_200;B10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00079-b01;VT00079;FragMAXlib;FML_alpha_DMSO_200;B11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00082-b01;VT00082;FragMAXlib;FML_alpha_DMSO_200;B12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00083-b01;VT00083;FragMAXlib;FML_alpha_DMSO_200;C01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00084-b01;VT00084;FragMAXlib;FML_alpha_DMSO_200;C02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00085-b01;VT00085;FragMAXlib;FML_alpha_DMSO_200;C03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00086-b01;VT00086;FragMAXlib;FML_alpha_DMSO_200;C04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00087-b01;VT00087;FragMAXlib;FML_alpha_DMSO_200;C05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00089-b01;VT00089;FragMAXlib;FML_alpha_DMSO_200;C06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00096-b01;VT00096;FragMAXlib;FML_alpha_DMSO_200;C07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00118-b01;VT00118;FragMAXlib;FML_alpha_DMSO_200;C08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00122-b01;VT00122;FragMAXlib;FML_alpha_DMSO_200;C09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00123-b01;VT00123;FragMAXlib;FML_alpha_DMSO_200;C10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00124-b01;VT00124;FragMAXlib;FML_alpha_DMSO_200;C11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00127-b01;VT00127;FragMAXlib;FML_alpha_DMSO_200;C12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00128-b01;VT00128;FragMAXlib;FML_alpha_DMSO_200;D01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00136-b01;VT00136;FragMAXlib;FML_alpha_DMSO_200;D02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00143-b01;VT00143;FragMAXlib;FML_alpha_DMSO_200;D03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00147-b01;VT00147;FragMAXlib;FML_alpha_DMSO_200;D04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00150-b01;VT00150;FragMAXlib;FML_alpha_DMSO_200;D05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00154-b01;VT00154;FragMAXlib;FML_alpha_DMSO_200;D06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00155-b01;VT00155;FragMAXlib;FML_alpha_DMSO_200;D07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00159-b01;VT00159;FragMAXlib;FML_alpha_DMSO_200;D08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00162-b01;VT00162;FragMAXlib;FML_alpha_DMSO_200;D09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00163-b01;VT00163;FragMAXlib;FML_alpha_DMSO_200;D10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00164-b01;VT00164;FragMAXlib;FML_alpha_DMSO_200;D11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00165-b01;VT00165;FragMAXlib;FML_alpha_DMSO_200;D12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00167-b01;VT00167;FragMAXlib;FML_alpha_DMSO_200;E01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00169-b01;VT00169;FragMAXlib;FML_alpha_DMSO_200;E02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00172-b01;VT00172;FragMAXlib;FML_alpha_DMSO_200;E03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00173-b01;VT00173;FragMAXlib;FML_alpha_DMSO_200;E04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00175-b01;VT00175;FragMAXlib;FML_alpha_DMSO_200;E05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00178-b01;VT00178;FragMAXlib;FML_alpha_DMSO_200;E06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00180-b01;VT00180;FragMAXlib;FML_alpha_DMSO_200;E07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00181-b01;VT00181;FragMAXlib;FML_alpha_DMSO_200;E08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00188-b01;VT00188;FragMAXlib;FML_alpha_DMSO_200;E09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00190-b01;VT00190;FragMAXlib;FML_alpha_DMSO_200;E10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00191-b01;VT00191;FragMAXlib;FML_alpha_DMSO_200;E11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00193-b01;VT00193;FragMAXlib;FML_alpha_DMSO_200;E12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00198-b01;VT00198;FragMAXlib;FML_alpha_DMSO_200;F01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00204-b01;VT00204;FragMAXlib;FML_alpha_DMSO_200;F02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00207-b01;VT00207;FragMAXlib;FML_alpha_DMSO_200;F03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00210-b01;VT00210;FragMAXlib;FML_alpha_DMSO_200;F04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00211-b01;VT00211;FragMAXlib;FML_alpha_DMSO_200;F05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00212-b01;VT00212;FragMAXlib;FML_alpha_DMSO_200;F06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00213-b01;VT00213;FragMAXlib;FML_alpha_DMSO_200;F07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00214-b01;VT00214;FragMAXlib;FML_alpha_DMSO_200;F08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00215-b01;VT00215;FragMAXlib;FML_alpha_DMSO_200;F09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00216-b01;VT00216;FragMAXlib;FML_alpha_DMSO_200;F10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00217-b01;VT00217;FragMAXlib;FML_alpha_DMSO_200;F11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00218-b01;VT00218;FragMAXlib;FML_alpha_DMSO_200;F12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00219-b01;VT00219;FragMAXlib;FML_alpha_DMSO_200;G01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00220-b01;VT00220;FragMAXlib;FML_alpha_DMSO_200;G02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00221-b01;VT00221;FragMAXlib;FML_alpha_DMSO_200;G03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00222-b01;VT00222;FragMAXlib;FML_alpha_DMSO_200;G04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00223-b01;VT00223;FragMAXlib;FML_alpha_DMSO_200;G05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00224-b01;VT00224;FragMAXlib;FML_alpha_DMSO_200;G06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00225-b01;VT00225;FragMAXlib;FML_alpha_DMSO_200;G07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00226-b01;VT00226;FragMAXlib;FML_alpha_DMSO_200;G08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00227-b01;VT00227;FragMAXlib;FML_alpha_DMSO_200;G09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00228-b01;VT00228;FragMAXlib;FML_alpha_DMSO_200;G10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00229-b01;VT00229;FragMAXlib;FML_alpha_DMSO_200;G11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00230-b01;VT00230;FragMAXlib;FML_alpha_DMSO_200;G12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00231-b01;VT00231;FragMAXlib;FML_alpha_DMSO_200;H01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00232-b01;VT00232;FragMAXlib;FML_alpha_DMSO_200;H02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00233-b01;VT00233;FragMAXlib;FML_alpha_DMSO_200;H03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00234-b01;VT00234;FragMAXlib;FML_alpha_DMSO_200;H04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00235-b01;VT00235;FragMAXlib;FML_alpha_DMSO_200;H05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00236-b01;VT00236;FragMAXlib;FML_alpha_DMSO_200;H06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00237-b01;VT00237;FragMAXlib;FML_alpha_DMSO_200;H07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00238-b01;VT00238;FragMAXlib;FML_alpha_DMSO_200;H08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00239-b01;VT00239;FragMAXlib;FML_alpha_DMSO_200;H09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00240-b01;VT00240;FragMAXlib;FML_alpha_DMSO_200;H10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00241-b01;VT00241;FragMAXlib;FML_alpha_DMSO_200;H11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00242-b01;VT00242;FragMAXlib;FML_alpha_DMSO_200;H12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00243-b01;VT00243;FragMAXlib;FML_beta_DMSO_200;A01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00244-b01;VT00244;FragMAXlib;FML_beta_DMSO_200;A02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00245-b01;VT00245;FragMAXlib;FML_beta_DMSO_200;A03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00246-b01;VT00246;FragMAXlib;FML_beta_DMSO_200;A04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00247-b01;VT00247;FragMAXlib;FML_beta_DMSO_200;A05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00248-b01;VT00248;FragMAXlib;FML_beta_DMSO_200;A06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00249-b01;VT00249;FragMAXlib;FML_beta_DMSO_200;A07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00250-b01;VT00250;FragMAXlib;FML_beta_DMSO_200;A08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00251-b01;VT00251;FragMAXlib;FML_beta_DMSO_200;A09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00252-b01;VT00252;FragMAXlib;FML_beta_DMSO_200;A10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00253-b01;VT00253;FragMAXlib;FML_beta_DMSO_200;A11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00254-b01;VT00254;FragMAXlib;FML_beta_DMSO_200;A12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00255-b01;VT00255;FragMAXlib;FML_beta_DMSO_200;B01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00257-b01;VT00257;FragMAXlib;FML_beta_DMSO_200;B02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00258-b01;VT00258;FragMAXlib;FML_beta_DMSO_200;B03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00259-b01;VT00259;FragMAXlib;FML_beta_DMSO_200;B04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00260-b01;VT00260;FragMAXlib;FML_beta_DMSO_200;B05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00261-b01;VT00261;FragMAXlib;FML_beta_DMSO_200;B06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00262-b01;VT00262;FragMAXlib;FML_beta_DMSO_200;B07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00263-b01;VT00263;FragMAXlib;FML_beta_DMSO_200;B08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00264-b01;VT00264;FragMAXlib;FML_beta_DMSO_200;B09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00265-b01;VT00265;FragMAXlib;FML_beta_DMSO_200;B10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00267-b01;VT00267;FragMAXlib;FML_beta_DMSO_200;B11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00268-b01;VT00268;FragMAXlib;FML_beta_DMSO_200;B12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00401-b01;VT00401;FragMAXlib;FML_beta_DMSO_200;C01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00402-b01;VT00402;FragMAXlib;FML_beta_DMSO_200;C02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00403-b01;VT00403;FragMAXlib;FML_beta_DMSO_200;C03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00404-b01;VT00404;FragMAXlib;FML_beta_DMSO_200;C04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00405-b01;VT00405;FragMAXlib;FML_beta_DMSO_200;C05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00406-b01;VT00406;FragMAXlib;FML_beta_DMSO_200;C06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00407-b01;VT00407;FragMAXlib;FML_beta_DMSO_200;C07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00408-b01;VT00408;FragMAXlib;FML_beta_DMSO_200;C08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00409-b01;VT00409;FragMAXlib;FML_beta_DMSO_200;C09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00410-b01;VT00410;FragMAXlib;FML_beta_DMSO_200;C10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00411-b01;VT00411;FragMAXlib;FML_beta_DMSO_200;C11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00412-b01;VT00412;FragMAXlib;FML_beta_DMSO_200;C12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00413-b01;VT00413;FragMAXlib;FML_beta_DMSO_200;D01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00414-b01;VT00414;FragMAXlib;FML_beta_DMSO_200;D02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00415-b01;VT00415;FragMAXlib;FML_beta_DMSO_200;D03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00416-b01;VT00416;FragMAXlib;FML_beta_DMSO_200;D04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00417-b01;VT00417;FragMAXlib;FML_beta_DMSO_200;D05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00418-b01;VT00418;FragMAXlib;FML_beta_DMSO_200;D06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00419-b01;VT00419;FragMAXlib;FML_beta_DMSO_200;D07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00420-b01;VT00420;FragMAXlib;FML_beta_DMSO_200;D08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00421-b01;VT00421;FragMAXlib;FML_beta_DMSO_200;D09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00422-b01;VT00422;FragMAXlib;FML_beta_DMSO_200;D10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00423-b01;VT00423;FragMAXlib;FML_beta_DMSO_200;D11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00424-b01;VT00424;FragMAXlib;FML_beta_DMSO_200;D12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00425-b01;VT00425;FragMAXlib;FML_beta_DMSO_200;E01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00426-b01;VT00426;FragMAXlib;FML_beta_DMSO_200;E02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00427-b01;VT00427;FragMAXlib;FML_beta_DMSO_200;E03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00428-b01;VT00428;FragMAXlib;FML_beta_DMSO_200;E04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00429-b01;VT00429;FragMAXlib;FML_beta_DMSO_200;E05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00430-b01;VT00430;FragMAXlib;FML_beta_DMSO_200;E06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00431-b01;VT00431;FragMAXlib;FML_beta_DMSO_200;E07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00432-b01;VT00432;FragMAXlib;FML_beta_DMSO_200;E08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00433-b01;VT00433;FragMAXlib;FML_beta_DMSO_200;E09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00434-b01;VT00434;FragMAXlib;FML_beta_DMSO_200;E10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00435-b01;VT00435;FragMAXlib;FML_beta_DMSO_200;E11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00436-b01;VT00436;FragMAXlib;FML_beta_DMSO_200;E12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00437-b01;VT00437;FragMAXlib;FML_beta_DMSO_200;F01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00438-b01;VT00438;FragMAXlib;FML_beta_DMSO_200;F02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00439-b01;VT00439;FragMAXlib;FML_beta_DMSO_200;F03;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00440-b01;VT00440;FragMAXlib;FML_beta_DMSO_200;F04;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00441-b01;VT00441;FragMAXlib;FML_beta_DMSO_200;F05;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00442-b01;VT00442;FragMAXlib;FML_beta_DMSO_200;F06;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00443-b01;VT00443;FragMAXlib;FML_beta_DMSO_200;F07;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00444-b01;VT00444;FragMAXlib;FML_beta_DMSO_200;F08;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00445-b01;VT00445;FragMAXlib;FML_beta_DMSO_200;F09;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00446-b01;VT00446;FragMAXlib;FML_beta_DMSO_200;F10;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00447-b01;VT00447;FragMAXlib;FML_beta_DMSO_200;F11;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00448-b01;VT00448;FragMAXlib;FML_beta_DMSO_200;F12;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00449-b01;VT00449;FragMAXlib;FML_beta_DMSO_200;G01;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00450-b01;VT00450;FragMAXlib;FML_beta_DMSO_200;G02;SwissCI-MRC-3d;clear;DMSO;1000 mM;
+VT00451-b01;VT00451;FragMAXlib;FML_beta_DMSO_200;G03;SwissCI-MRC-3d;clear;DMSO;1000 mM;

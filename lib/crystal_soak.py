@@ -67,11 +67,12 @@ class crystal_soak(object):
             crystal_plate_list = []
             for line in open(soak_csv, encoding='utf-8-sig'):
                 self.logger.warning(line)
-                if line.startswith(';'):
+                if line.startswith(';') or line.startswith('";'):
                     continue
                 elif line.startswith('PlateType'):
                     continue
                 # crystal_id is irrelevant, but if field is blank then nothing was transferred
+                self.logger.error(re.split(r'[,;]+', line))
                 crystal_id = re.split(r'[,;]+', line)[7].replace(' ','')
 #                self.logger.info('crystal ID: {0!s}'.format(crystal_id))
                 self.logger.info('current line: {0!s}'.format(re.split(r'[,;]+', line)))
