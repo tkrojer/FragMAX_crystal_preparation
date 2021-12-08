@@ -163,6 +163,13 @@ class project_description(object):
             os.mkdir(workflow_fragmaxapp_folder)
             os.mkdir(os.path.join(workflow_fragmaxapp_folder, 'backup'))
 
+        workflow_summary_folder = os.path.join(self.settings.project_folder, 'workflow', '7-summary')
+        if os.path.isdir(workflow_summary_folder):
+            self.logger.warning('workflow/7-summary folder exists: ' + workflow_summary_folder)
+        else:
+            self.logger.info('creating workflow/7-summary folder: ' + workflow_summary_folder)
+            os.mkdir(workflow_summary_folder)
+
         self.settings.eln_folder = os.path.join(self.settings.project_folder,'eln')
         if os.path.isdir(self.settings.eln_folder):
             self.logger.warning('eln folder exists: ' + self.settings.eln_folder)

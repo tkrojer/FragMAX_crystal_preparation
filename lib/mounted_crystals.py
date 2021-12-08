@@ -492,7 +492,9 @@ class mounted_crystals(object):
         query = db.select([
             self.dbObject.mountedcrystalTable.columns.Crystal_ID,
             self.dbObject.compoundbatchTable.columns.Compound_ID,
-            self.dbObject.compoundTable.columns.Smiles
+            self.dbObject.compoundTable.columns.Smiles,
+            self.dbObject.compoundTable.columns.Vendor_ID,
+            self.dbObject.compoundTable.columns.Vendor
         ]).order_by(
             self.dbObject.mountedcrystalTable.columns.Crystal_ID)
 
@@ -503,13 +505,24 @@ class mounted_crystals(object):
         csvOut = ''
         for c in crystals:
             crystalID = c[0]
+
             cpdID = c[1]
             if not cpdID:
                 cpdID = ''
+
             smiles = c[2]
             if not smiles:
                 smiles = ''
-            csvOut += crystalID + ',' + cpdID + ',' + smiles + '\n'
+
+            vendor_id = c[3]
+            if not vendor_id:
+                vendor_id = ''
+
+            vendor = c[4]
+            if not vendor:
+                vendor = ''
+
+            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + '\n'
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.logger.info('saving CSV summary {0!s}'.format(
             os.path.join(self.settingsObject.workflow_folder, '7-summary', 'summary_' + now + '.csv')))
