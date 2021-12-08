@@ -494,7 +494,13 @@ class mounted_crystals(object):
             self.dbObject.compoundbatchTable.columns.Compound_ID,
             self.dbObject.compoundTable.columns.Smiles,
             self.dbObject.compoundTable.columns.Vendor_ID,
-            self.dbObject.compoundTable.columns.Vendor
+            self.dbObject.compoundTable.columns.Vendor,
+            self.dbObject.compoundbatchTable.columns.Library_Name,
+            self.dbObject.crystalscreenTable.columns.CrystalScreen_Condition,
+            self.dbObject.mountedcrystalTable.columns.Mount_Date,
+            self.dbObject.soakedcrystalTable.columns.Soak_Time,
+            self.dbObject.crystalplateTable.columns.Temperature,
+            self.dbObject.crystalplateTable.columns.Crystallization_Method
         ]).order_by(
             self.dbObject.mountedcrystalTable.columns.Crystal_ID)
 
@@ -522,7 +528,19 @@ class mounted_crystals(object):
             if not vendor:
                 vendor = ''
 
-            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + '\n'
+            try:
+                soak_start = datetime.strptime(c[8], '%d/%m/%Y %H:%M:%S')
+                soak_end = datetime.strptime(c[7], '%d/%m/%Y %H:%M:%S')
+                diff = soak_end - soak_start
+                soak_time = str(int(diff.total_seconds()))
+            except TypeError:
+                soak_time = ''
+
+            condition = c[6]
+            if not condition:
+                condition = ''
+
+            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + ',' + soak_time + ',' +  condition + '\n'
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.logger.info('saving CSV summary {0!s}'.format(
             os.path.join(self.settingsObject.workflow_folder, '7-summary', 'summary_' + now + '.csv')))
