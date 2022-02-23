@@ -181,7 +181,7 @@ class mounted_crystals(object):
                     'Crystal_ID':               Crystal_ID,
                     "Pin_Barcode":              None,
                     "Puck_Name":                puck_name,
-                    "Puck_Position":            puck_position,
+                    "Puck_Position":            str(puck_position),
                     "Mount_Date":               mount_time,
                     "Cryo":                     None,
                     "Cryo_Concentration":       None,
@@ -270,22 +270,43 @@ class mounted_crystals(object):
                 continue
 
             try:
+                self.logger.error('trying to read associated crystal screen for crystal plate {0!s}'.format(barcode))
+                query = db.select([self.dbObject.crystalplateTable.columns.CrystalScreen_Name]).where(
+                    self.dbObject.crystalplateTable.columns.CrystalPlate_Barcode == barcode)
+                ResultProxy = self.dbObject.connection.execute(query)
+                crystalscreen = [x[0] for x in ResultProxy.fetchall()][0]
+
                 if len(df.at[index, 'CrystalPlate_Well']) == 2:
                     well = df.at[index, 'CrystalPlate_Well'][0] + '0' + df.at[index, 'CrystalPlate_Well'][1]
                 else:
                     well = df.at[index, 'CrystalPlate_Well']
                 subwell = df.at[index, 'CrystalPlate_Subwell']
                 marked_crystal_id = barcode + '-' + well + subwell
+
+                crystalscreen_id = crystalscreen + '-' + well
+
                 if marked_crystal_id not in marked_crystals:
                     self.logger.info('marking crystal for mounting/ soaking in database: ' + marked_crystal_id)
                     values_list = [{
                         'MarkedCrystal_ID': marked_crystal_id,
                         'CrystalPlate_Barcode': barcode,
                         'CrystalPlate_Well': well,
-                        'CrystalPlate_Subwell': subwell
+                        'CrystalPlate_Subwell': subwell,
+                        'CrystalScreen_ID': crystalscreen_id
                     }]
                     query = db.insert(self.dbObject.markedcrystalTable)
                     self.dbObject.connection.execute(query, values_list)
+                    marked_crystals.append(marked_crystal_id)
+                else:
+                    self.logger.info('updating information for: ' + marked_crystal_id)
+
+                    query = db.update(self.dbObject.markedcrystalTable).values(
+                        CrystalScreen_ID=crystalscreen_id
+                    ).where(
+                        self.dbObject.markedcrystalTable.columns.MarkedCrystal_ID == marked_crystal_id)
+                    self.dbObject.connection.execute(query)
+                    marked_crystals.append(marked_crystal_id)
+
             except TypeError:
                 logger.error(
                     'there is something wrong with well and/ or subwell description: well = {0!s}, subwell = {1!s}; please correct!'.format(
@@ -293,15 +314,17 @@ class mounted_crystals(object):
                 continue
 
             if Manual_Crystal_ID in existing_manually_mounted_crystals:
-                self.logger.warning('updating records for manually mounted crystal: {0!s}'.format(well, condition))
+                self.logger.warning('updating records for manually mounted crystal: {0!s}'.format(well))
+#                self.logger.warning('updating records for manually mounted crystal: {0!s}'.format(well, condition))
                 query = db.update(self.dbObject.mountedcrystalTable).values(
                     Pin_Barcode=df.at[index, 'Pin_Barcode'],
                     Puck_Name=df.at[index, 'Puck_Name'],
-                    Puck_Position=df.at[index, 'Puck_Position'],
+                    Puck_Position=str(df.at[index, 'Puck_Position']),
                     CompoundBatch_ID=df.at[index, 'CompoundBatch_ID'],
                     Cryo=df.at[index, 'Cryo'],
                     Cryo_Concentration=df.at[index, 'Cryo_Concentration'],
-                    Comment=df.at[index, 'Comment']
+                    Comment=df.at[index, 'Comment'],
+                    MarkedCrystal_ID=marked_crystal_id
                 ).where(
                     self.dbObject.mountedcrystalTable.columns.Manual_Crystal_ID == Manual_Crystal_ID)
                 self.dbObject.connection.execute(query)
@@ -315,11 +338,12 @@ class mounted_crystals(object):
                     'Crystal_ID': Crystal_ID,
                     'Pin_Barcode': df.at[index, 'Pin_Barcode'],
                     'Puck_Name': df.at[index, 'Puck_Name'],
-                    'Puck_Position': df.at[index, 'Puck_Position'],
+                    'Puck_Position': str(df.at[index, 'Puck_Position']),
                     'CompoundBatch_ID': df.at[index, 'CompoundBatch_ID'],
                     'Cryo': df.at[index, 'Cryo'],
                     'Cryo_Concentration': df.at[index, 'Cryo_Concentration'],
-                    'Comment': df.at[index, 'Comment']
+                    'Comment': df.at[index, 'Comment'],
+                    'MarkedCrystal_ID': marked_crystal_id
                 }]
                 query = db.insert(self.dbObject.mountedcrystalTable)
                 self.dbObject.connection.execute(query, values_list)
@@ -508,6 +532,7 @@ class mounted_crystals(object):
 
         ResultProxy = self.dbObject.connection.execute(query)
         crystals = ResultProxy.fetchall()
+        self.logger.error(crystals)
         csvOut = ''
         for c in crystals:
             crystalID = c[0]
