@@ -53,21 +53,22 @@ class eln_entry(object):
 #        # attachments
 
     def add_eln_entry(self, b):
-        self.add_eln('', '', str(self.last_tab))
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.add_eln('', '', str(self.last_tab), now)
 
 
-    def add_eln(self, title, comment, entry_id):
-        self.eln_tab_list.append(self.add_tab_widget(title, comment, entry_id))
+    def add_eln(self, title, comment, entry_id, date_created):
+        self.eln_tab_list.append(self.add_tab_widget(title, comment, entry_id, date_created))
         self.tab.children = self.eln_tab_list
         self.tab.set_title(self.last_tab, 'entry {0!s}'.format(self.last_tab))
         self.last_tab += 1
 
-    def add_tab_widget(self, t, c, i):
+    def add_tab_widget(self, t, c, i, now):
         eln_id = i
 
         title = widgets.Text(value=t, layout=widgets.Layout(height="auto", width="500px"))
         comment = widgets.Textarea(value=c, layout=widgets.Layout(height="auto", width="500px"))
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         self.eln_tab_dict[eln_id] = []
 
@@ -121,7 +122,7 @@ class eln_entry(object):
                     'entry ' + id + ' exists in database; updating records...')
                 query = db.update(self.dbObject.diaryTable).values(
                     EntryName=title,
-                    Date_modified=now
+                    Date_modified=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 ).where(self.dbObject.diaryTable.columns.Entry_ID == id)
                 self.dbObject.connection.execute(query)
             else:
@@ -137,5 +138,32 @@ class eln_entry(object):
 
             self.save_text_to_eln_folder(id, title, comment)
 
+    def get_entries_from_db(self):
+        self.logger.info('fetching existing ELN entries from database...')
+        query = db.select([self.dbObject.diaryTable.columns.Entry_ID,
+                           self.dbObject.diaryTable.columns.EntryName,
+                           self.dbObject.diaryTable.columns.Date_created,
+                           self.dbObject.diaryTable.columns.Date_modified
+                          ]).order_by(
+                           self.dbObject.diaryTable.columns.Entry_ID.asc())
+        ResultProxy = self.dbObject.connection.execute(query)
+        result = ResultProxy.fetchall()
+        return result
+
+
     def read_eln_from_db(self, b):
-        print('hallo')
+        self.check_existing_entries_in_db()
+
+    def check_existing_entries_in_db(self):
+        result = self.get_entries_from_db()
+        for b in result:
+            entry_id = b[0]
+            entry_name = b[1]
+            date_created = b[2]
+            comment = ''
+            if os.path.isfile(os.path.join(self.settings.eln_folder, entry_id, 'comment.txt')):
+                for line in open(os.path.join(self.settings.eln_folder, entry_id, 'comment.txt')):
+                    comment += line
+
+#            self.add_tab_widget(entry_name, comment, entry_id)
+            self.add_eln(entry_name, comment, entry_id, date_created)
