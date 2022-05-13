@@ -524,7 +524,10 @@ class mounted_crystals(object):
             self.dbObject.mountedcrystalTable.columns.Mount_Date,
             self.dbObject.soakedcrystalTable.columns.Soak_Time,
             self.dbObject.crystalplateTable.columns.Temperature,
-            self.dbObject.crystalplateTable.columns.Crystallization_Method
+            self.dbObject.crystalplateTable.columns.Crystallization_Method,
+            self.dbObject.mountedcrystalTable.columns.Manual_Crystal_ID,
+            self.dbObject.mountedcrystalTable.columns.CompoundBatch_ID,
+            self.dbObject.mountedcrystalTable.columns.Comment
         ]).order_by(
             self.dbObject.mountedcrystalTable.columns.Crystal_ID)
 
@@ -565,7 +568,19 @@ class mounted_crystals(object):
             if not condition:
                 condition = ''
 
-            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + ',' + soak_time + ',' +  condition + '\n'
+            manual_id = str(c[11])
+            if not manual_id:
+                manual_id = ''
+
+            manual_cpd = str(c[12])
+            if not manual_cpd:
+                manual_cpd = ''
+
+            comment = str(c[13])
+            if not comment:
+                comment = ''
+
+            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + ',' + soak_time + ',' + condition + ',' + manual_id + ',' + manual_cpd + ',' + comment + '\n'
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.logger.info('saving CSV summary {0!s}'.format(
             os.path.join(self.settingsObject.workflow_folder, '7-summary', 'summary_' + now + '.csv')))
