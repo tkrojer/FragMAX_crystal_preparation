@@ -97,6 +97,7 @@ class mounted_crystals(object):
         elif folder == '4-mount-manual':
             self.logger.info('reading CSV file of manually mounted crystals from CSV file: ' + b.files[0])
             df = pd.read_csv(b.files[0], sep=';')
+            self.logger.info(df.head)
             self.update_db_with_manually_mounted_crystals(df)
 
 
@@ -122,6 +123,7 @@ class mounted_crystals(object):
             if line.startswith('"'):
                 continue
             try:
+                self.logger.info(re.split(r'[,;]+', line))
                 plate_type = re.split(r'[,;]+', line)[0]
 #                self.logger.warning(repr(plate_type))
                 if plate_type not in known_plate_types:
@@ -218,7 +220,10 @@ class mounted_crystals(object):
             self.dbObject.mountedcrystalTable.columns.Crystal_ID.desc()).limit(1)
         ResultProxy = self.dbObject.connection.execute(query)
         result = ResultProxy.fetchall()
+
+        print('-->', result)
         if result:
+            print('-->')
             last_crystal_id = result[0][0]
         else:
             last_crystal_id = proteinacronym + '-x0000'
