@@ -176,7 +176,8 @@ class mounted_crystals(object):
             else:
                 # latest crystal ID
                 last_crystal_id = self.get_last_crystal_id(proteinacronym)
-                next_crystal_number = int(last_crystal_id.split('-')[1].replace('x', '')) + 1
+                next_crystal_number = int(last_crystal_id[last_crystal_id.rfind('-')+2:]) + 1
+#                next_crystal_number = int(last_crystal_id.split('-')[1].replace('x', '')) + 1
                 Crystal_ID = str(proteinacronym) + '-x' + '0' * (4 - len(str(next_crystal_number))) + str(
                     next_crystal_number)
                 values_list = [{
@@ -542,6 +543,8 @@ class mounted_crystals(object):
         crystals = ResultProxy.fetchall()
         self.logger.error(crystals)
         csvOut = ''
+        csvOut += 'SampleID,CompoundID,Smiles,VendorID,Vendor,SoakTime(h),CrystallizationCondition,ManualCrystalID,ManualCompoundID,Comment\n'
+
         for c in crystals:
             crystalID = c[0]
 
@@ -565,7 +568,7 @@ class mounted_crystals(object):
                 soak_start = datetime.strptime(c[8], '%d/%m/%Y %H:%M:%S')
                 soak_end = datetime.strptime(c[7], '%d/%m/%Y %H:%M:%S')
                 diff = soak_end - soak_start
-                soak_time = str(int(diff.total_seconds()))
+                soak_time = str(round((float(diff.total_seconds())/3600), 1))
             except TypeError:
                 soak_time = ''
 
