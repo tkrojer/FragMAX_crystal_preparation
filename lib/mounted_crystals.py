@@ -414,7 +414,7 @@ class mounted_crystals(object):
                            self.dbObject.mountedcrystalTable.columns.Puck_Position]).\
             where(self.dbObject.mountedcrystalTable.columns.Shipment == None).\
             order_by(self.dbObject.mountedcrystalTable.columns.Puck_Name.asc(),
-                    self.dbObject.mountedcrystalTable.columns.Puck_Position.asc())
+                    db.cast(self.dbObject.mountedcrystalTable.columns.Puck_Position, db.Integer).asc())
         ResultProxy = self.dbObject.connection.execute(query)
         result = ResultProxy.fetchall()
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -428,17 +428,24 @@ class mounted_crystals(object):
         for r in result:
             Crystal_ID = r[0]
             puck = r[1]
+#            if puck not in puckList and len(puckList) < 8:
+#                puckList.append(puck)
+#            elif len(puckList) == 8:
+#                puckList = [puck]
+#                dewar_number += 1
+            position = r[2]
+#            proteinacronym = Crystal_ID.split('-')[0]
+            proteinacronym = Crystal_ID[:Crystal_ID.rfind('-x')]
+#            sample = Crystal_ID.split('-')[1]
+            sample = Crystal_ID[Crystal_ID.rfind('-x')+1:]
+            self.logger.info('{0!s} {1!s} {2!s} {3!s} {4!s}'.format(puck, position, Crystal_ID, proteinacronym, sample))
+            self.update_shipment_in_db(shipment, Crystal_ID)
+            exi_csv += 'Dewar{0!s},{1!s},Unipuck,{2!s},{3!s},{4!s},,,,,,,,\n'.format(dewar_number, puck, position, proteinacronym, sample)
             if puck not in puckList and len(puckList) < 8:
                 puckList.append(puck)
             elif len(puckList) == 8:
                 puckList = [puck]
                 dewar_number += 1
-            position = r[2]
-            proteinacronym = Crystal_ID.split('-')[0]
-            sample = Crystal_ID.split('-')[1]
-            self.logger.info('{0!s} {1!s} {2!s} {3!s} {4!s}'.format(puck, position, Crystal_ID, proteinacronym, sample))
-            self.update_shipment_in_db(shipment, Crystal_ID)
-            exi_csv += 'Dewar{0!s},{1!s},Unipuck,{2!s},{3!s},{4!s},,,,,,,,\n'.format(dewar_number, puck, position, proteinacronym, sample)
         self.save_shipment_csv_file(shipment, exi_csv)
 
     def save_fragmax_csv_file(self, shipment, fragmax_csv):
