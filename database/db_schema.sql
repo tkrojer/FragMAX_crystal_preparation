@@ -190,6 +190,7 @@ CREATE TABLE IF NOT EXISTS "CrystalPlateType" (
 );
 
 INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-3d');
+INSERT INTO CrystalPlateType VALUES('SwissCI-MRC-2d');
 
 CREATE TABLE IF NOT EXISTS "CrystallizationMethod" (
 	"Method"	TEXT
