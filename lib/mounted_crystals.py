@@ -1,3 +1,5 @@
+import sys
+
 import ipywidgets as widgets
 from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 from IPython.display import display,clear_output
@@ -525,7 +527,35 @@ class mounted_crystals(object):
         if not foundCrystals:
             self.logger.error('did not find any crystals, make sure that you exported samples for EXI!')
 
-    def export_csv_summary(self, b):
+
+    def get_all_soaked_crystals(self):
+        joined_soakedcrystalTable = self.dbObject.soakedcrystalTable.join(
+            self.dbObject.soakplateTable, self.dbObject.soakedcrystalTable.columns.SoakPlate_Condition_ID ==
+                                  self.dbObject.soakplateTable.columns.SoakPlate_Condition_ID, isouter=True).join(
+            self.dbObject.compoundbatchTable, self.dbObject.soakplateTable.columns.CompoundBatch_ID ==
+                                      self.dbObject.compoundbatchTable.columns.CompoundBatch_ID, isouter=True).join(
+            self.dbObject.compoundTable, self.dbObject.compoundbatchTable.columns.Compound_ID ==
+                                 self.dbObject.compoundTable.columns.Compound_ID, isouter=True)
+
+        query = db.select([
+            self.dbObject.soakedcrystalTable.columns.Soak_ID,
+            self.dbObject.compoundbatchTable.columns.Compound_ID,
+            self.dbObject.compoundTable.columns.Smiles,
+            self.dbObject.compoundTable.columns.Vendor_ID,
+            self.dbObject.compoundTable.columns.Vendor,
+            self.dbObject.compoundbatchTable.columns.Library_Name,
+            self.dbObject.soakedcrystalTable.columns.Soak_Time,
+            self.dbObject.soakedcrystalTable.columns.Soak_Comment
+        ]).order_by(
+            self.dbObject.soakedcrystalTable.columns.Soak_ID)
+
+        query = query.select_from(joined_soakedcrystalTable)
+        ResultProxy = self.dbObject.connection.execute(query)
+        soaks = ResultProxy.fetchall()
+        return soaks
+
+
+    def get_all_mounted_crystals(self):
         query = db.select([
             self.dbObject.mountedcrystalTable.columns.Crystal_ID,
             self.dbObject.compoundbatchTable.columns.Compound_ID,
@@ -540,18 +570,20 @@ class mounted_crystals(object):
             self.dbObject.crystalplateTable.columns.Crystallization_Method,
             self.dbObject.mountedcrystalTable.columns.Manual_Crystal_ID,
             self.dbObject.mountedcrystalTable.columns.CompoundBatch_ID,
-            self.dbObject.mountedcrystalTable.columns.Comment
+            self.dbObject.mountedcrystalTable.columns.Comment,
+            self.dbObject.soakedcrystalTable.columns.Soak_ID,
+            self.dbObject.soakedcrystalTable.columns.Soak_Comment
         ]).order_by(
             self.dbObject.mountedcrystalTable.columns.Crystal_ID)
 
         query = query.select_from(self.dbObject.joined_tables)
-
         ResultProxy = self.dbObject.connection.execute(query)
         crystals = ResultProxy.fetchall()
-        self.logger.error(crystals)
-        csvOut = ''
-        csvOut += 'SampleID,CompoundID,Smiles,VendorID,Vendor,SoakTime(h),CrystallizationCondition,ManualCrystalID,ManualCompoundID,Comment\n'
+        return crystals
 
+
+    def add_mounted_crystals_to_csv(self, crystals, csvOut):
+        Soak_ID_list = []
         for c in crystals:
             crystalID = c[0]
 
@@ -591,11 +623,70 @@ class mounted_crystals(object):
             if not manual_cpd:
                 manual_cpd = ''
 
-            comment = str(c[13])
+            comment = str(c[13]).split(':')[2]
             if not comment:
                 comment = ''
+            elif comment == 'No comment':
+                comment = 'OK'
 
-            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + ',' + soak_time + ',' + condition + ',' + manual_id + ',' + manual_cpd + ',' + comment + '\n'
+            cpd_behaviour = str(c[15]).split(':')[1]
+            if not cpd_behaviour:
+                cpd_behaviour = ''
+            elif cpd_behaviour == 'No comment':
+                cpd_behaviour = 'clear'
+
+            csvOut += crystalID + ',' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + ',' + soak_time + ',' + condition + ',' + manual_id + ',' + manual_cpd + ',' + comment + ',' + cpd_behaviour + '\n'
+
+            Soak_ID_list.append(str(c[14]))
+        return csvOut, Soak_ID_list
+
+
+    def add_failed_soaks_to_csv(self, soaks, csvOut, Soak_ID_list):
+
+        for s in soaks:
+            soak_id = s[0]
+            if soak_id not in Soak_ID_list:
+                cpdID = s[1]
+                if not cpdID:
+                    cpdID = ''
+
+                smiles = s[2]
+                if not smiles:
+                    smiles = ''
+
+                vendor_id = s[3]
+                if not vendor_id:
+                    vendor_id = ''
+
+                vendor = s[4]
+                if not vendor:
+                    vendor = ''
+
+                condition = s[6]
+                if not condition:
+                    condition = ''
+
+                cpd_behaviour = str(s[7]).split(':')[1]
+                if not cpd_behaviour:
+                    cpd_behaviour = ''
+                elif cpd_behaviour == 'No comment':
+                    cpd_behaviour = 'clear'
+
+                csvOut += 'nan,' + cpdID + ',' + smiles + ',' + vendor_id + ',' + vendor + ',nan,' + condition + ',nan,nan,nan,' + cpd_behaviour + '\n'
+        return csvOut
+
+
+    def export_csv_summary(self, b):
+        crystals = self.get_all_mounted_crystals()
+        soaks = self.get_all_soaked_crystals()
+
+        self.logger.error(crystals)
+        csvOut = ''
+        csvOut += 'SampleID,CompoundID,Smiles,VendorID,Vendor,SoakTime(h),CrystallizationCondition,ManualCrystalID,ManualCompoundID,CompoundBehaviour,CrystalBehaviourt\n'
+
+        csvOut, Soak_ID_list = self.add_mounted_crystals_to_csv(crystals, csvOut)
+        csvOut = self.add_failed_soaks_to_csv(soaks, csvOut, Soak_ID_list)
+
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.logger.info('saving CSV summary {0!s}'.format(
             os.path.join(self.settingsObject.workflow_folder, '7-summary', 'summary_' + now + '.csv')))
