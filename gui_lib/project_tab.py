@@ -20,10 +20,11 @@ import query
 #import csv
 
 class project_tab(object):
-    def __init__(self, settingsObject, logger, dal, standard_table_file):
+    def __init__(self, settingsObject, logger, dal, standard_table_file, crystalplateObject, soakplateObject):
 
         self.settings = settingsObject
-#        self.crystalplateObject = crystalplateObject
+        self.crystalplateObject = crystalplateObject
+        self.soakplateObject = soakplateObject
         self.logger = logger
         self.dal = dal
         self.standard_table_file = standard_table_file
@@ -87,7 +88,7 @@ class project_tab(object):
         self.logger.info('reading project information from database')
         d = query.get_project_info(self.dal, self.logger)
         self.update_project_widgets(d)
-#        self.update_crystal_plate_widgets()
+        self.update_crystal_plate_widgets()
 
     def update_project_widgets(self, d):
         self.logger.info('updating fields in project description tab')
@@ -107,7 +108,7 @@ class project_tab(object):
             'project_directory': self.project_directory.value
         }
         d = query.save_project_info(self.dal, self.logger, d)
-
+        self.update_crystal_plate_widgets()
 
 
 #        query = db.select([self.dbObject.projectTable.columns.Proposal_ID.distinct()])
@@ -154,21 +155,29 @@ class project_tab(object):
 #
 #        self.update_crystal_plate_widgets()
 #
-#    def update_crystal_plate_widgets(self):
+    def update_crystal_plate_widgets(self):
 #        query = db.select([self.dbObject.proteinBatchTable.columns.ProteinBatch_ID.distinct()])
 #        ResultProxy = self.dbObject.connection.execute(query)
 #        existing_protein_batches = [x[0] for x in ResultProxy.fetchall()]
-#        self.logger.info('found the following protein batches in database: ' + str(existing_protein_batches))
-#        self.crystalplateObject.select_protein_batch.options = existing_protein_batches
-#
+        existing_protein_batches = query.get_protein_batch_for_dropdown(self.dal, self.logger)
+        self.logger.info('found the following protein batches in database: ' + str(existing_protein_batches))
+        self.crystalplateObject.select_protein_batch.options = existing_protein_batches
+
 #        query = db.select([self.dbObject.crystal_plate_typeTable.columns.Plate_Name.distinct()])
 #        ResultProxy = self.dbObject.connection.execute(query)
 #        existing_plate_types = [x[0] for x in ResultProxy.fetchall()]
-#        self.logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
-#        self.crystalplateObject.select_plate_type.options = existing_plate_types
+        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
+        self.logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
+        self.crystalplateObject.select_plate_type.options = existing_plate_types
 #
 #        query = db.select([self.dbObject.crystallizationMethodTable.columns.Method.distinct()])
 #        ResultProxy = self.dbObject.connection.execute(query)
 #        existing_methods = [x[0] for x in ResultProxy.fetchall()]
-#        self.logger.info('found the following crystallization methods in database: ' + str(existing_methods))
-#        self.crystalplateObject.select_method.options = existing_methods
+        existing_methods = query.get_crystallization_method_for_dropdown(self.dal, self.logger)
+        self.logger.info('found the following crystallization methods in database: ' + str(existing_methods))
+        self.crystalplateObject.select_method.options = existing_methods
+
+        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
+        self.logger.info('found the following plate types in database: ' + str(existing_methods))
+        self.soakplateObject.select_plate_type.options = existing_plate_types
+
