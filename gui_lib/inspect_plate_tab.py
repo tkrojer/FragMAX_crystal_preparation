@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-#from ipywidgets import HBox, VBox, Layout, IntProgress, Label
+from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 from IPython.display import display,clear_output
 from tkinter import Tk, filedialog
 #from beakerx import *
@@ -15,6 +15,7 @@ import ntpath
 import sys
 sys.path.append(os.path.join(os.getcwd(), 'lib'))
 import filesystem as fs
+import misc
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import query
 
@@ -23,52 +24,81 @@ import panel as pn
 import numpy as np
 pn.extension('tabulator')
 
+import matplotlib.pyplot as plt
+import matplotlib.cbook as cbook
+
 class inspect_plate_tab(object):
     def __init__(self, settingsObject, dbObject, logger):
         self.logger = logger
         self.dbObject = dbObject
         self.settingsObject = settingsObject
 
-        self.import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter')
-        self.import_shifter_marked_crystals_button.on_click(self.import_shifter_marked_crystals)
+        self.grid_widget = widgets.GridspecLayout(9, 4)
 
-        self.n_rows_inspected_wells = 288
+#        import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter',
+#                                                               layout=Layout(height='auto', width='auto'))
+        import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter',
+                                                               layout=Layout(border='1px solid', width='75%'))
+        import_shifter_marked_crystals_button.on_click(self.import_shifter_marked_crystals)
+        self.grid_widget[0, :2] = import_shifter_marked_crystals_button
 
-        sheet_header = [
-            'crystal_plate_barcode',
-            'crystal_plate_well',
-            'crystal_plate_subwell'
-        ]
+#        self.grid_widget[1, 0] = Label("Crystal plate", layout=Layout(display="flex", justify_content="center"))
+        self.grid_widget[1, 0] = Label("Crystal plate", layout=Layout(justify_content="center", width='100%'))
+        self.select_crystal_plate = widgets.Dropdown(layout=Layout(width='100%'))
+        self.grid_widget[1, 1] = self.select_crystal_plate
+#        self.grid_widget[1, 1] = Label("test", layout=Layout(display="flex", justify_content="center"))
+#        load_crystal_plate_button = widgets.Button(description='test')
+        load_crystal_plate_button = widgets.Button(description='Load crystal plate\nfrom database')
+        load_crystal_plate_button.on_click(self.load_crystal_plate)
+        self.grid_widget[1, 2] = load_crystal_plate_button
+        load_crystal_image_button = widgets.Button(description='Load crystal images', style= {'button_color': 'orange'})
+        load_crystal_image_button.on_click(self.load_crystal_image)
+        self.grid_widget[1, 3] = load_crystal_image_button
 
-#        x = []
+        self.cystal_image_box = widgets.VBox(children=[], layout=Layout(border='3px solid red', width='100%'))
+        self.grid_widget[2:6, 0:2] = self.cystal_image_box
+
+        self.cystal_plate_box = widgets.VBox(children=[], layout=Layout(border='solid', width='100%'))
+        self.grid_widget[2:6, 2:] = self.cystal_plate_box
+
+        self.show_marked_crystals()
+
+        prev_image_button = widgets.Button(description='<<<', layout=Layout(border='1px solid', width='100%'))
+        self.grid_widget[7, 0] = prev_image_button
+        next_image_button = widgets.Button(description='>>>', layout=Layout(border='1px solid', width='100%'))
+        self.grid_widget[7, 1] = next_image_button
+
+        mount_crystal_button = widgets.Button(description='Mount', style={'button_color': 'green'},
+                                              layout=Layout(border='1px solid', width='100%'))
+        self.grid_widget[8, 0] = mount_crystal_button
+        unmount_crystal_button = widgets.Button(description='Unmount', style={'button_color': 'red'},
+                                                layout=Layout(border='1px solid', width='100%'))
+        self.grid_widget[8, 1] = unmount_crystal_button
+    #        self.n_rows_inspected_wells = 288
+#
+#        sheet_header = [
+#            'crystal_plate_barcode',
+#            'crystal_plate_well',
+#            'crystal_plate_subwell'
+#        ]
+#
+#        data = []
 #        for i in range(self.n_rows_inspected_wells):
-#            m = {}
-#            for j in range(len(headerList_inspected_wells)):
-#                key = headerList_inspected_wells[j]
-#                value = "............"  # cannot be space
-#                m[key] = value
-#            x.append(m)
-#        print(x)
-#        self.inspected_wells_sheet = beakerx.TableDisplay(x)
-        data = []
-        for i in range(self.n_rows_inspected_wells):
-            row = []
-            for j in range(len(sheet_header)):
-                row.append("............")
-            data.append(row)
-#        data = [['tom', 10], ['nick', 15], ['juli', 14]]
-        df = pd.DataFrame(data, columns=[sheet_header])
-
-        out = widgets.Output()
-        self.inspected_wells_sheet = pn.widgets.Tabulator(df)
-        self.table_box = widgets.VBox()
-        with out:
-            clear_output(wait=True)
-            display(self.inspected_wells_sheet)
-        self.table_box.children = [out]
+#            row = []
+#            for j in range(len(sheet_header)):
+#                row.append("............")
+#            data.append(row)
+#        df = pd.DataFrame(data, columns=[sheet_header])
+#
+#        out = widgets.Output()
+#        self.inspected_wells_sheet = pn.widgets.Tabulator(df)
+#        table_box = widgets.VBox()
+#        with out:
+#            clear_output(wait=True)
+#            display(self.inspected_wells_sheet)
+#        table_box.children = [out]
 
 
-#        self.vbox_cystal_image = widgets.VBox(children=[])
 
 #    def get_crystal_screen_name(self, barcode):
 #        query = db.select([self.dbObject.crystalplateTable.columns.CrystalScreen_Name]).where(
@@ -81,6 +111,32 @@ class inspect_plate_tab(object):
 #            screen_name = ''
 #        return screen_name
 
+    def show_crystal_image(self, n):
+#        crystal_image_progress.value = n
+        out = widgets.Output()
+        with cbook.get_sample_data(image_list[n]) as image_file:
+            image = plt.imread(image_file)
+        plt.imshow(image)
+        #    plt.axis("off")
+        plt.title('Training')
+        with out:
+            clear_output(wait=True)
+            display(plt.show())
+        self.cystal_image_box.children = [out]
+
+#    def change_next_crystal_image(b):
+#        global crystal_image_number
+#        crystal_image_number += 1
+#        if crystal_image_number > len(image_list):
+#            crystal_image_number = len(image_list)
+#        show_crystal_image(crystal_image_number)
+
+#    def change_prev_crystal_image(b):
+#        global crystal_image_number
+#        crystal_image_number += -1
+#        if crystal_image_number < 0:
+#            crystal_image_number = 0
+#        show_crystal_image(crystal_image_number)
 
     def import_shifter_marked_crystals(self, b):
         clear_output()
@@ -126,26 +182,36 @@ class inspect_plate_tab(object):
 #                self.inspected_wells_sheet.values[i][2] = "............"
 #        self.inspected_wells_sheet.sendModel()
 
-#    def show_marked_crystals(self, wellList):
-#        magnify = 2
-#        out = widgets.Output()
-#        fig, ax = plt.subplots()
-#        plt.xlim(0,36 * magnify)
-#        plt.ylim(0,25 * magnify)
-#        ax.set_aspect(1)
-#        for c in misc.swiss_ci_layout():
-#            well = c[0]
-#            x = c[1] * magnify
-#            y = c[2] * magnify
-#            radius = 0.2 * magnify
+    def show_marked_crystals(self):
+#        wellList = []
+        magnify = 2
+        out = widgets.Output()
+        fig, ax = plt.subplots()
+        plt.xlim(0,36 * magnify)
+        plt.ylim(0,25 * magnify)
+        ax.set_aspect(1)
+        for c in misc.swiss_ci_3_drop_layout():
+            well = c[0]
+            x = c[1] * magnify
+            y = c[2] * magnify
+            radius = 0.2 * magnify
 #            if c[3] == 'circle' and well in wellList:
 #                ax.add_artist(plt.Circle((x, y), radius, color='red'))
 #            if c[3] == 'circle' and not well in wellList:
 #                ax.add_artist(plt.Circle((x, y), radius, color='gray'))
-#            elif c[3] == 'rectangle':
-#                ax.add_patch(Rectangle((x-radius, y-radius), radius*2, radius*2,edgecolor='black',facecolor='none',lw=0.2))
-#        plt.axis("off")
-#        with out:
-#            clear_output(wait=True)
-#            display(plt.show())
-#        self.vbox_cystal_image.children = [out]
+            if c[3] == 'circle':
+                ax.add_artist(plt.Circle((x, y), radius, color='gray'))
+            elif c[3] == 'rectangle':
+                ax.add_patch(plt.Rectangle((x-radius, y-radius), radius*2, radius*2,
+                                           edgecolor='black', facecolor='none', lw=0.2))
+        plt.axis("off")
+        with out:
+            clear_output(wait=True)
+            display(plt.show())
+        self.cystal_plate_box.children = [out]
+
+    def load_crystal_plate(self):
+        print('hallo')
+
+    def load_crystal_image(self):
+        print('hallo')

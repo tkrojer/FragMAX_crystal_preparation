@@ -6,8 +6,8 @@ from datetime import datetime
 import os
 
 import sys
-#sys.path.append(os.path.join(os.getcwd(), 'lib'))
-#import filesystem as fs
+sys.path.append(os.path.join(os.getcwd(), 'lib'))
+import filesystem as fs
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import query
 
@@ -19,25 +19,32 @@ class crystal_plate_tab(object):
         self.dal = dal
         self.logger = logger
 
-        self.grid_widget_upper = widgets.GridspecLayout(10, 4)
+        protein_history = [
+            'frozen',
+            'fresh'
+        ]
 
-        self.grid_widget_upper[0,0] = Label("Enter New Barcode", layout=Layout(display="flex", justify_content="center"))
+        self.grid_widget_upper = widgets.GridspecLayout(13, 4)
 
-        self.plate_barcode = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+#        self.grid_widget_upper[0,0] = Label("Enter New Barcode", layout=Layout(display="flex", justify_content="center"))
+#        self.protein_concentration = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+
+        self.grid_widget_upper[0,0] = Label("Enter New Barcode")
+        self.plate_barcode = widgets.Text(value='', layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[0,1] = self.plate_barcode
         add_plate_barcode_button = widgets.Button(description='Add')
         add_plate_barcode_button.on_click(self.add_plate_barcode)
         self.grid_widget_upper[0,2] = add_plate_barcode_button
 
-        self.grid_widget_upper[1,0] = Label("Select Barcode", layout=Layout(display="flex", justify_content="center"))
-        self.select_barcode = widgets.Dropdown()
+        self.grid_widget_upper[1,0] = Label("Select Barcode")
+        self.select_barcode = widgets.Dropdown(layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[1,1] = self.select_barcode
         refresh_barcode_button = widgets.Button(description='Refresh Barcode List')
         refresh_barcode_button.on_click(self.refresh_barcode)
         self.grid_widget_upper[1,2] = refresh_barcode_button
 
-        self.grid_widget_upper[2,0] = Label("Screen", layout=Layout(display="flex", justify_content="center"))
-        self.select_screen_for_plate = widgets.Dropdown()
+        self.grid_widget_upper[2,0] = Label("Screen")
+        self.select_screen_for_plate = widgets.Dropdown(layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[2,1] = self.select_screen_for_plate
         refresh_screens_button = widgets.Button(description='Refresh Screen List')
         refresh_screens_button.on_click(self.refresh_screens)
@@ -47,85 +54,93 @@ class crystal_plate_tab(object):
         load_plate_from_db_button.on_click(self.load_plate_from_db)
         self.grid_widget_upper[4:5,2] = load_plate_from_db_button
 
-        self.grid_widget_upper[3,0] = Label("Protein Concentration (mg/ml)", layout=Layout(display="flex", justify_content="center"))
-        self.protein_concentration = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget_upper[3,0] = Label("Protein Concentration (mg/ml)")
+        self.protein_concentration = widgets.Text(value='', layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[3,1] = self.protein_concentration
 
-        self.grid_widget_upper[4,0] = Label("Protein Batch", layout=Layout(display="flex", justify_content="center"))
-        self.select_protein_batch = widgets.Dropdown()
+        self.grid_widget_upper[4,0] = Label("Protein Batch")
+        self.select_protein_batch = widgets.Dropdown(layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[4,1] = self.select_protein_batch
 
-        self.grid_widget_upper[5,0] = Label("Temperature (K)", layout=Layout(display="flex", justify_content="center"))
-        self.temperature = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget_upper[5,0] = Label("Temperature (K)")
+        self.temperature = widgets.Text(value='', layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[5,1] = self.temperature
 
-        self.grid_widget_upper[6,0] = Label("Protein Buffer", layout=Layout(display="flex", justify_content="center"))
-        self.protein_buffer = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget_upper[6,0] = Label("Protein Buffer")
+        self.protein_buffer = widgets.Text(value='', layout=widgets.Layout(width="auto"))
         self.grid_widget_upper[6,1] = self.protein_buffer
 
-        self.grid_widget_upper[7,0] = Label("Reservoir Volume (\u03BCL)", layout=Layout(display="flex", justify_content="center"))
-        self.reservoir_volume = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
-        self.grid_widget_upper[7,1] = self.reservoir_volume
+        self.grid_widget_upper[7,0] = Label("Protein history")
+        self.protein_history = widgets.Dropdown(layout=widgets.Layout(width="auto"))
+        self.protein_history.options = protein_history
+        self.grid_widget_upper[7,1] = self.protein_history
 
-        self.grid_widget_upper[8,0] = Label("Plate Type", layout=Layout(display="flex", justify_content="center"))
-        self.select_plate_type = widgets.Dropdown()
-        self.grid_widget_upper[8,1] = self.select_plate_type
+        self.grid_widget_upper[8,0] = Label("Reservoir Volume (\u03BCL)")
+        self.reservoir_volume = widgets.Text(value='', layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[8,1] = self.reservoir_volume
 
-        self.grid_widget_upper[9,0] = Label("Method", layout=Layout(display="flex", justify_content="center"))
-        self.select_method = widgets.Dropdown()
-        self.grid_widget_upper[9,1] = self.select_method
+        self.grid_widget_upper[9,0] = Label("Plate Type")
+        self.select_plate_type = widgets.Dropdown(layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[9,1] = self.select_plate_type
+
+        self.grid_widget_upper[10,0] = Label("Method")
+        self.select_method = widgets.Dropdown(layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[10,1] = self.select_method
+
+        self.grid_widget_upper[11,0] = Label("start row")
+        self.start_row = widgets.Text(value='A', layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[11,1] = self.start_row
+
+        self.grid_widget_upper[11,2] = Label("end row")
+        self.end_row = widgets.Text(value='H', layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[11,3] = self.end_row
+
+        self.grid_widget_upper[12,0] = Label("start column")
+        self.start_column = widgets.Text(value='01', layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[12,1] = self.start_column
+
+        self.grid_widget_upper[12,2] = Label("end column")
+        self.end_column = widgets.Text(value='12', layout=widgets.Layout(width="auto"))
+        self.grid_widget_upper[12,3] = self.end_column
 
         file = open("images/swiss_ci_layout.png", "rb")
         image = file.read()
         swissci = widgets.Image(value=image, format='png', width=200, height=200)
-        self.grid_widget_upper[1:-1,-1] = swissci
+#        self.grid_widget_upper[1:-1,-1] = swissci
 
-        self.grid_widget_lower = widgets.GridspecLayout(11, 3)
+        self.grid_widget_lower = widgets.GridspecLayout(11, 6)
 
-        self.grid_widget_lower[0,0:] = widgets.Button(description="subwell a", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="info")
-        self.grid_widget_lower[1,0] = widgets.Button(description="V(Protein) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="info")
-        self.grid_widget_lower[1,1] = widgets.Button(description="V(Reservoir) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="info")
-        self.grid_widget_lower[1,2] = widgets.Button(description="V(Seed) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="info")
-        self.subwell_a_protein = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget_lower[0,:3] = widgets.Button(description="subwell a", button_style="info", layout=widgets.Layout(width="auto"))
+        self.grid_widget_lower[1,0] = widgets.Button(description="V(Protein) [nL]", button_style="info")
+        self.grid_widget_lower[1,1] = widgets.Button(description="V(Reservoir) [nL]", button_style="info")
+        self.grid_widget_lower[1,2] = widgets.Button(description="V(Seed) [nL]", button_style="info")
+        self.subwell_a_protein = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[2,0] = self.subwell_a_protein
-        self.subwell_a_reservoir = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.subwell_a_reservoir = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[2,1] = self.subwell_a_reservoir
-        self.subwell_a_seed = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.subwell_a_seed = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[2,2] = self.subwell_a_seed
 
-        self.grid_widget_lower[3,0:] = widgets.Button(description="subwell c", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="primary")
-        self.grid_widget_lower[4,0] = widgets.Button(description="V(Protein) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="primary")
-        self.grid_widget_lower[4,1] = widgets.Button(description="V(Reservoir) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="primary")
-        self.grid_widget_lower[4,2] = widgets.Button(description="V(Seed) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="primary")
-        self.subwell_c_protein = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget_lower[3,:3] = widgets.Button(description="subwell c", button_style="primary", layout=widgets.Layout(width="auto"))
+        self.grid_widget_lower[4,0] = widgets.Button(description="V(Protein) [nL]", button_style="primary")
+        self.grid_widget_lower[4,1] = widgets.Button(description="V(Reservoir) [nL]", button_style="primary")
+        self.grid_widget_lower[4,2] = widgets.Button(description="V(Seed) [nL]", button_style="primary")
+        self.subwell_c_protein = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[5,0] = self.subwell_c_protein
-        self.subwell_c_reservoir = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.subwell_c_reservoir = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[5,1] = self.subwell_c_reservoir
-        self.subwell_c_seed = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.subwell_c_seed = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[5,2] = self.subwell_c_seed
 
-        self.grid_widget_lower[6,0:] = widgets.Button(description="subwell d", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="success")
-        self.grid_widget_lower[7,0] = widgets.Button(description="V(Protein) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="success")
-        self.grid_widget_lower[7,1] = widgets.Button(description="V(Reservoir) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="success")
-        self.grid_widget_lower[7,2] = widgets.Button(description="V(Seed) [nL]", layout=widgets.Layout(height="auto", width="auto"),
-                            button_style="success")
-
-        self.subwell_d_protein = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget_lower[6,:3] = widgets.Button(description="subwell d", button_style="success", layout=widgets.Layout(width="auto"))
+        self.grid_widget_lower[7,0] = widgets.Button(description="V(Protein) [nL]", button_style="success")
+        self.grid_widget_lower[7,1] = widgets.Button(description="V(Reservoir) [nL]", button_style="success")
+        self.grid_widget_lower[7,2] = widgets.Button(description="V(Seed) [nL]", button_style="success")
+        self.subwell_d_protein = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[8,0] = self.subwell_d_protein
-        self.subwell_d_reservoir = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.subwell_d_reservoir = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[8,1] = self.subwell_d_reservoir
-        self.subwell_d_seed = widgets.Text(layout=widgets.Layout(height="auto", width="100"))
+        self.subwell_d_seed = widgets.Text(layout=widgets.Layout(width="auto"))
         self.grid_widget_lower[8,2] = self.subwell_d_seed
 
         save_plate_to_db_button = widgets.Button(description='Save CrystalPlate to Database',
@@ -133,6 +148,7 @@ class crystal_plate_tab(object):
                                            style= {'button_color':'gray'})
         save_plate_to_db_button.on_click(self.save_plate_to_db)
         self.grid_widget_lower[10,0:] = save_plate_to_db_button
+        self.grid_widget_lower[:9,3:] = swissci
 
 
     def add_plate_barcode(self, b):
@@ -200,7 +216,7 @@ class crystal_plate_tab(object):
         except ValueError:
             d['subwell_a_protein_volume'] = 0.0
 
-        d['subwell_a_protein_volume'] = 'nL'
+        d['subwell_a_protein_volume_unit'] = 'nL'
 
         try:
             d['subwell_a_reservoir_volume'] = float(self.subwell_a_reservoir.value)
@@ -262,10 +278,24 @@ class crystal_plate_tab(object):
         d['crystallization_method_id'] = self.select_method.value.split(':')[0]
         d['plate_type_id'] = self.select_plate_type.value.split(':')[0]
         d['crystal_screen_id'] = self.select_screen_for_plate.value.split(':')[0]
+        d['protein_history'] = self.protein_history.value
 
-        barcode =  self.select_barcode.value
+        d['start_row'] = self.start_row.value
+        d['end_row'] = self.end_row.value
+        d['start_column'] = self.start_column.value
+        d['end_column'] = self.end_column.value
+
+        barcode = self.select_barcode.value
 
         query.save_crystal_plate_to_database(self.logger, self.dal, d, barcode)
+
+        fs.save_shifter_csv_to_inspect_folder(self.logger,
+                                              d['subwell_a_protein_volume'],
+                                              d['subwell_c_protein_volume'],
+                                              d['subwell_d_protein_volume'],
+                                              self.select_barcode.value,
+                                              self.select_plate_type.value,
+                                              self.settingsObject.workflow_folder)
 
 #        if self.select_barcode.value in existing_barcodes:
 #            self.logger.warning('plate barcode ' + self.select_barcode.value + ' exists in database; updating records...')
@@ -314,9 +344,6 @@ class crystal_plate_tab(object):
 #            query = db.insert(self.dbObject.crystalplateTable)
 #            self.dbObject.connection.execute(query, values_list)
 
-        fs.save_shifter_csv_to_inspect_folder(_subwell_a_protein, _subwell_c_protein, _subwell_d_protein,
-                                              self.select_barcode.value, self.select_plate_type.value,
-                                              self.settingsObject.workflow_folder)
 
 
 #    def save_shifter_csv_to_inspect_folder(self, subwell_a, subwell_c, subwell_d, barcode, plate_type):

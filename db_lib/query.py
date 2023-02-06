@@ -1,5 +1,6 @@
 import sqlalchemy
 from sqlalchemy.sql import select
+from sqlalchemy import and_
 import pandas as pd
 
 def get_empty_project_info():
@@ -102,17 +103,24 @@ def save_crystal_screen_to_db(dal, logger, df, csname, pgbar):
         start += step
         pgbar.value = int(start)
         d = {
-        'crystal_screen_condition': df.at[index, 'CrystalScreen_Condition'],
-        'crystal_screen_well': df.at[index, 'CrystalScreen_Well']
+        'crystal_screen_condition': df.at[index, 'crystal_screen_condition'],
+        'crystal_screen_well': df.at[index, 'crystal_screen_well']
         }
         try:
-            ins = dal.crystal_screen_table.insert().values(d.update({'crystal_screen_name': csname}))
+            d.update({'crystal_screen_name': csname})
+            ins = dal.crystal_screen_table.insert().values(d)
             dal.connection.execute(ins)
         except sqlalchemy.exc.IntegrityError as e:
             if "UNIQUE constraint failed" in str(e):
                 logger.warning('crystal screen exists in database; updating information...')
-                u = dal.crystal_screen_table.update().where(dal.crystal_screen_table.c.crystal_screen_name == csname)
-                u.values(d)
+                del d['crystal_screen_name']
+                well = d['crystal_screen_well']
+                del d['crystal_screen_well']
+                u = dal.crystal_screen_table.update().values(d).where(and_(
+                    dal.crystal_screen_table.c.crystal_screen_name == csname,
+                    dal.crystal_screen_table.c.crystal_screen_well == well))
+#                u.values(d)
+#                print(u.compile(dal.engine))
                 dal.connection.execute(u)
             else:
                 logger.error(str(e))
@@ -159,16 +167,19 @@ def combine_pkey_and_name_for_dropdown(logger, dal, q):
 
 def get_existing_crystal_screens_for_dropdown(dal, logger):
     logger.info('reading existing crystal screens from database')
-    q = select([dal.crystal_screen_table.c.crystal_screen_id,
-                dal.crystal_screen_table.c.crystal_screen_name]).order_by(
+#    q = select([dal.crystal_screen_table.c.crystal_screen_id,
+#                dal.crystal_screen_table.c.crystal_screen_name]).order_by(
+#        dal.crystal_screen_table.c.crystal_screen_id.asc())
+    q = select(dal.crystal_screen_table.c.crystal_screen_name.distinct()).order_by(
         dal.crystal_screen_table.c.crystal_screen_id.asc())
-#    rp = dal.connection.execute(q)
-#    result = rp.fetchall()
-#    result_list = []
-#    for entry in result:
+    rp = dal.connection.execute(q)
+    result = rp.fetchall()
+    result_list = []
+    for entry in result:
+        result_list.append(entry[0])
 #        logger.info('>>>> {0!s}'.format(entry))
 #        result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
-    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
+#    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
     return result_list
 
 def get_plate_type_for_dropdown(dal, logger):
@@ -216,13 +227,15 @@ def get_compound_plates_for_dropdown(dal, logger):
 def save_crystal_plate_to_database(logger, dal, d, barcode):
     logger.info('saving crystal plate {0!s} to database'.format(barcode))
     try:
-        ins = dal.crystal_plate_table.insert().values(d.update({'crystal_plate_barcode': barcode}))
+        d.update({'crystal_plate_barcode': barcode})
+#        print(d)
+        ins = dal.crystal_plate_table.insert().values(d)
         dal.connection.execute(ins)
     except sqlalchemy.exc.IntegrityError as e:
         if "UNIQUE constraint failed" in str(e):
             logger.warning('crystal plate exists in database; updating information...')
-            u = dal.crystal_plate_table.update().where(dal.crystal_plate_table.c.crystal_plate_barcode == barcode)
-            u.values(d)
+            u = dal.crystal_plate_table.update().values(d).where(dal.crystal_plate_table.c.crystal_plate_barcode == barcode)
+#            u.values(d)
             dal.connection.execute(u)
         else:
             logger.error(str(e))
@@ -282,9 +295,9 @@ def save_soak_plate_to_database(logger, dal, dbase):
         except sqlalchemy.exc.IntegrityError as e:
             if "UNIQUE constraint failed" in str(e):
                 logger.warning('soak plate well exists in database; updating information...')
-                u = dal.soak_plate_table.update().where(
+                u = dal.soak_plate_table.update().values(d).where(
                     dal.soak_plate_table.c.soak_plate_condition == soak_plate_condition)
-                u.values(d)
+#                u.values(d)
                 dal.connection.execute(u)
             else:
                 logger.error(str(e))
@@ -306,3 +319,36 @@ def save_soaked_crystals_to_database(logger, dal, soaked_cystal_list, pgbar):
                 logger.error(str(e))
         start += step
     pgbar.value = 0
+
+def get_last_id(dal, tableobject):
+    q = select(tableobject).order_by(tableobject.desc())
+    rp = dal.connection.execute(q)
+    result = rp.first()
+    last_id = result[0]
+    return last_id
+
+def save_mounted_crystals_to_database(logger, dal, mounted_cystal_list, pgbar):
+    logger.info('saving mounted crystal information to database')
+    proteinacronym = get_protein_acronym(dal, logger)
+    start, step = get_step_for_progress_bar(len(mounted_cystal_list))
+    for d in mounted_cystal_list:
+        last_id = get_last_id(dal, dal.mounted_crystals_table.c.mounted_crystal_id)
+        new_id = last_id + 1
+
+        # get soak_plate_id
+        # get_marked_crystals_id
+
+        d['mounted_crystal_code'] = proteinacronym + '-x' + '0' * (4 - len(str(new_id))) + str(new_id)
+        start += step
+        pgbar.value = int(start)
+        try:
+            ins = dal.mounted_crystals_table.insert().values(d)
+            dal.connection.execute(ins)
+        except sqlalchemy.exc.IntegrityError as e:
+            if "UNIQUE constraint failed" in str(e):
+                logger.warning('entry exists (time mounted {0!s}); skipping'.format(d['mount_datetime']))
+            else:
+                logger.error(str(e))
+        start += step
+    pgbar.value = 0
+

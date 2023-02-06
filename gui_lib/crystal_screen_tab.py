@@ -49,15 +49,15 @@ class crystal_screen_tab(object):
         self.load_selected_screen_button.on_click(self.load_screen_from_db)
         self.grid_widget[2, 0] = self.load_selected_screen_button
 
-        self.save_screen_csv_button = widgets.Button(description="Save CSV template",
+        save_screen_excel_button = widgets.Button(description="Save EXCEL template",
                                                 layout=widgets.Layout(height="auto", width="auto"))
-        self.save_screen_csv_button.on_click(self.save_screen_csv)
-        self.grid_widget[2, 1] = self.save_screen_csv_button
+        save_screen_excel_button.on_click(self.save_screen_excel)
+        self.grid_widget[2, 1] = save_screen_excel_button
 
-        self.upload_screen_csv_button = widgets.Button(description="Upload CSV file",
+        upload_screen_excel_button = widgets.Button(description="Upload EXCEL file",
                                                   layout=widgets.Layout(height="auto", width="auto"))
-        self.upload_screen_csv_button.on_click(self.upload_screen_csv)
-        self.grid_widget[2, 2] = self.upload_screen_csv_button
+        upload_screen_excel_button.on_click(self.upload_screen_excel)
+        self.grid_widget[2, 2] = upload_screen_excel_button
 
         self.import_dragonfly_button = widgets.Button(description="Import Dragonfly file",
                                                  layout=widgets.Layout(height="auto", width="auto"))
@@ -91,7 +91,7 @@ class crystal_screen_tab(object):
 #        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
 #        ResultProxy = self.dbObject.connection.execute(query)
 #        existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
-        existing_crystalscreens = query.get_existing_crystal_screens(self.dal, self.logger)
+        existing_crystalscreens = query.get_existing_crystal_screens_for_dropdown(self.dal, self.logger)
         self.select_screen.options = existing_crystalscreens
         self.logger.info('updating screen selection dropdown: ' + str(existing_crystalscreens))
 
@@ -99,7 +99,7 @@ class crystal_screen_tab(object):
 #        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
 #        ResultProxy = self.dbObject.connection.execute(query)
 #        existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
-        existing_crystalscreens = get_existing_crystal_screens(self.dal, self.logger)
+        existing_crystalscreens = query.get_existing_crystal_screens_for_dropdown(self.dal, self.logger)
         if self.select_screen.value in existing_crystalscreens:
             self.logger.info('screen ' + self.select_screen.value + ' exists in database')
 #            query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Well,
@@ -116,20 +116,18 @@ class crystal_screen_tab(object):
 
     def save_screen_csv(self, b):
         crystal_screen_name = self.select_screen.value.replace(' ','')
-        fs.save_crystal_screen_as_csv(self.logger, self.settings.crystal_screen_folder,
-                                      crystal_screen_name, self.crystal_plate_template)
+#        fs.save_crystal_screen_as_csv(self.logger, self.settings.crystal_screen_folder,
+#                                      crystal_screen_name, self.crystal_plate_template)
         fs.save_crystal_screen_as_excel(self.logger, self.settings.crystal_screen_folder,
                                         crystal_screen_name, self.crystal_plate_template)
-#        self.logger.warning('removing whitespaces from crystal screen name: ' + CrystalScreen_Name)
-#        self.logger.info('trying to copy empty crystal screen CSV template with name ' +
-#                         CrystalScreen_Name + ' to ' + self.settings.crystal_screen_folder)
-#        if os.path.isfile(os.path.join(self.settings.crystal_screen_folder, CrystalScreen_Name + '.csv')):
-#            self.logger.error('file exists in ' + os.path.join(self.settings.crystal_screen_folder, CrystalScreen_Name + '.csv'))
-#        else:
-#            self.logger.info('creating new template ' + os.path.join(self.settings.crystal_screen_folder, CrystalScreen_Name + '.csv'))
-#            copyfile(self.crystal_plate_template, os.path.join(self.settings.crystal_screen_folder, CrystalScreen_Name + '.csv'))
 
-    def upload_screen_csv(self, b):
+    def save_screen_excel(self, b):
+        crystal_screen_name = self.select_screen.value.replace(' ','')
+        fs.save_crystal_screen_as_excel(self.logger, self.settings.crystal_screen_folder,
+                                        crystal_screen_name, self.crystal_plate_template)
+
+
+    def upload_screen_excel(self, b):
         clear_output()
         root = Tk()
         root.withdraw()
@@ -137,7 +135,7 @@ class crystal_screen_tab(object):
         b.files = filedialog.askopenfilename(multiple=True,
                                              initialdir=os.path.join(self.settings.project_folder, 'crystal_screen'),
                                              title="Select file",
-                                             filetypes=[("Text Files", "*.csv", "*.xlsx")])
+                                             filetypes=[("Excel files", "*.xlsx")])
         if os.path.isfile(b.files[0]):
             self.logger.info('loading ' + b.files[0])
             self.screen_name.value = ntpath.basename(b.files[0]).split('.')[0]
@@ -150,24 +148,6 @@ class crystal_screen_tab(object):
 
 
     def save_dragonfly_to_csv(self, dragonflyFile):
-#        csv = 'CrystalScreen_Well,CrystalScreen_Condition\n'
-#        new_condition = False
-#        for line in open(dragonflyFile):
-#            if new_condition and line.replace('\n', '') == '':
-#                csv += well + ',' + condition[:-3] + '\n'
-#                new_condition = False
-#            if new_condition:
-#                condition += line.replace('\n', '').replace(',', '.') + ' - '
-#            if line.endswith(':\n') and not 'Components' in line:
-#                well = line.replace(':\n', '')
-#                if len(well) == 2:
-#                    well = well[0] + '0' + well[1]
-#                new_condition = True
-#                condition = ''
-#        self.logger.info('saving dragonfly txt file as csv: ' + dragonflyFile.replace('.txt', '.csv'))
-#        f = open(dragonflyFile.replace('.txt', '.csv'), 'w')
-#        f.write(csv)
-#        f.close()
         fs.save_dragonfly_to_csv(self.logger, dragonflyFile)
 
 
@@ -197,30 +177,3 @@ class crystal_screen_tab(object):
         csname = self.select_screen.value.replace(' ','')
         query.save_crystal_screen_to_db(self.dal, self.logger, df, csname, self.progress_bar)
 
-#        self.logger.info('saving ' + CrystalScreen_Name + ' crystal screen to database')
-#        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
-#        for index, row in df.iterrows():
-#            self.crystal_screen_progress.value = index
-#            condition = df.at[index,'CrystalScreen_Condition']
-#            well = df.at[index,'CrystalScreen_Well']
-#            self.logger.info("-- {0!s} {1!s}".format(well, condition))
-#            screen_id = CrystalScreen_Name + '-' + well
-#            if CrystalScreen_Name in existing_crystalscreens:
-#                self.logger.warning('crystal screen exists in database; updating records: {0!s} - {1!s}'.format(well, condition))
-#                query = db.update(self.dbObject.crystalscreenTable).values(
-#                    CrystalScreen_Condition = condition).where(
-#                    self.dbObject.crystalscreenTable.columns.CrystalScreen_ID == screen_id)
-#                self.dbObject.connection.execute(query)
-#            else:
-#                self.logger.info('crystal screen does not exist in database; inserting records: {0!s} - {1!s}'.format(well, condition))
-#                values_list = [{
-#                    'CrystalScreen_Condition': condition,
-#                    'CrystalScreen_Well':      well,
-#                    'CrystalScreen_Name':      CrystalScreen_Name,
-#                    'CrystalScreen_ID':        screen_id
-#                }]
-#                query = db.insert(self.dbObject.crystalscreenTable)
-#                self.dbObject.connection.execute(query,values_list)
-#            self.crystal_screen_progress.value = 0

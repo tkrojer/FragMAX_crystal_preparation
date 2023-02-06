@@ -90,6 +90,8 @@ class DataAccessLayer:
         Column('base_buffer_volume_unit', String(8)),
         Column('compound_volume', Numeric(12, 2)),
         Column('compound_volume_unit', String(8)),
+        Column('soak_temperature', Numeric(12, 2)),
+        Column('soak_temperature_unit', String(8)),
         Column('soak_method', String(55)),
         Column('created_on', DateTime(), default=datetime.now),
         Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
@@ -136,6 +138,8 @@ class DataAccessLayer:
         Column('puck_name', String(55)),
         Column('puck_position', Integer()),
         Column('mount_datetime', DateTime(), default=datetime.now),
+        Column('mount_temperature', Numeric(12, 2)),
+        Column('mount_temperature_unit', String(8)),
         Column('shipment', String(55)),
         Column('soak_plate_id', ForeignKey('soak_plate_table.soak_plate_id')),
         Column('marked_crystal_id', ForeignKey('marked_crystals_table.marked_crystal_id')),
@@ -146,7 +150,8 @@ class DataAccessLayer:
         Column('cryo_volume_unit', Numeric(12, 2)),
         Column('manual_mounted_crystal_code', String(55)),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('mount_datetime', 'mounted_crystal_code', name='unique_mount')
     )
 
     crystal_screen_table = Table('crystal_screen_table',
@@ -156,7 +161,8 @@ class DataAccessLayer:
         Column('crystal_screen_condition', String(255)),
         Column('crystal_screen_well', String(12)),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('crystal_screen_name', 'crystal_screen_well', name='unique_name_well')
     )
 
     crystal_plate_table = Table('crystal_plate_table',
@@ -167,6 +173,7 @@ class DataAccessLayer:
         Column('protein_batch_concentration', Numeric(12, 2)),
         Column('protein_batch_concentration_unit', String(8)),
         Column('protein_batch_buffer', String(255)),
+        Column('protein_history', String(255)),
         Column('comment', String(255)),
         Column('crystal_screen_id', ForeignKey('crystal_screen_table.crystal_screen_id')),
         Column('crystallization_method_id', ForeignKey('crystallization_method_table.method_id')),
@@ -174,6 +181,10 @@ class DataAccessLayer:
         Column('plate_type_id', ForeignKey('plate_type_table.plate_type_id')),
         Column('reservoir_volume', Numeric(12, 2)),
         Column('reservoir_volume_unit', String(8)),
+        Column('start_row', String(8)),
+        Column('end_row', String(8)),
+        Column('start_column', String(8)),
+        Column('end_column', String(8)),
         Column('subwell_a_protein_volume', Numeric(12, 2)),
         Column('subwell_a_protein_volume_unit', String(8)),
         Column('subwell_a_reservoir_volume', Numeric(12, 2)),
@@ -199,7 +210,8 @@ class DataAccessLayer:
         Column('subwell_d_seed_volume', Numeric(12, 2)),
         Column('subwell_d_seed_volume_unit', String(8)),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('crystal_plate_barcode', name='unique_crystal_plate_barcode')
     )
 
     unit_table = Table('unit_table',

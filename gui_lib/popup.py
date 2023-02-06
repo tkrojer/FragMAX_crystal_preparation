@@ -8,3 +8,4 @@ display(notify_output)
 def popup(text):
     clear_output()
     display(Javascript("alert('{}')".format(text)))
+

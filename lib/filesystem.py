@@ -20,10 +20,10 @@ def save_crystal_screen_as_excel(logger, csfolder, csname, cstemplate):
     else:
         logger.info('creating new template ' + os.path.join(csfolder, csname + '.xlsx'))
         df_template = pd.read_csv(cstemplate)
-        df_template.to_excel(os.path.join(csfolder, csname + '.xlsx'))
+        df_template.to_excel(os.path.join(csfolder, csname + '.xlsx'), index=False)
 
 def read_crystal_screen_as_df(logger, csfile):
-    logger('reading {0!s} as dataframe'.format(csfile))
+    logger.info('reading {0!s} as dataframe'.format(csfile))
     df = None
     if csfile.endswith('.csv'):
         logger.info('screen file seems to be a CSV file')
