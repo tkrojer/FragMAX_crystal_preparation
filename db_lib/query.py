@@ -175,6 +175,9 @@ def get_existing_crystal_screens_for_dropdown(dal, logger):
     rp = dal.connection.execute(q)
     result = rp.fetchall()
     result_list = []
+    # need to do it like this because there is no unique crystal_screen_name in the table
+    # would need to introduce a crystal_screen_condition_table to which the
+    # crystal_screen_table points to
     for entry in result:
         result_list.append(entry[0])
 #        logger.info('>>>> {0!s}'.format(entry))

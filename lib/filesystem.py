@@ -1,7 +1,14 @@
 import os
+import glob
 from shutil import (copyfile, move)
 import csv
 import pandas as pd
+from datetime import datetime
+
+import sys
+sys.path.append(os.path.join(os.getcwd(), 'lib'))
+import misc
+
 
 def save_crystal_screen_as_csv(logger, csfolder, csname, cstemplate):
     logger.warning('removing whitespaces from crystal screen name: ' + csname)
@@ -56,12 +63,13 @@ def save_dragonfly_to_csv(logger, dragonflyFile):
 
 def save_shifter_csv_to_inspect_folder(logger, subwell_a, subwell_c, subwell_d, barcode, plate_type, folder):
     logger.info('writing CSV file for shifter inspection as ' + os.path.join(folder, '1-inspect', barcode + '.csv'))
-    if os.path.isfile(os.path.join(folder, '1-inspect', barcode + '.csv')):
-        self.logger.warning('file exists ' + os.path.join(folder, '1-inspect', barcode + '.csv'))
-        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        logger.info('backing up exisiting file as ' + barcode + '.csv.' + now)
-        move(os.path.join(folder, '1-inspect', barcode + '.csv'),
-             os.path.join(folder, '1-inspect', 'backup', barcode + '.csv.' + now))
+    backup_file(logger, os.path.join(folder, '1-inspect'), barcode + '_shifter.csv')
+#    if os.path.isfile(os.path.join(folder, '1-inspect', barcode + '.csv')):
+#        logger.warning('file exists ' + os.path.join(folder, '1-inspect', barcode + '.csv'))
+#        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+#        logger.info('backing up exisiting file as ' + barcode + '.csv.' + now)
+#        move(os.path.join(folder, '1-inspect', barcode + '.csv'),
+#             os.path.join(folder, '1-inspect', 'backup', barcode + '.csv.' + now))
     csv = ''
     subwells = []
     if int(subwell_a) != 0:
@@ -76,9 +84,75 @@ def save_shifter_csv_to_inspect_folder(logger, subwell_a, subwell_c, subwell_d, 
         for column in columns:
             for subwell in subwells:
                 csv += '{0!s},{1!s},AM,{2!s},{3!s},{4!s},,,,,,,,,\n'.format(plate_type, barcode, row, column, subwell)
-    f = open(os.path.join(folder, '1-inspect', barcode + '.csv'), 'w')
+    f = open(os.path.join(folder, '1-inspect', barcode + '_shifter.csv'), 'w')
     f.write(csv)
     f.close()
+
+def backup_file(logger, folder, file_name):
+    if os.path.isfile(os.path.join(folder, file_name)):
+        logger.warning('file exists ' + os.path.join(folder, file_name))
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        logger.info('backing up exisiting file as ' + file_name + now)
+        move(os.path.join(folder, file_name),
+             os.path.join(folder, file_name + '.' + now))
+
+def column_range(start_column, end_column):
+    column_range = []
+    columns = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+    add_column = False
+    for c in columns:
+        if c == start_column:
+            add_column = True
+        if add_column:
+            column_range.append(c)
+        if c == end_column:
+            add_column = False
+    return column_range
+
+def row_range(start_row, end_row):
+    row_range = []
+    rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    add_row = False
+    for c in rows:
+        if c == start_row:
+            add_row = True
+        if add_row:
+            row_range.append(c)
+        if c == end_row:
+            add_row = False
+    return row_range
+
+def subwell_range(subwell_01, subwell_02, subwell_03):
+    subwell_range = []
+    if int(subwell_01) != 0:
+        subwell_range.append('01')
+    if int(subwell_02) != 0:
+        subwell_range.append('02')
+    if int(subwell_03) != 0:
+        subwell_range.append('03')
+    return subwell_range
+
+def crystal_plate_header():
+    header = [
+        'plate_type_name',
+        'crystal_plate_barcode',
+        'crystal_plate_row',
+        'crystal_plate_column',
+        'crystal_plate_subwell'
+    ]
+    return header
+
+def save_crystal_plate_csv_to_inspect_folder(logger, subwell_01, subwell_02, subwell_03, barcode, plate_type, folder,
+                                             start_row, end_row, start_column, end_column):
+    logger.info('writing crystal plate CSV file as ' + os.path.join(folder, '1-inspect', barcode + '.csv'))
+    backup_file(logger, os.path.join(folder, '1-inspect'), barcode + '.csv')
+    data = []
+    for row in row_range(start_row, end_row):
+        for column in column_range(start_column, end_column):
+            for subwell in subwell_range(subwell_01, subwell_02, subwell_03):
+                data.append([plate_type, barcode, row, column, subwell])
+    df = pd.DataFrame(data, columns=crystal_plate_header())
+    df.to_csv(os.path.join(os.path.join(folder, '1-inspect', barcode + '.csv')), index=False)
 
 def import_marked_crystals_from_shifter_csv(logger, shiftercsv):
     logger.info('loading ' + shiftercsv)
@@ -183,8 +257,8 @@ def read_soaked_crystal_csv_from_shifter(logger, soak_csv):
             d['soak_datetime'] = re.split(r'[,;]+', line)[9]
 
             d['comment'] = re.split(r'[,;]+', line)[6]
-            d['compound_appearance']
-            d['crystal_appearance']
+#            d['compound_appearance']
+#            d['crystal_appearance']
 
             if not 'FAIL' in line:
                 crystal_plate_name = re.split(r'[,;]+', line)[11].replace('Right: ', '').replace('Left: ', '')
@@ -362,4 +436,92 @@ def read_mounted_crystal_csv_from_shifter(logger, crystal_csv):
 #            self.logger.warning('seems there are marked but not mounted crystals in file:')
 #            self.logger.info(str(line.split(';')))
 
+def get_crystal_drop_list_from_csv(logger, barcode, folder):
+    logger.info('trying to get crystal droplet info for {0!s}.csv in {1!s}'.format(barcode, folder))
+    d = None
+    if os.path.isfile(os.path.join(folder, barcode + '.csv')):
+        df = pd.read_csv(os.path.join(folder, barcode + '.csv'), dtype = str) # set dtype otherwise 01 becomes 1
+        d = df.to_dict('records')   # 'records' turns df into list of dicts
+    else:
+        logger.error('file {0!s}.csv does not exist in {1!s}'.format(barcode, folder))
+    return d
+
+def crystallization_drop_exists(drop_list, row, column, subwell):
+    drop_exists = False
+    for item in drop_list:
+        r = item['crystal_plate_row']
+        c = item['crystal_plate_column']
+        s = item['crystal_plate_subwell']
+        if row == r and column == c and subwell == s:
+            drop_exists = True
+            break
+    return drop_exists
+
+def read_crystal_image_list(logger, barcode, folder, inspect_folder):
+    logger.info('trying to read crystal images for plate {0!s} in {1!s}'.format(barcode, folder))
+    drop_list = get_crystal_drop_list_from_csv(logger, barcode, inspect_folder)
+    l = []
+    for i in sorted(glob.glob(os.path.join(folder, '*.jpg'))):
+        fn = os.path.basename(i)
+        if barcode in fn:
+            if fn.split('_')[13] == '00':
+                column, row, subwell = misc.get_row_column_subwell_from_filename(i)
+#                logger.warning('--- {0!s} {1!s} {2!s}'.format(column, row, subwell))
+                row_letter = misc.get_row_letter_from_row_number(row, misc.swiss_ci_3_drop_layout())
+#                logger.warning('=== {0!s}'.format(row_letter))
+                if crystallization_drop_exists(drop_list, row_letter, column, subwell):
+                    l.append(i)
+                else:
+                    logger.warning('no entry for {0!s} {1!s} {2!s} in {3!s}.csv'.format(
+                        column_letter, row, subwell, barcode))
+    logger.info('found {0!s} crystal images'.format(len(l)))
+    return l
+
+
+def check_for_marked_crystals(logger)
+    marked_crystal_list = []
+    csv_file = os.path.join(folder, '2-soak', barcode + '_xtal.csv')
+    logger.info('checking for marked/ soaked crystals in ' + csv_file)
+    if os.path.isfile(csv_file):
+        logger.info('file exists')
+        df = pd.read_csv(os.path.join(csv_file), dtype=str)
+        # if you want to remove columns in dataframe df.drop(columns=["Letter", "GDP per capita"])
+
+
+
+def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, folder, plate_type):
+    logger.info('writing marked crystal CSV file as ' + os.path.join(folder, '2-soak', barcode + '_xtal.csv'))
+    backup_file(logger, os.path.join(folder, '2-soak'), barcode + '_xtal.csv')
+    #self.marked_crystal_list.append([column, row, subwell, 'new'])
+    data = []
+    df_old = None
+    if os.path.isfile(os.path.join(folder, '2-soak', barcode + '_xtal.csv')):
+        logger.warning('file exists ' + os.path.join(folder, '2-soak', barcode + '_xtal.csv'))
+        logger.info('will read in existing records and add new ones')
+        df_old = pd.read_csv(os.path.join(folder, '2-soak', barcode + '_xtal.csv'), dtype = str)
+    for item in marked_crystal_list:
+        column = item[0]
+        row = item[1]
+        row_letter = misc.get_row_letter_from_row_number(row, misc.swiss_ci_3_drop_layout())
+        subwell = item[2]
+        status = item[3]
+        if status == 'new':
+            logger.info('adding new marked crystal to {0!s}.csv: row {1!s} - col {2!s} - sub {3!s}'.format(
+                barcode, row_letter, column, subwell))
+            data.append([plate_type, barcode, row_letter, column, subwell])
+        else:
+            logger.warning('skipping row {0!s} - col {1!s} - sub {2!s}; status: {3!s}'.format(
+                row_letter, column, subwell, status))
+    if data:
+        df = pd.DataFrame(data, columns=crystal_plate_header())
+        if not df_old is None:
+#            df_old.append(df)
+            concat = pd.concat([df_old, df])
+            logger.info('saving old and new marked crystals')
+            concat.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False, dtype = str)
+        else:
+            logger.info('saving new marked crystals')
+            df.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False, dtype = str)
+    else:
+        logger.warning('looks like there were no new crystals marked for plate ' + barcode)
 

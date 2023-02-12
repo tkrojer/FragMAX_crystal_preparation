@@ -107,77 +107,23 @@ class project_tab(object):
             'protein_acronym': self.protein_acronym.value.replace(' ', ''),
             'project_directory': self.project_directory.value
         }
-        d = query.save_project_info(self.dal, self.logger, d)
+        query.save_project_info(self.dal, self.logger, d)
         self.update_crystal_plate_widgets()
 
-
-#        query = db.select([self.dbObject.projectTable.columns.Proposal_ID.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_project_id = [x[0] for x in ResultProxy.fetchall()]
-#
-#        self.logger.info('existing project_id: ' + str(existing_project_id))
-#
-#        if existing_project_id == []:
-#            self.logger.info(
-#                'adding project information: {0!s}, {1!s}'.format(self.project_name.value, self.proposal_id.value.replace(' ', '')))
-#            values_list = [{
-#                'Project_Name': self.project_name.value,
-#                'Proposal_ID': self.proposal_id.value.replace(' ', '')
-#            }]
-#            query = db.insert(self.dbObject.projectTable)
-#            self.dbObject.connection.execute(query, values_list)
-#        else:
-#            self.logger.info(
-#                'updating project information: {0!s}, {1!s}'.format(self.project_name.value, self.proposal_id.value.replace(' ', '')))
-#            query = db.update(self.dbObject.projectTable).values(
-#                Project_Name=self.project_name.value,
-#                Proposal_ID=self.proposal_id.value.replace(' ', '')).where(
-#                self.dbObject.projectTable.columns.Proposal_ID == existing_project_id[0])
-#            self.dbObject.connection.execute(query)
-#
-#        query = db.select([self.dbObject.proteinTable.columns.Protein_Acronym.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_protein_acronym = [x[0] for x in ResultProxy.fetchall()]
-#
-#        if existing_protein_acronym == []:
-#            values_list = [{
-#                'Protein_Name': self.protein_name.value,
-#                'Protein_Acronym': self.protein_acronym.value.replace(' ', '')
-#            }]
-#            query = db.insert(self.dbObject.proteinTable)
-#            self.dbObject.connection.execute(query, values_list)
-#        else:
-#            query = db.update(self.dbObject.proteinTable).values(
-#                Protein_Name=self.protein_name.value,
-#                Protein_Acronym=self.protein_acronym.value.replace(' ', '')).where(
-#                self.dbObject.proteinTable.columns.Protein_Acronym == existing_protein_acronym[0])
-#            self.dbObject.connection.execute(query)
-#
-#        self.update_crystal_plate_widgets()
-#
     def update_crystal_plate_widgets(self):
-#        query = db.select([self.dbObject.proteinBatchTable.columns.ProteinBatch_ID.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_protein_batches = [x[0] for x in ResultProxy.fetchall()]
         existing_protein_batches = query.get_protein_batch_for_dropdown(self.dal, self.logger)
         self.logger.info('found the following protein batches in database: ' + str(existing_protein_batches))
         self.crystalplateObject.select_protein_batch.options = existing_protein_batches
 
-#        query = db.select([self.dbObject.crystal_plate_typeTable.columns.Plate_Name.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_plate_types = [x[0] for x in ResultProxy.fetchall()]
         existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
         self.logger.info('found the following crystal plate types in database: ' + str(existing_plate_types))
         self.crystalplateObject.select_plate_type.options = existing_plate_types
-#
-#        query = db.select([self.dbObject.crystallizationMethodTable.columns.Method.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_methods = [x[0] for x in ResultProxy.fetchall()]
+
         existing_methods = query.get_crystallization_method_for_dropdown(self.dal, self.logger)
         self.logger.info('found the following crystallization methods in database: ' + str(existing_methods))
         self.crystalplateObject.select_method.options = existing_methods
 
-        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
-        self.logger.info('found the following plate types in database: ' + str(existing_methods))
-        self.soakplateObject.select_plate_type.options = existing_plate_types
+#        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
+#        self.logger.info('found the following plate types in database: ' + str(existing_methods))
+#        self.soakplateObject.select_plate_type.options = existing_plate_types
 
