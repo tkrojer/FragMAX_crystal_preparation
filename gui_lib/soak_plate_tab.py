@@ -26,48 +26,49 @@ class soak_plate_tab(object):
 
         self.grid_widget = widgets.GridspecLayout(10, 4)
 
-        self.grid_widget[0,0] = widgets.Button(description="Enter New Soak Plate Name", 
-                           layout=widgets.Layout(height="auto", width="auto"), style= {'button_color':'white'})
-        self.soakplate_name = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
-        self.grid_widget[0,1] = self.soakplate_name
+        self.grid_widget[0, 0] = widgets.Button(description="Enter New Soak Plate Name",
+                           layout=widgets.Layout(width="100%"), style= {'button_color':'white'})
+        self.soakplate_name = widgets.Text(value='', layout=widgets.Layout(width="auto"))
+        self.grid_widget[0, 1] = self.soakplate_name
         add_soakplate_name_button = widgets.Button(description='Add')
         add_soakplate_name_button.on_click(self.add_soakplate)
-        self.grid_widget[0,2] = add_soakplate_name_button
+        self.grid_widget[0, 2] = add_soakplate_name_button
 
-        self.grid_widget[1,0] = widgets.Button(description="Select Soak Plate", 
-                           layout=widgets.Layout(height="auto", width="auto"), style= {'button_color':'white'})
+        self.grid_widget[1, 0] = widgets.Button(description="Select Soak Plate",
+                           layout=widgets.Layout(width="auto"), style= {'button_color': 'white'})
         self.select_soakplate = widgets.Dropdown()
-        self.grid_widget[1,1] = self.select_soakplate
+        self.grid_widget[1, 1] = self.select_soakplate
         refresh_soakplate_button = widgets.Button(description='Refresh Soak Plate List')
         refresh_soakplate_button.on_click(self.refresh_soakplate)
-        self.grid_widget[1,2] = refresh_soakplate_button
+        self.grid_widget[1, 2] = refresh_soakplate_button
 
-        self.grid_widget[2,0] = widgets.Button(description="Select Library Plate", 
-                           layout=widgets.Layout(height="auto", width="auto"), style= {'button_color':'white'})
+        self.grid_widget[2, 0] = widgets.Button(description="Select Library Plate",
+                           layout=widgets.Layout(width="auto"), style= {'button_color': 'white'})
         self.select_library_plate = widgets.Dropdown()
-        self.grid_widget[2,1] = self.select_library_plate
+        self.grid_widget[2, 1] = self.select_library_plate
         refresh_library_plate_button = widgets.Button(description='Refresh Library Plate List')
         refresh_library_plate_button.on_click(self.refresh_libraryplate)
-        self.grid_widget[2,2] = refresh_library_plate_button
+        self.grid_widget[2, 2] = refresh_library_plate_button
 
-        self.grid_widget[3,0] = widgets.Button(description="Reservoir Condition", 
-                           layout=widgets.Layout(height="auto", width="auto"), style= {'button_color':'white'})
-        self.soakplate_reservoir = widgets.Text(value='', layout=widgets.Layout(height="auto", width="200"))
-        self.grid_widget[3,1:] = self.soakplate_reservoir
+        self.grid_widget[3, 0] = widgets.Button(description="Reservoir Condition",
+                           layout=widgets.Layout(width="auto"), style= {'button_color': 'white'})
+        self.soakplate_reservoir = widgets.Text(value='', layout=widgets.Layout(width="auto"))
+        self.grid_widget[3, 1:] = self.soakplate_reservoir
 
-        self.grid_widget[4,0] = widgets.Button(description="Reservoir Volume (\u03BCL)", 
-                           layout=widgets.Layout(height="auto", width="auto"), style= {'button_color':'white'})
-        self.soakplate_reservoir_volume = widgets.Text(value='', layout=widgets.Layout(height="auto", width="200"))
-        self.grid_widget[4,1:] = self.soakplate_reservoir_volume
+        self.grid_widget[4, 0] = widgets.Button(description="Reservoir Volume (\u03BCL)",
+                           layout=widgets.Layout(width="100%"), style= {'button_color': 'white'})
+        self.soakplate_reservoir_volume = widgets.Text(value='', layout=widgets.Layout(width="200"))
+        self.grid_widget[4, 1:] = self.soakplate_reservoir_volume
 
-        self.grid_widget[5,0] = widgets.Button(description="Compound Volume (\u03BCL)", 
-                           layout=widgets.Layout(height="auto", width="auto"), style= {'button_color':'white'})
-        self.soakplate_compound_volume = widgets.Text(value='', layout=widgets.Layout(height="auto", width="200"))
-        self.grid_widget[5,1] = self.soakplate_compound_volume
+        self.grid_widget[5, 0] = widgets.Button(description="Compound Volume (\u03BCL)",
+                           layout=widgets.Layout(width="100%"), style= {'button_color': 'white'})
+        self.soakplate_compound_volume = widgets.Text(value='', layout=widgets.Layout(width="200"))
+        self.grid_widget[5, 1] = self.soakplate_compound_volume
 
-        save_soakplate_button = widgets.Button(description='Save Soak Plate to DB',  style= {'button_color':'gray'})
+        save_soakplate_button = widgets.Button(description='Save Soak Plate to DB & CSV',
+                                               style= {'button_color': 'orange'})
         save_soakplate_button.on_click(self.save_soakplate_to_db)
-        self.grid_widget[6,0:] = save_soakplate_button
+        self.grid_widget[6, 0:] = save_soakplate_button
 
 
     def add_soakplate(self, b):

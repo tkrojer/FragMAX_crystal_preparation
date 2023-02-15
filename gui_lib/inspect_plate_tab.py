@@ -96,17 +96,19 @@ class inspect_plate_tab(object):
 #                exists = True
 #        return exists
 
-    def droplet_newly_flagged(self, co, ro, su):
+    def droplet_newly_flagged(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            if co == i[0] and ro == i[1] and su == i[2] and i[3] == 'new':
+#            print(ro, i[2], co, i[3], su, i[4], i[5])
+            if ro == i[2] and co == i[3] and su == i[4] and i[5] == 'new':
+#                print('here')
                 exists = True
         return exists
 
-    def droplet_already_flagged(self, co, ro, su):
+    def droplet_already_flagged(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            if co == i[0] and ro == i[1] and su == i[2] and i[3] == 'old':
+            if ro == i[2] and co == i[3] and su == i[4] and i[5] == 'marked':
                 exists = True
         return exists
 
@@ -117,18 +119,18 @@ class inspect_plate_tab(object):
 #                exists = True
 #        return exists
 
-    def droplet_was_soaked(self, co, ro, su):
+    def droplet_was_soaked(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            if co == i[0] and ro == i[1] and su == i[2] and i[3] == 'soaked':
+            if ro == i[2] and co == i[3] and su == i[4] and i[5] == 'soaked':
                 exists = True
         return exists
 
-    def droplet_status(self, co, ro, su):
+    def droplet_status(self, ro, co, su):
 #        marked = self.droplet_marked(co, ro, su)
-        new = self.droplet_newly_flagged(co, ro, su)
-        old = self.droplet_already_flagged(co, ro, su)
-        soaked = self.droplet_was_soaked(co, ro, su)
+        new = self.droplet_newly_flagged(ro, co, su)
+        old = self.droplet_already_flagged(ro, co, su)
+        soaked = self.droplet_was_soaked(ro, co, su)
 #        mounted = self.droplet_was_mounted(co, ro, su)
         return new, old, soaked
 
@@ -141,6 +143,7 @@ class inspect_plate_tab(object):
         plt.xlim(0,36 * magnify)
         plt.ylim(0,25 * magnify)
         ax.set_aspect(1)
+#        print(self.marked_crystal_list)
         for c in misc.swiss_ci_3_drop_layout():
 #            well = c[0]
             ox = c[1]
@@ -148,21 +151,22 @@ class inspect_plate_tab(object):
             x = c[1] * magnify
             y = c[2] * magnify
             radius = 0.2 * magnify
-            new, old, soaked = self.droplet_status(c[6], c[5], c[7]) # column row switched
-            if c[3] == 'circle' and ox == cx and oy == cy and not (new or old or soaked or mounted):
+            new, old, soaked = self.droplet_status(c[4], c[6], c[7])
+#            print(c[4], c[6], c[7])
+            if c[3] == 'circle' and ox == cx and oy == cy and not (new or old or soaked):
                 ax.add_artist(plt.Circle((x, y), radius * 2, color='orange'))
             elif c[3] == 'circle' and ox == cx and oy == cy and (new or old):
                 ax.add_artist(plt.Circle((x, y), radius * 2, facecolor='green', edgecolor="orange", linewidth=3))
             elif c[3] == 'circle' and ox == cx and oy == cy and soaked:
-                ax.add_artist(plt.Circle((x, y), radius * 2, facecolor='blue', edgecolor="orange", linewidth=3))
+                ax.add_artist(plt.Circle((x, y), radius * 2, facecolor='cyan', edgecolor="orange", linewidth=3))
 #            elif c[3] == 'circle' and ox == cx and oy == cy and mounted:
 #                ax.add_artist(plt.Circle((x, y), radius * 2, facecolor='cyan', edgecolor="orange", linewidth=3))
             elif c[3] == 'circle' and (new or old):
                 ax.add_artist(plt.Circle((x, y), radius * 1.5, color='green'))
             elif c[3] == 'circle' and soaked:
-                ax.add_artist(plt.Circle((x, y), radius * 1.5, color='blue'))
-            elif c[3] == 'circle' and mounted:
                 ax.add_artist(plt.Circle((x, y), radius * 1.5, color='cyan'))
+#            elif c[3] == 'circle' and mounted:
+#                ax.add_artist(plt.Circle((x, y), radius * 1.5, color='cyan'))
             elif c[3] == 'circle':
                 ax.add_artist(plt.Circle((x, y), radius, color='gray'))
             elif c[3] == 'rectangle':
@@ -172,8 +176,7 @@ class inspect_plate_tab(object):
         legend_elements = [
             Line2D([0], [0], marker='o', color='w', label='current', markerfacecolor='orange', markersize=7),
             Line2D([0], [0], marker='o', color='w', label='marked', markerfacecolor='green', markersize=7),
-            Line2D([0], [0], marker='o', color='w', label='soaked', markerfacecolor='blue', markersize=7),
-            Line2D([0], [0], marker='o', color='w', label='mounted', markerfacecolor='cyan', markersize=7)]
+            Line2D([0], [0], marker='o', color='w', label='soaked', markerfacecolor='cyan', markersize=7)]
 
 #        ax.legend(handles=legend_elements, loc='lower center')
 
@@ -198,31 +201,36 @@ class inspect_plate_tab(object):
                                                      os.path.join(self.settingsObject.workflow_folder, '1-inspect'))
         if self.image_list:
             self.logger.info('resetting marked_crystal_list and image_number...')
-            self.marked_crystal_list = []
+            self.marked_crystal_list = fs.check_for_marked_crystals(self.logger,
+                                                                    self.select_crystal_plate.value,
+                                                                    self.settingsObject.workflow_folder)
             self.image_number = 0
             self.show_crystal_image()
         else:
             self.logger.error('could not find any crystal images for {0!s}'.format(self.select_crystal_plate.value))
 
-    def check_for_marked_crystals(self):
-
-
-
     def flag_crystal_for_mounting(self, b):
         crystal_image = self.image_list[self.image_number]
 #        x, y = misc.get_coordinates_from_filename(crystal_image, misc.swiss_ci_3_drop_layout())
-        column, row, subwell = misc.get_row_column_subwell_from_filename(crystal_image)
-        if [column, row, subwell, 'new'] not in self.marked_crystal_list:
-            self.marked_crystal_list.append([column, row, subwell, 'new'])
-        self.show_marked_crystals(crystal_image)
+#        column, row, subwell = misc.get_row_column_subwell_from_filename(crystal_image)
+        column, row_letter, subwell = misc.get_row_letter_column_subwell_from_filename(crystal_image)
+        barcode = self.select_crystal_plate.value
+        if ["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'] not in self.marked_crystal_list:
+            # plate_type, barcode, row_letter, column, subwell, status
+            self.marked_crystal_list.append(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'])
+#        self.show_marked_crystals(crystal_image)
+        self.change_crystal_image(1)
 
     def unflag_crystal_for_mounting(self, b):
         crystal_image = self.image_list[self.image_number]
 #        x, y = misc.get_coordinates_from_filename(crystal_image, misc.swiss_ci_3_drop_layout())
-        column, row, subwell = misc.get_row_column_subwell_from_filename(crystal_image)
-        if [column, row, subwell, 'new'] in self.marked_crystal_list:
-            self.marked_crystal_list.remove([column, row, subwell, 'new'])
-        self.show_marked_crystals(crystal_image)
+#        column, row, subwell = misc.get_row_column_subwell_from_filename(crystal_image)
+        column, row_letter, subwell = misc.get_row_letter_column_subwell_from_filename(crystal_image)
+        barcode = self.select_crystal_plate.value
+        if ["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'] in self.marked_crystal_list:
+            self.marked_crystal_list.remove(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'])
+#        self.show_marked_crystals(crystal_image)
+        self.change_crystal_image(1)
 
     def show_crystal_image(self):
 #        crystal_image_progress.value = n
@@ -232,8 +240,9 @@ class inspect_plate_tab(object):
             image = plt.imread(image_file)
         plt.imshow(image)
         plt.axis("off")
-        column, row, subwell = misc.get_row_column_subwell_from_filename(crystal_image)
-        row_letter = misc.get_row_letter_from_row_number(row, misc.swiss_ci_3_drop_layout())
+#        column, row, subwell = misc.get_row_column_subwell_from_filename(crystal_image)
+#        row_letter = misc.get_row_letter_from_row_number(row, misc.swiss_ci_3_drop_layout())
+        column, row_letter, subwell = misc.get_row_letter_column_subwell_from_filename(crystal_image)
         plt.title('row: {0!s} - column: {1!s} - subwell: {2!s}'.format(row_letter, column, subwell))
         with out:
             clear_output(wait=True)
@@ -241,17 +250,28 @@ class inspect_plate_tab(object):
         self.cystal_image_box.children = [out]
         self.show_marked_crystals(crystal_image)
 
-    def change_next_crystal_image(self, b):
+
+    def change_crystal_image(self, n):
         self.image_number += 1
         if self.image_number > len(self.image_list):
             self.image_number = len(self.image_list)
-        self.show_crystal_image()
-
-    def change_prev_crystal_image(self, b):
-        self.image_number += -1
         if self.image_number < 0:
             self.image_number = 0
         self.show_crystal_image()
+
+    def change_next_crystal_image(self, b):
+        self.change_crystal_image(1)
+#        self.image_number += 1
+#        if self.image_number > len(self.image_list):
+#            self.image_number = len(self.image_list)
+#        self.show_crystal_image()
+
+    def change_prev_crystal_image(self, b):
+        self.change_crystal_image(-1)
+#        self.image_number += -1
+#        if self.image_number < 0:
+#            self.image_number = 0
+#        self.show_crystal_image()
 
     def save_marked_crystals(self, b):
         """

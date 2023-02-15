@@ -421,6 +421,18 @@ def get_row_column_subwell_from_filename(crystal_image):
         subwell = fn.split('_')[12]
     return column, row, subwell
 
+def get_row_letter_column_subwell_from_filename(crystal_image):
+    column = None
+    subwell = None
+    row_letter = None
+    if crystal_image:
+        fn = os.path.basename(crystal_image)
+        column = fn.split('_')[10]
+        row = fn.split('_')[11]
+        row_letter = get_row_letter_from_row_number(row, swiss_ci_3_drop_layout())
+        subwell = fn.split('_')[12]
+    return column, row_letter, subwell
+
 def get_row_letter_from_row_number(row_number, plate_layout):
     row_letter = None
     for r in plate_layout:
@@ -432,10 +444,9 @@ def get_row_letter_from_row_number(row_number, plate_layout):
 def get_list_of_dict_from_marked_crystal_list(marked_crystal_list, barcode):
     l = []
     for item in marked_crystal_list:
-        column = item[0]
-        row = item[1]
-        row_letter = get_row_letter_from_row_number(row, swiss_ci_3_drop_layout())
-        subwell = item[2]
+        row_letter = item[2]
+        column = item[3]
+        subwell = item[4]
         d = {}
         d['crystal_plate_barcode'] = barcode
         d['crystal_plate_row'] = row_letter

@@ -93,8 +93,8 @@ def backup_file(logger, folder, file_name):
         logger.warning('file exists ' + os.path.join(folder, file_name))
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         logger.info('backing up exisiting file as ' + file_name + now)
-        move(os.path.join(folder, file_name),
-             os.path.join(folder, file_name + '.' + now))
+        copyfile(os.path.join(folder, file_name),
+                 os.path.join(folder, 'backup', file_name + '.' + now))
 
 def column_range(start_column, end_column):
     column_range = []
@@ -138,7 +138,8 @@ def crystal_plate_header():
         'crystal_plate_barcode',
         'crystal_plate_row',
         'crystal_plate_column',
-        'crystal_plate_subwell'
+        'crystal_plate_subwell',
+        'status'
     ]
     return header
 
@@ -150,7 +151,7 @@ def save_crystal_plate_csv_to_inspect_folder(logger, subwell_01, subwell_02, sub
     for row in row_range(start_row, end_row):
         for column in column_range(start_column, end_column):
             for subwell in subwell_range(subwell_01, subwell_02, subwell_03):
-                data.append([plate_type, barcode, row, column, subwell])
+                data.append([plate_type, barcode, row, column, subwell, ''])
     df = pd.DataFrame(data, columns=crystal_plate_header())
     df.to_csv(os.path.join(os.path.join(folder, '1-inspect', barcode + '.csv')), index=False)
 
@@ -478,15 +479,18 @@ def read_crystal_image_list(logger, barcode, folder, inspect_folder):
     return l
 
 
-def check_for_marked_crystals(logger)
+def check_for_marked_crystals(logger, barcode, folder):
     marked_crystal_list = []
     csv_file = os.path.join(folder, '2-soak', barcode + '_xtal.csv')
     logger.info('checking for marked/ soaked crystals in ' + csv_file)
     if os.path.isfile(csv_file):
         logger.info('file exists')
+        # plate_type, barcode, row_letter, column, subwell, status
         df = pd.read_csv(os.path.join(csv_file), dtype=str)
         # if you want to remove columns in dataframe df.drop(columns=["Letter", "GDP per capita"])
-
+#        df['status'] = 'old'
+        marked_crystal_list = df.values.tolist()
+    return marked_crystal_list
 
 
 def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, folder, plate_type):
@@ -494,34 +498,37 @@ def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, 
     backup_file(logger, os.path.join(folder, '2-soak'), barcode + '_xtal.csv')
     #self.marked_crystal_list.append([column, row, subwell, 'new'])
     data = []
-    df_old = None
+#    df_old = None
     if os.path.isfile(os.path.join(folder, '2-soak', barcode + '_xtal.csv')):
         logger.warning('file exists ' + os.path.join(folder, '2-soak', barcode + '_xtal.csv'))
         logger.info('will read in existing records and add new ones')
-        df_old = pd.read_csv(os.path.join(folder, '2-soak', barcode + '_xtal.csv'), dtype = str)
+        df = pd.read_csv(os.path.join(folder, '2-soak', barcode + '_xtal.csv'), dtype = str)
+        data = df.values.tolist()
     for item in marked_crystal_list:
-        column = item[0]
-        row = item[1]
-        row_letter = misc.get_row_letter_from_row_number(row, misc.swiss_ci_3_drop_layout())
-        subwell = item[2]
-        status = item[3]
+        plate_type = item[0]
+        barcode = item[1]
+        row_letter = item[2]
+        column = item[3]
+        subwell = item[4]
+        status = item[5]
         if status == 'new':
             logger.info('adding new marked crystal to {0!s}.csv: row {1!s} - col {2!s} - sub {3!s}'.format(
                 barcode, row_letter, column, subwell))
-            data.append([plate_type, barcode, row_letter, column, subwell])
+            data.append([plate_type, barcode, row_letter, column, subwell, 'marked'])
         else:
             logger.warning('skipping row {0!s} - col {1!s} - sub {2!s}; status: {3!s}'.format(
                 row_letter, column, subwell, status))
     if data:
         df = pd.DataFrame(data, columns=crystal_plate_header())
-        if not df_old is None:
-#            df_old.append(df)
-            concat = pd.concat([df_old, df])
-            logger.info('saving old and new marked crystals')
-            concat.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False, dtype = str)
-        else:
-            logger.info('saving new marked crystals')
-            df.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False, dtype = str)
+        df.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False)
+#        if not df_old is None:
+##            df_old.append(df)
+#            concat = pd.concat([df_old, df])
+#            logger.info('saving old and new marked crystals')
+#            concat.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False, dtype = str)
+#        else:
+#            logger.info('saving new marked crystals')
+#            df.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False, dtype = str)
     else:
         logger.warning('looks like there were no new crystals marked for plate ' + barcode)
 
