@@ -14,7 +14,8 @@ def insert(dal, standard_table_file, logger):
         2: dal.crystallization_method_table,
         3: dal.soak_method_table,
         4: dal.space_group_table,
-        5: dal.compound_table
+        5: dal.compound_table,
+        6: dal.compound_batch_table
     }
 
     for index in standard_table_dict:

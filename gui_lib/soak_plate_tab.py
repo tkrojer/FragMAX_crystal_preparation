@@ -27,7 +27,7 @@ class soak_plate_tab(object):
         self.grid_widget = widgets.GridspecLayout(10, 4)
 
         self.grid_widget[0, 0] = widgets.Button(description="Enter New Soak Plate Name",
-                           layout=widgets.Layout(width="100%"), style= {'button_color':'white'})
+                           layout=widgets.Layout(width="auto"), style= {'button_color':'white'})
         self.soakplate_name = widgets.Text(value='', layout=widgets.Layout(width="auto"))
         self.grid_widget[0, 1] = self.soakplate_name
         add_soakplate_name_button = widgets.Button(description='Add')
@@ -56,17 +56,17 @@ class soak_plate_tab(object):
         self.grid_widget[3, 1:] = self.soakplate_reservoir
 
         self.grid_widget[4, 0] = widgets.Button(description="Reservoir Volume (\u03BCL)",
-                           layout=widgets.Layout(width="100%"), style= {'button_color': 'white'})
+                           layout=widgets.Layout(width="auto"), style= {'button_color': 'white'})
         self.soakplate_reservoir_volume = widgets.Text(value='', layout=widgets.Layout(width="200"))
         self.grid_widget[4, 1:] = self.soakplate_reservoir_volume
 
         self.grid_widget[5, 0] = widgets.Button(description="Compound Volume (\u03BCL)",
-                           layout=widgets.Layout(width="100%"), style= {'button_color': 'white'})
-        self.soakplate_compound_volume = widgets.Text(value='', layout=widgets.Layout(width="200"))
+                           layout=widgets.Layout(width="auto"), style= {'button_color': 'white'})
+        self.soakplate_compound_volume = widgets.Text(value='', layout=widgets.Layout(width="auto"))
         self.grid_widget[5, 1] = self.soakplate_compound_volume
 
         save_soakplate_button = widgets.Button(description='Save Soak Plate to DB & CSV',
-                                               style= {'button_color': 'orange'})
+                                               layout=widgets.Layout(width="auto"), style= {'button_color': 'orange'})
         save_soakplate_button.on_click(self.save_soakplate_to_db)
         self.grid_widget[6, 0:] = save_soakplate_button
 

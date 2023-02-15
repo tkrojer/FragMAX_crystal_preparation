@@ -22,23 +22,26 @@ class DataAccessLayer:
         Column('protein_acronym', String(50), unique=True),
         Column('protein_name', String(255)),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('protein_acronym', name='unique_protein_acronym')
     )
 
     protein_batch_table = Table('protein_batch_table',
         metadata,
         Column('protein_batch_id', Integer(), primary_key=True),
-        Column('protein_id', ForeignKey('project_table.project_id')),
+        Column('protein_batch_name', String(255)),
+        Column('protein_acronym', String(50), ForeignKey('project_table.protein_acronym')),
         Column('protein_batch_supplier', String(255)),
         Column('protein_batch_sequence', String(2550)),
         Column('protein_batch_expression_host', String(255)),
         Column('protein_batch_buffer', String(255)),
         Column('protein_batch_concentration', Numeric(12, 2)),
-        Column('protein_batch_concentration_unit', String(12)),
+        Column('protein_batch_concentration_unit', String(8), ForeignKey('unit_table.unit_symbol')),
         Column('protein_batch_date_received', DateTime(), default=datetime.now),
         Column('protein_batch_comment', String(2550)),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('protein_batch_name', name='unique_protein_batch_name')
     )
 
     compound_table = Table('compound_table',
@@ -54,47 +57,46 @@ class DataAccessLayer:
         Column('cocktail', Boolean(), default=False),
         Column('covalent', Boolean(), default=False),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('compound_code', name='unique_compound_code')
     )
 
     compound_batch_table = Table('compound_batch_table',
         metadata,
         Column('compound_batch_id', Integer(), primary_key=True),
-        Column('compound_id', ForeignKey('compound_table.compound_id')),
         Column('compound_batch_code', String(50), index=True),
+        Column('compound_code', String(50), ForeignKey('compound_table.compound_code')),
         Column('library_name', String(55)),
         Column('compound_plate_name', String(55)),
-        Column('compound_plate_well', String(55)),
-        Column('compound_plate_type', String(55)),
-        Column('solvent', String(55)),
+        Column('compound_plate_well', String(8)),
+        Column('compound_plate_type', String(20), ForeignKey('plate_type_table.plate_type_name')),
+        Column('solvent', String(50), ForeignKey('compound_table.compound_code')),
         Column('compound_concentration', Numeric(12, 2)),
-        Column('compound_concentration_unit', String(8)),
+        Column('compound_concentration_unit', String(8), ForeignKey('unit_table.unit_symbol')),
         Column('compound_volume', Numeric(12, 2)),
-        Column('compound_volume_unit', String(8)),
+        Column('compound_volume_unit', String(8), ForeignKey('unit_table.unit_symbol')),
         Column('comment', String(255)),
         Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('compound_batch_code', name='unique_compound_batch_code')
     )
 
     soak_plate_table = Table('soak_plate_table',
         metadata,
         Column('soak_plate_id', Integer(), primary_key=True),
-        Column('compound_batch_id', ForeignKey('compound_batch_table.compound_batch_id')),
+        Column('compound_batch_code', ForeignKey('compound_batch_table.compound_batch_code')),
         Column('soak_plate_condition', String(55)),
         Column('soak_plate_name', String(55)),
         Column('soak_plate_row', String(55)),
         Column('soak_plate_column', String(55)),
         Column('soak_plate_well', String(55)),
         Column('soak_plate_subwell', String(55)),
-        Column('plate_type_id', ForeignKey('plate_type_table.plate_type_id')),
+#        Column('plate_type_id', String(20), ForeignKey('plate_type_table.plate_type_name')),  # don't need it because is in compound_batch_table
         Column('base_buffer', String(55)),
         Column('base_buffer_volume', Numeric(12, 2)),
         Column('base_buffer_volume_unit', String(8)),
         Column('compound_volume', Numeric(12, 2)),
-        Column('compound_volume_unit', String(8)),
-        Column('soak_temperature', Numeric(12, 2)),
-        Column('soak_temperature_unit', String(8)),
-        Column('soak_method', String(55)),
+        Column('compound_volume_unit', String(8), ForeignKey('unit_table.unit_symbol')),
         Column('created_on', DateTime(), default=datetime.now),
         Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
         UniqueConstraint('soak_plate_condition', name='unique_soak_plate_condition')
@@ -126,7 +128,9 @@ class DataAccessLayer:
         Column('status', String(50)),   # soak_success, soak_fail, mount_success, mount_fail
         Column('soak_solution_volume', Numeric(12, 2)),
         Column('soak_solution_unit', String(8)),
-        Column('soak_method_id', ForeignKey('soak_method_table.method_id')),
+        Column('soak_method', String(8), ForeignKey('soak_method_table.method_name')),
+        Column('soak_temperature', Numeric(12, 2)),
+        Column('soak_temperature_unit', String(8), ForeignKey('unit_table.unit_symbol')),
         Column('comment', String(255)),
         Column('soak_datetime', DateTime(), default=datetime.now),
         Column('created_on', DateTime(), default=datetime.now),
@@ -230,7 +234,7 @@ class DataAccessLayer:
     plate_type_table = Table('plate_type_table',
         metadata,
         Column('plate_type_id', Integer(), primary_key=True),
-        Column('plate_type_name', String(50), index=True),
+        Column('plate_type_name', String(20), index=True),
         UniqueConstraint('plate_type_name', name='unique_plate_type_name')
     )
 
