@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-from ipywidgets import HBox, VBox, Layout, IntProgress, Label
+#from ipywidgets import HBox, VBox, Layout, IntProgress, Label
 from IPython.display import display,clear_output
 from tkinter import Tk, filedialog
 #import sqlalchemy as db
@@ -7,12 +7,14 @@ import os
 #import re
 #from shutil import copyfile
 #from datetime import datetime
+from datetime import datetime
 
 import sys
 sys.path.append(os.path.join(os.getcwd(), 'lib'))
-import filesystem as fs
+import soaked_crystal_fs as fs
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import query
+import soaked_crystal_db as db
 
 
 class soaked_crystal_tab(object):
@@ -24,77 +26,66 @@ class soaked_crystal_tab(object):
         self.popup = popup
         self.progress_bar = progress_bar
 
-        n_rows = 2000
-
-        headerList = [
-            'CrystalPlate_Barcode',
-            'CrystalPlate_Well',
-            'CrystalPlate_Subwell',
-            'SoakPlate_Name',
-            'SoakPlate_Well',
-            'SoakPlate_Subwell',
-            'CompoundBatch_ID',
-            'Soak_Comment'
-                ]
-
         methods = [
+            "opentrons workflow (compound to drop)",
             "shifter (compound to drop)",
             "shifter (crystal to compound)",
-            "opentrons workflow (compound to drop)",
             "mosquito transfer (compound to drop)",
             "multichannel pipette transfer (manual; compound to drop)",
             "single pipette transfer (manual; compound to drop)"
         ]
 
-        x = []
-
-        for i in range(1000):
-            m = {}
-            for j in range(len(headerList)):
-                key = headerList[j]
-                value = "............"     # cannot be space
-                m[key] = value
-            x.append(m)
-
         self.grid_widget = widgets.GridspecLayout(10, 4)
 
-        import_crystal_soak_csv_button = widgets.Button(description='Import CSVs')
-        import_crystal_soak_csv_button.on_click(self.import_crystal_soak_csv)
-        self.grid_widget[0, 0] = import_crystal_soak_csv_button
+        self.grid_widget[0, 0] = widgets.Label("CSV file",
+                                               layout=widgets.Layout(display="flex", justify_content="center"))
+        self.crystal_soak_csv = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget[0, 1] = self.crystal_soak_csv
+        load_crystal_soak_csv_button = widgets.Button(description='Load')
+        load_crystal_soak_csv_button.on_click(self.load_crystal_soak_csv)
+        self.grid_widget[0, 2] = load_crystal_soak_csv_button
 
-        soak_method_button = widgets.Button(description='Method used')
-        self.grid_widget[1, 0] = soak_method_button
+        self.grid_widget[1, 0] = widgets.Label("Method used",
+                                               layout=widgets.Layout(display="flex", justify_content="center"))
         self.soak_method_dropdown = widgets.Dropdown()
         self.soak_method_dropdown.options = methods
-        self.grid_widget[1, 1] = import_crystal_soak_csv_button
+        self.grid_widget[1, 1] = self.soak_method_dropdown
 
-        volume_added_button = widgets.Button(description='Volume added (\u03BCL)')
-        self.grid_widget[2,0] = volume_added_button
+        self.grid_widget[2, 0] = widgets.Label("Volume added (\u03BCL)",
+                                               layout=widgets.Layout(display="flex", justify_content="center"))
         self.volume_added = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
         self.grid_widget[2, 1] = self.volume_added
 
-        update_crystal_soak_table_button = widgets.Button(description='Update table')
-        update_crystal_soak_table_button.on_click(self.update_crystal_soak_table)
-        self.grid_widget[3,0] = update_crystal_soak_table_button
+        self.grid_widget[3, 0] = widgets.Label("Soak temperature (K)",
+                                               layout=widgets.Layout(display="flex", justify_content="center"))
+        self.temperature = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget[3, 1] = self.temperature
 
-#        need start import button (and show selected file as text)
+        self.grid_widget[4, 0] = widgets.Label("Soak start time",
+                                               layout=widgets.Layout(display="flex", justify_content="center"))
+        self.soak_start = widgets.Text(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget[4, 1] = self.soak_start
+        set_current_time_button = widgets.Button(description='current time')
+        set_current_time_button.on_click(self.set_current_time)
+        self.grid_widget[4, 2] = set_current_time_button
+
+        self.grid_widget[5, 0] = widgets.Label("Comments",
+                                               layout=widgets.Layout(display="flex", justify_content="center"))
+        self.comment = widgets.Textarea(value='', layout=widgets.Layout(height="auto", width="100"))
+        self.grid_widget[5, 1] = self.comment
+
+        update_csv_db_button = widgets.Button(description='Save Soaked Crystals to DB & CSV',
+                                                          layout=widgets.Layout(width="auto"),
+                                                          style= {'button_color': 'orange'})
+        update_csv_db_button.on_click(self.update_csv_and_db)
+        self.grid_widget[6,0:2] = update_csv_db_button
 
 
+    def set_current_time(self, b):
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.soak_start.value = now
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def import_crystal_soak_csv(self, b):
+    def load_crystal_soak_csv(self, b):
         clear_output()
         root = Tk()
         root.withdraw()
@@ -104,17 +95,53 @@ class soaked_crystal_tab(object):
                                              title="select _compound.csv file",
                                              filetypes=[("Text Files", "*.csv")])
         soak_csv = b.files[0]
-        if soak_csv.endswith('_compound.csv'):
-            soaked_cystal_list, xtbm_list = fs.read_soaked_crystal_csv_from_shifter(self.logger, soak_csv)
-            # save xtbm to 3-mount -> 1. does file exist; 2. update existing or insert in new file
-            fs.prepare_crystal_mount_csv_for_shifter(self.logger, self.settingsObject.workflow_folder, xtbm_list)
-            fs.update_crystal_mount_csv_for_shifter(self.logger, self.settingsObject.workflow_folder, xtbm_list)
-            query.save_soaked_crystals_to_database(self.logger, self.dal, soaked_cystal_list, self.progress_bar)
+        if soak_csv.endswith('_compound.csv') or soak_csv.endswith('_soak.csv'):
+            self.crystal_soak_csv.value = soak_csv
         else:
-            self.popup('Wrong file type! Please select a file ending with _compound.csv!')
+            self.popup('Wrong file type! Please select a file ending with _compound.csv or _soak.csv!')
 
-    def update_crystal_soak_table(self, b):
-        self.popup('feature coming soon')
+    def update_csv_and_db(self, b):
+        if soak_csv.endswith('_soak.csv'):
+            soaked_cystal_list = fs.read_opentrons_soak_plate_csv_file(self.logger, soak_csv)
+        else:
+            soaked_cystal_list = None
+            self.logger.error('only opentrons soaks are supported at the moment')
+
+        if soaked_cystal_list:
+            self.update_db(soaked_cystal_list)
+            self.update_csv(soaked_cystal_list)
+
+    def update_db(self, soaked_cystal_list):
+        d = {}
+        d['soak_plate_name'] = self.select_soakplate.value.replace('_compound.csv','').replace('_soak.csv','')
+        d['soak_method'] = self.soak_method_dropdown.value
+        d['soak_datetime'] = self.soak_start.value
+        d['comment'] = self.comment.value
+
+        try:
+            d['soak_solution_volume'] = float(self.volume_added.value)
+        except ValueError:
+            d['soak_solution_volume'] = 0.0
+        d['soak_solution_volume_unit'] = 'uL'
+
+        try:
+            d['soak_temperature'] = float(self.temperature.value)
+        except ValueError:
+            d['soak_temperature'] = 0.0
+        d['soak_temperature_unit'] = 'K'
+
+        db.save_soaked_crystals_to_database(self.logger, self.dal, soaked_cystal_list, d, self.progress_bar)
+
+    def update_csv(self, soaked_cystal_list):
+        fs.save_shifter_csv_file_for_mounting(self.logger,
+                                              os.path.join(self.settingsObject.workflow_folder, '3-mount'),
+                                              soaked_cystal_list)
+
+
+
+
+
+
 
 #    def update_crystal_mount_csv_file(self, crystal_plate_name, plate_type, row, column, subwell):
 #        # check if barcode, row, column, subwell exisit

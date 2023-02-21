@@ -7,9 +7,10 @@ import os
 
 import sys
 sys.path.append(os.path.join(os.getcwd(), 'lib'))
-import filesystem as fs
+import crystal_plate_fs as fs
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import query
+import crystal_plate_db as db
 
 
 class crystal_plate_tab(object):
@@ -167,18 +168,9 @@ class crystal_plate_tab(object):
         self.logger.info('updating screen selection dropdown: ' + str(existing_crystalscreen))
 
     def refresh_screens(self, b):
-#        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_crystalscreen = [x[0] for x in ResultProxy.fetchall()]
-#        existing_crystalscreen = query.get_existing_crystal_screens_for_dropdown(self.dal, self.logger)
-#        self.select_screen_for_plate.options = existing_crystalscreen
-#        self.logger.info('updating screen selection dropdown: ' + str(existing_crystalscreen))
         self.get_crystal_screen_from_db_for_dropdown()
 
     def refresh_barcode(self, b):
-#        query = db.select([self.dbObject.crystalplateTable.columns.CrystalPlate_Barcode.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_crystalplates = [x[0] for x in ResultProxy.fetchall()]
         existing_crystalplates = query.get_existing_crystal_plate_barcodes(self.dal, self.logger)
         self.select_barcode.options = existing_crystalplates
         self.logger.info('updating barcode selection dropdown: ' + str(existing_crystalplates))
@@ -285,15 +277,15 @@ class crystal_plate_tab(object):
 
         barcode = self.select_barcode.value
 
-        query.save_crystal_plate_to_database(self.logger, self.dal, d, barcode)
+        db.save_crystal_plate_to_database(self.logger, self.dal, d, barcode)
 
-        fs.save_shifter_csv_to_inspect_folder(self.logger,
-                                              d['subwell_01_protein_volume'],
-                                              d['subwell_02_protein_volume'],
-                                              d['subwell_03_protein_volume'],
-                                              self.select_barcode.value,
-                                              self.select_plate_type.value.split(':')[1].replace(' ', ''),
-                                              self.settingsObject.workflow_folder)
+#        fs.save_shifter_csv_to_inspect_folder(self.logger,
+#                                              d['subwell_01_protein_volume'],
+#                                              d['subwell_02_protein_volume'],
+#                                              d['subwell_03_protein_volume'],
+#                                              self.select_barcode.value,
+#                                              self.select_plate_type.value.split(':')[1].replace(' ', ''),
+#                                              self.settingsObject.workflow_folder)
 
         fs.save_crystal_plate_csv_to_inspect_folder(self.logger,
                                                     d['subwell_01_protein_volume'],
@@ -308,7 +300,7 @@ class crystal_plate_tab(object):
                                                     d['end_column'])
 
     def load_plate_from_db(self, b):
-        x = query.load_crystal_plate_from_database(self.dal, self.logger, self.select_barcode.value)
+        x = db.load_crystal_plate_from_database(self.dal, self.logger, self.select_barcode.value)
         self.reservoir_volume.value = str(x['reservoir_volume'])
         self.protein_concentration.value = str(x['protein_batch_concentration'])
         self.temperature.value = str(x['temperature'])

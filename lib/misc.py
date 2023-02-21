@@ -456,3 +456,93 @@ def get_list_of_dict_from_marked_crystal_list(marked_crystal_list, barcode):
         d['marked_crystal_code'] = d['crystal_plate_barcode'] + '-' + d['crystal_plate_well'] + d['crystal_plate_subwell']
         l.append(d)
     return l
+
+def get_shifter_csv_header():
+    header = [
+        'PlateType',
+        'PlateID',
+        'LocationShifter',
+        'PlateColumn',
+        'PlateRow',
+        'PositionSubWell',
+        'Comment',
+        'CrystalID',
+        'TimeArrival',
+        'TimeDeparture',
+        'PickDuration',
+        'DestinationName',
+        'DestinationLocation',
+        'Barcode',
+        'ExternalComment'
+        ]
+    return header
+
+def crystal_plate_header():
+    header = [
+        'plate_type_name',
+        'crystal_plate_barcode',
+        'crystal_plate_row',
+        'crystal_plate_column',
+        'crystal_plate_subwell',
+        'status'
+    ]
+    return header
+
+def get_step_for_progress_bar(steps):
+    start = 0.0
+    step = float(100/int(steps))
+    return start, step
+
+def backup_file(logger, folder, file_name):
+    if os.path.isfile(os.path.join(folder, file_name)):
+        logger.warning('file exists ' + os.path.join(folder, file_name))
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        logger.info('backing up exisiting file as ' + file_name + now)
+        copyfile(os.path.join(folder, file_name),
+                 os.path.join(folder, 'backup', file_name + '.' + now))
+
+def read_line_from_shifter_csv(logger, line):
+    if line.startswith(';'):
+        s = {}
+    elif line.startswith('PlateType'):
+        s = {}
+    elif line.startswith('";'):
+        s = {}
+    elif line.startswith('"'):
+        s = {}
+    elif line.startswith("Column1"):
+        s = {}
+    else:
+        try:
+            s = {
+                'PlateType':            re.split(r'[,;]+', line)[0],
+                'PlateID':              re.split(r'[,;]+', line)[1],
+                'LocationShifter':      re.split(r'[,;]+', line)[2],
+                'PlateRow':             re.split(r'[,;]+', line)[3],
+                'PlateColumn':          re.split(r'[,;]+', line)[4],
+                'PositionSubWell':      re.split(r'[,;]+', line)[5],
+                'Comment':              re.split(r'[,;]+', line)[6],
+                'CrystalID':            re.split(r'[,;]+', line)[7],
+                'TimeArrival':          re.split(r'[,;]+', line)[8],
+                'TimeDeparture':        re.split(r'[,;]+', line)[9],
+                'PickDuration':         re.split(r'[,;]+', line)[10],
+                'DestinationName':      re.split(r'[,;]+', line)[11],
+                'DestinationLocation':  re.split(r'[,;]+', line)[12],
+                'Barcode':              re.split(r'[,;]+', line)[13],
+                'ExternalComment':      re.split(r'[,;]+', line)[14]
+            }
+        except IndexError:
+            logger.warning('seems there are marked but not mounted crystals in file (check info line below):')
+            logger.info(str(line.split(';')))
+            s = {}
+    return s
+
+def numeric_subwell_to_letter(num_subwell):
+    subwell = '00'
+    if num_subwell == '01':
+        subwell = 'a'
+    elif num_subwell == '02':
+        subwell = 'c'
+    elif num_subwell == '03':
+        subwell = 'd'
+    return subwell

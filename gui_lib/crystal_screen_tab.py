@@ -12,10 +12,10 @@ import pandas as pd
 
 import sys
 sys.path.append(os.path.join(os.getcwd(), 'lib'))
-import filesystem as fs
+import crystal_screen_fs as fs
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import query
-
+import crystal_screen_db as db
 
 
 class crystal_screen_tab(object):
@@ -88,36 +88,21 @@ class crystal_screen_tab(object):
         self.select_screen.options = l
 
     def refresh_screen_dropdown(self, b):
-#        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
         existing_crystalscreens = query.get_existing_crystal_screens_for_dropdown(self.dal, self.logger)
         self.select_screen.options = existing_crystalscreens
         self.logger.info('updating screen selection dropdown: ' + str(existing_crystalscreens))
 
     def load_screen_from_db(self, b):
-#        query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Name.distinct()])
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        existing_crystalscreens = [x[0] for x in ResultProxy.fetchall()]
         existing_crystalscreens = query.get_existing_crystal_screens_for_dropdown(self.dal, self.logger)
         if self.select_screen.value in existing_crystalscreens:
             self.logger.info('screen ' + self.select_screen.value + ' exists in database')
-#            query = db.select([self.dbObject.crystalscreenTable.columns.CrystalScreen_Well,
-#                              self.dbObject.crystalscreenTable.columns.CrystalScreen_Condition]).where(
-#                              self.dbObject.crystalscreenTable.columns.CrystalScreen_Name == self.select_screen.value)
-##            ResultProxy = connection.execute(query)
-##            result = ResultProxy.fetchall()
-#            self.logger.info('loading information for screen {0!s} from database'.format(self.select_screen.value))
-#            df = pd.read_sql_query(query, self.dbObject.engine)
-            df = query.get_crystal_screen_conditions_as_df(self.dal, self.logger, self.select_screen.value)
+            df = db.get_crystal_screen_conditions_as_df(self.dal, self.logger, self.select_screen.value)
             self.screen_sheet.df = df
         else:
             self.logger.warning('screen {0!s} does not exist in database; skipping...'.format(self.select_screen.value))
 
     def save_screen_csv(self, b):
         crystal_screen_name = self.select_screen.value.replace(' ','')
-#        fs.save_crystal_screen_as_csv(self.logger, self.settings.crystal_screen_folder,
-#                                      crystal_screen_name, self.crystal_plate_template)
         fs.save_crystal_screen_as_excel(self.logger, self.settings.crystal_screen_folder,
                                         crystal_screen_name, self.crystal_plate_template)
 
@@ -175,5 +160,5 @@ class crystal_screen_tab(object):
     def save_screen_to_db(self, b):
         df = self.screen_sheet.get_changed_df()
         csname = self.select_screen.value.replace(' ','')
-        query.save_crystal_screen_to_db(self.dal, self.logger, df, csname, self.progress_bar)
+        db.save_crystal_screen_to_db(self.dal, self.logger, df, csname, self.progress_bar)
 

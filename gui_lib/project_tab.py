@@ -10,7 +10,7 @@ from init_filesystem import init_filesystem
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import prep_tables
 import query
-
+import project_db as db
 
 #import sqlalchemy as db
 #from shutil import copyfile
@@ -86,7 +86,7 @@ class project_tab(object):
 
     def read_project_from_db(self):
         self.logger.info('reading project information from database')
-        d = query.get_project_info(self.dal, self.logger)
+        d = db.get_project_info(self.dal, self.logger)
         self.update_project_widgets(d)
         self.update_crystal_plate_widgets()
 
@@ -107,7 +107,7 @@ class project_tab(object):
             'protein_acronym': self.protein_acronym.value.replace(' ', ''),
             'project_directory': self.project_directory.value
         }
-        query.save_project_info(self.dal, self.logger, d)
+        db.save_project_info(self.dal, self.logger, d)
         self.update_crystal_plate_widgets()
 
     def update_crystal_plate_widgets(self):
@@ -123,7 +123,7 @@ class project_tab(object):
         self.logger.info('found the following crystallization methods in database: ' + str(existing_methods))
         self.crystalplateObject.select_method.options = existing_methods
 
-#        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
-#        self.logger.info('found the following plate types in database: ' + str(existing_methods))
-#        self.soakplateObject.select_plate_type.options = existing_plate_types
+        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
+        self.logger.info('found the following plate types in database: ' + str(existing_methods))
+        self.soakplateObject.select_plate_type.options = existing_plate_types
 

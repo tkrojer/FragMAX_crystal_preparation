@@ -81,27 +81,6 @@ class DataAccessLayer:
         UniqueConstraint('compound_batch_code', name='unique_compound_batch_code')
     )
 
-    soak_plate_table = Table('soak_plate_table',
-        metadata,
-        Column('soak_plate_id', Integer(), primary_key=True),
-        Column('compound_batch_code', ForeignKey('compound_batch_table.compound_batch_code')),
-        Column('soak_plate_condition', String(55)),
-        Column('soak_plate_name', String(55)),
-        Column('soak_plate_row', String(55)),
-        Column('soak_plate_column', String(55)),
-        Column('soak_plate_well', String(55)),
-        Column('soak_plate_subwell', String(55)),
-#        Column('plate_type_id', String(20), ForeignKey('plate_type_table.plate_type_name')),  # don't need it because is in compound_batch_table
-        Column('base_buffer', String(55)),
-        Column('base_buffer_volume', Numeric(12, 2)),
-        Column('base_buffer_volume_unit', String(8)),
-        Column('compound_volume', Numeric(12, 2)),
-        Column('compound_volume_unit', String(8), ForeignKey('unit_table.unit_symbol')),
-        Column('created_on', DateTime(), default=datetime.now),
-        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
-        UniqueConstraint('soak_plate_condition', name='unique_soak_plate_condition')
-    )
-
     marked_crystals_table = Table('marked_crystals_table',
         metadata,
         Column('marked_crystal_id', Integer(), primary_key=True),
@@ -118,16 +97,40 @@ class DataAccessLayer:
         UniqueConstraint('marked_crystal_code', name='unique_marked_crystal_code')
     )
 
+    soak_plate_table = Table('soak_plate_table',
+        metadata,
+        Column('soak_plate_id', Integer(), primary_key=True),
+        Column('soak_plate_name', String(55)),
+        Column('compound_batch_code', ForeignKey('compound_batch_table.compound_batch_code')),
+        Column('compound_plate_name', String(55)),
+        Column('soak_plate_type', String(20), ForeignKey('plate_type_table.plate_type_name')),
+        Column('soak_plate_row', String(55)),
+        Column('soak_plate_column', String(55)),
+        Column('soak_plate_well', String(55)),
+        Column('soak_plate_subwell', String(55)),
+        #        Column('plate_type_id', String(20), ForeignKey('plate_type_table.plate_type_name')),  # don't need it because is in compound_batch_table
+        Column('base_buffer', String(55)),
+        Column('base_buffer_volume', Numeric(12, 2)),
+        Column('base_buffer_volume_unit', String(8)),
+        Column('compound_volume', Numeric(12, 2)),
+        Column('compound_volume_unit', String(8), ForeignKey('unit_table.unit_symbol')),
+        Column('created_on', DateTime(), default=datetime.now),
+        Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
+        UniqueConstraint('soak_plate_name', 'soak_plate_well', name='unique_name_well')
+    )
+
     soaked_crystals_table = Table('soaked_crystals_table',
         metadata,
         Column('soaked_crystals_id', Integer(), primary_key=True),
-        Column('soak_plate_id', ForeignKey('soak_plate_table.soak_plate_id')),
-        Column('marked_crystal_id', ForeignKey('marked_crystals_table.marked_crystal_id')),
+        Column('soak_plate_name', String(55), ForeignKey('soak_plate_table.soak_plate_name')),
+        Column('marked_crystal_code', ForeignKey('marked_crystals_table.marked_crystal_code')),
         Column('compound_appearance', String(50)),
         Column('crystal_appearance', String(50)),
         Column('status', String(50)),   # soak_success, soak_fail, mount_success, mount_fail
+        Column('soak_plate_type', String(20), ForeignKey('plate_type_table.plate_type_name')),
+        Column('soak_plate_well', String(55)),
         Column('soak_solution_volume', Numeric(12, 2)),
-        Column('soak_solution_unit', String(8)),
+        Column('soak_solution_volume_unit', String(8), ForeignKey('unit_table.unit_symbol')),
         Column('soak_method', String(8), ForeignKey('soak_method_table.method_name')),
         Column('soak_temperature', Numeric(12, 2)),
         Column('soak_temperature_unit', String(8), ForeignKey('unit_table.unit_symbol')),
@@ -135,7 +138,7 @@ class DataAccessLayer:
         Column('soak_datetime', DateTime(), default=datetime.now),
         Column('created_on', DateTime(), default=datetime.now),
         Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
-        UniqueConstraint('soak_datetime', name='unique_soak_datetime')
+        UniqueConstraint('soak_datetime', 'marked_crystal_code', name='unique_soak_datetime_crystal_code')
     )
 
     mounted_crystals_table = Table('mounted_crystals_table',

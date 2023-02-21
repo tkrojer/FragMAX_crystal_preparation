@@ -14,27 +14,30 @@ class gui(object):
         self.logger = logger
 
         self.grid_widget = widgets.GridspecLayout(10, 3)
-        self.button_01 = widgets.Button(description='01', layout=widgets.Layout(width="auto"),
+
+        height = '80px'
+
+        self.button_01 = widgets.Button(description='01', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_02 = widgets.Button(description='02', layout=widgets.Layout(width="auto"),
+        self.button_02 = widgets.Button(description='02', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_03 = widgets.Button(description='03', layout=widgets.Layout(width="auto"),
+        self.button_03 = widgets.Button(description='03', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_04 = widgets.Button(description='04', layout=widgets.Layout(width="auto"),
+        self.button_04 = widgets.Button(description='04', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_05 = widgets.Button(description='05', layout=widgets.Layout(width="auto"),
+        self.button_05 = widgets.Button(description='05', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_06 = widgets.Button(description='06', layout=widgets.Layout(width="auto"),
+        self.button_06 = widgets.Button(description='06', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_07 = widgets.Button(description='07', layout=widgets.Layout(width="auto"),
+        self.button_07 = widgets.Button(description='07', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_08 = widgets.Button(description='08', layout=widgets.Layout(width="auto"),
+        self.button_08 = widgets.Button(description='08', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_09 = widgets.Button(description='09', layout=widgets.Layout(width="auto"),
+        self.button_09 = widgets.Button(description='09', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_10 = widgets.Button(description='10', layout=widgets.Layout(width="auto"),
+        self.button_10 = widgets.Button(description='10', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
-        self.button_11 = widgets.Button(description='11', layout=widgets.Layout(width="auto"),
+        self.button_11 = widgets.Button(description='11', layout=widgets.Layout(width="auto", height=height),
                                         style={'button_color': 'lightgray'})
 
         self.button_01.on_click(self.set_scan_value_button)

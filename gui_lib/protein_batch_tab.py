@@ -6,7 +6,8 @@ import datetime
 
 import os, sys
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
-import query
+import protein_batch_db as db
+#import query
 
 
 class protein_batch_tab(object):
@@ -127,14 +128,14 @@ class protein_batch_tab(object):
             }
             self.logger.info('data for protein batch: {0!s}'.format(d))
             l.append(d)
-        query.save_protein_batch_to_db(self.dal, self.logger, l)
+        db.save_protein_batch_to_db(self.dal, self.logger, l)
 #        self.update_crystal_plate_widgets()
 
     def read_batch_from_db(self, b):
         self.check_existing_batch_in_db()
 
     def check_existing_batch_in_db(self):
-        result_list = query.get_protein_batches_from_db(self.dal, self.logger)
+        result_list = db.get_protein_batches_from_db(self.dal, self.logger)
         for qr in result_list:
             proteinbatch = qr['protein_batch_id']
             if proteinbatch not in self.protein_batch_tab_dict:
