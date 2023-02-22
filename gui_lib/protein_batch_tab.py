@@ -7,14 +7,14 @@ import datetime
 import os, sys
 sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import protein_batch_db as db
-#import query
+import query
 
 
 class protein_batch_tab(object):
-    def __init__(self, dal, logger):
+    def __init__(self, dal, logger, crystalplateObject):
         self.logger = logger
         self.dal = dal
-#        self.crystalplateObject = crystalplateObject
+        self.crystalplateObject = crystalplateObject
 
         self.last_tab = 1
         self.protein_batch_tab_list = []
@@ -40,11 +40,10 @@ class protein_batch_tab(object):
         self.check_existing_batch_in_db()
         qr = {
             'protein_batch_id': None,
-            'protein_id': 1,
             'protein_batch_expression_host': '',
             'protein_batch_comment': '',
             'date_received': '',
-            'protein_batch_supplier': '',
+            'protein_batch_supplier_name': '',
             'protein_batch_sequence': '',
             'protein_batch_buffer': '',
             'protein_batch_concentration': '',
@@ -70,7 +69,7 @@ class protein_batch_tab(object):
         expression_host = widgets.Text(value=qr['protein_batch_expression_host'], layout=widgets.Layout(height="auto", width="200"))
         comment = widgets.Textarea(value=qr['protein_batch_comment'], layout=widgets.Layout(height="auto", width="200"))
         date_received = widgets.DatePicker(disabled=False)
-        supplier_id = widgets.Text(value=qr['protein_batch_supplier'], layout=widgets.Layout(height="auto", width="200"))
+        supplier_id = widgets.Text(value=qr['protein_batch_supplier_name'], layout=widgets.Layout(height="auto", width="200"))
         sequence = widgets.Textarea(value=qr['protein_batch_sequence'], layout=widgets.Layout(height="auto", width="200"))
         buffer = widgets.Text(value=qr['protein_batch_buffer'], layout=widgets.Layout(height="auto", width="200"))
         concentration = widgets.Text(value=str(qr['protein_batch_concentration']), layout=widgets.Layout(height="auto", width="200"))
@@ -109,18 +108,21 @@ class protein_batch_tab(object):
         vbox = VBox(children=[grid_widget])
         return vbox
 
+    def get_protein_batch_name(self, batch):
+        proteinacronym = query.get_protein_acronym(self.dal, self.logger)
+        protein_batch_name = proteinacronym + '-b' + ((3-len(str(batch))) * '0') + str(batch)
+        return protein_batch_name
+
     def save_batch_to_db(self, b):
         self.logger.info('saving batch information to database')
-
         l = []
         for batch in self.protein_batch_tab_dict:
             d = {
-                'protein_batch_id': batch,
-                'protein_id': 1,
+                'protein_batch_name': self.get_protein_batch_name(batch),
                 'protein_batch_expression_host': self.protein_batch_tab_dict[batch][0].value,
                 'protein_batch_comment': self.protein_batch_tab_dict[batch][1].value,
                 'protein_batch_date_received': self.protein_batch_tab_dict[batch][2].value,
-                'protein_batch_supplier': self.protein_batch_tab_dict[batch][3].value,
+                'protein_batch_supplier_name': self.protein_batch_tab_dict[batch][3].value,
                 'protein_batch_sequence': self.protein_batch_tab_dict[batch][4].value,
                 'protein_batch_buffer': self.protein_batch_tab_dict[batch][5].value,
                 'protein_batch_concentration': self.protein_batch_tab_dict[batch][6].value,
@@ -129,7 +131,7 @@ class protein_batch_tab(object):
             self.logger.info('data for protein batch: {0!s}'.format(d))
             l.append(d)
         db.save_protein_batch_to_db(self.dal, self.logger, l)
-#        self.update_crystal_plate_widgets()
+        self.update_crystal_plate_widgets()
 
     def read_batch_from_db(self, b):
         self.check_existing_batch_in_db()
@@ -141,7 +143,11 @@ class protein_batch_tab(object):
             if proteinbatch not in self.protein_batch_tab_dict:
                 self.add_batch_tab(qr)
 
-#    def update_crystal_plate_widgets(self):
+    def update_crystal_plate_widgets(self):
+        existing_protein_batches = query.get_protein_batch_for_dropdown(self.dal, self.logger)
+        self.logger.info('found the following protein batches in database: ' + str(existing_protein_batches))
+        self.crystalplateObject.select_protein_batch.options = existing_protein_batches
+
 #        query = db.select([self.dbObject.proteinBatchTable.columns.ProteinBatch_ID.distinct()])
 #        ResultProxy = self.dbObject.connection.execute(query)
 #        existing_protein_batches = [x[0] for x in ResultProxy.fetchall()]

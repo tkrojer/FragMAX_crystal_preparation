@@ -14,11 +14,12 @@ import crystal_plate_db as db
 
 
 class crystal_plate_tab(object):
-    def __init__(self, settingsObject, dal, logger):
+    def __init__(self, settingsObject, dal, logger, pgbar):
 
         self.settingsObject = settingsObject
         self.dal = dal
         self.logger = logger
+        self.pgbar = pgbar
 
         protein_history = [
             'frozen',
@@ -263,11 +264,11 @@ class crystal_plate_tab(object):
 
         d['subwell_03_seed_volume_unit'] = 'nL'
 
-        d['protein_batch_id'] = self.select_protein_batch.value.split(':')[0]
+        d['protein_batch_name'] = self.select_protein_batch.value
         d['protein_batch_buffer'] = self.protein_buffer.value
-        d['crystallization_method_id'] = self.select_method.value.split(':')[0]
-        d['plate_type_id'] = self.select_plate_type.value.split(':')[0]
-        d['crystal_screen_id'] = self.select_screen_for_plate.value.split(':')[0]
+        d['method_name'] = self.select_method.value
+        d['plate_type_name'] = self.select_plate_type.value
+        d['crystal_screen_name'] = self.select_screen_for_plate.value
         d['protein_history'] = self.protein_history.value
 
         d['start_row'] = self.start_row.value
@@ -292,34 +293,56 @@ class crystal_plate_tab(object):
                                                     d['subwell_02_protein_volume'],
                                                     d['subwell_03_protein_volume'],
                                                     self.select_barcode.value,
-                                                    self.select_plate_type.value.split(':')[1].replace(' ', ''),
+                                                    self.select_plate_type.value,
                                                     self.settingsObject.workflow_folder,
                                                     d['start_row'],
                                                     d['end_row'],
                                                     d['start_column'],
-                                                    d['end_column'])
+                                                    d['end_column'],
+                                                    self.pgbar)
 
     def load_plate_from_db(self, b):
         x = db.load_crystal_plate_from_database(self.dal, self.logger, self.select_barcode.value)
         self.reservoir_volume.value = str(x['reservoir_volume'])
         self.protein_concentration.value = str(x['protein_batch_concentration'])
         self.temperature.value = str(x['temperature'])
-        self.subwell_a_protein.value = str(x['subwell_a_protein_volume'])
-        self.subwell_a_reservoir.value = str(x['subwell_a_reservoir_volume'])
-        self.subwell_a_seed.value = str(x['subwell_a_seed_volume'])
-        self.subwell_c_protein.value = str(x['subwell_c_protein_volume'])
-        self.subwell_c_reservoir.value = str(x['subwell_c_reservoir_volume'])
-        self.subwell_c_seed.value = str(x['subwell_c_seed_volume'])
-        self.subwell_d_protein.value = str(x['subwell_d_protein_volume'])
-        self.subwell_d_reservoir.value = str(x['subwell_d_reservoir_volume'])
-        self.subwell_d_seed.value = str(x['subwell_d_seed_volume'])
+        self.subwell_a_protein.value = str(x['subwell_01_protein_volume'])
+        self.subwell_a_reservoir.value = str(x['subwell_01_reservoir_volume'])
+        self.subwell_a_seed.value = str(x['subwell_01_seed_volume'])
+        self.subwell_c_protein.value = str(x['subwell_02_protein_volume'])
+        self.subwell_c_reservoir.value = str(x['subwell_02_reservoir_volume'])
+        self.subwell_c_seed.value = str(x['subwell_02_seed_volume'])
+        self.subwell_d_protein.value = str(x['subwell_03_protein_volume'])
+        self.subwell_d_reservoir.value = str(x['subwell_03_reservoir_volume'])
+        self.subwell_d_seed.value = str(x['subwell_03_seed_volume'])
         self.protein_buffer.value = str(x['protein_batch_buffer'])
-
-        crystal_screen_id = x['crystal_screen_id']
+        self.start_row.value = str(x['start_row'])
+        self.end_row.value = str(x['end_row'])
+        self.start_column.value = str(x['start_column'])
+        self.end_column.value = str(x['end_column'])
 
         self.get_crystal_screen_from_db_for_dropdown()
         for option in self.select_screen_for_plate.options:
-            if int(option.split(':')[0]) == crystal_screen_id:
+            if option == x['crystal_screen_name']:
                 self.select_screen_for_plate.value = option
                 break
 
+        for option in self.protein_history.options:
+            if option == x['protein_history']:
+                self.protein_history.value = option
+                break
+
+        for option in self.select_protein_batch.options:
+            if option == x['protein_batch_name']:
+                self.select_protein_batch.value = option
+                break
+
+        for option in self.select_plate_type.options:
+            if option == x['plate_type_name']:
+                self.select_plate_type.value = option
+                break
+
+        for option in self.select_method.options:
+            if option == x['method_name']:
+                self.select_method.value = option
+                break

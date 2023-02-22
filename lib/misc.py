@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+from shutil import (copyfile, move)
 
 def swiss_ci_3_drop_layout():
 
@@ -537,12 +539,42 @@ def read_line_from_shifter_csv(logger, line):
             s = {}
     return s
 
+def read_line_from_shifter_csv_as_mounted_crystal_dict(logger, line):
+    s = read_line_from_shifter_csv(logger, line)
+    mount_dict = {}
+    soak_dict = {}
+    if s:
+        well = s['PlateRow'] + (2 - len(s['PlateColumn'])) * '0' + s['PlateColumn']
+        subwell = subwell_letter_to_numeric(s['PositionSubWell'])
+        soak_dict['marked_crystal_code'] = s['PlateID'] + '-' + well + '-' + subwell
+        soak_dict['status'] = s['Comment'].split(':')[0]
+        soak_dict['compound_appearance'] = s['Comment'].split(':')[1]
+        soak_dict['crystal_appearance'] = s['Comment'].split(':')[2]
+        if not 'fail' in s['Comment'].lower():
+            mount_dict['puck_name'] = s['DestinationName']
+            mount_dict['puck_position'] = s['DestinationLocation']
+            mount_dict['mount_datetime'] = s['TimeDeparture']
+            mount_dict['marked_crystal_code'] = soak_dict['marked_crystal_code']
+            mount_dict['compound_appearance'] = soak_dict['compound_appearance']
+            mount_dict['crystal_appearance'] = soak_dict['crystal_appearance']
+    return mount_dict, soak_dict
+
 def numeric_subwell_to_letter(num_subwell):
-    subwell = '00'
+    subwell = num_subwell
     if num_subwell == '01':
         subwell = 'a'
     elif num_subwell == '02':
         subwell = 'c'
     elif num_subwell == '03':
         subwell = 'd'
+    return subwell
+
+def subwell_letter_to_numeric(letter_subwell):
+    subwell = letter_subwell
+    if letter_subwell == 'a':
+        subwell = '01'
+    elif letter_subwell == 'c':
+        subwell = '02'
+    elif letter_subwell == 'd':
+        subwell = '03'
     return subwell

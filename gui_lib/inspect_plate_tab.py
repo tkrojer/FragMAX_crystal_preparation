@@ -23,10 +23,11 @@ import matplotlib.cbook as cbook
 from matplotlib.lines import Line2D
 
 class inspect_plate_tab(object):
-    def __init__(self, settingsObject, dal, logger):
+    def __init__(self, settingsObject, dal, logger, pgbar):
         self.logger = logger
         self.dal = dal
         self.settingsObject = settingsObject
+        self.pgbar = pgbar
 
         self.image_list = []
         self.image_number = 0
@@ -161,7 +162,8 @@ class inspect_plate_tab(object):
         self.image_list = fs.read_crystal_image_list(self.logger,
                                                      self.select_crystal_plate.value,
                                                      self.settingsObject.crystal_image_folder,
-                                                     os.path.join(self.settingsObject.workflow_folder, '1-inspect'))
+                                                     os.path.join(self.settingsObject.workflow_folder, '1-inspect'),
+                                                     self.pgbar)
         if self.image_list:
             self.logger.info('resetting marked_crystal_list and image_number...')
             self.marked_crystal_list = fs.check_for_marked_crystals(self.logger,
@@ -229,7 +231,7 @@ class inspect_plate_tab(object):
                                                  "SwissCI-MRC-3d")
         xtal_list = misc.get_list_of_dict_from_marked_crystal_list(self.marked_crystal_list,
                                                                    self.select_crystal_plate.value)
-        db.save_marked_crystals_to_db(self.dal, self.logger, xtal_list)
+        db.save_marked_crystals_to_db(self.dal, self.logger, xtal_list, self.pgbar)
 
 
 

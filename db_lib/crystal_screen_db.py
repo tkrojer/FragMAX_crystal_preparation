@@ -4,17 +4,23 @@ from sqlalchemy import and_
 
 import pandas as pd
 
+import os
+import sys
+sys.path.append(os.path.join(os.getcwd(), 'lib'))
+import misc
+
 def get_crystal_screen_conditions_as_df(dal, logger, crystal_screen_name):
     logger.info('loading information for screen {0!s} from database'.format(crystal_screen_name))
     q = select([dal.crystal_screen_table.c.crystal_screen_well,
                 dal.crystal_screen_table.c.crystal_screen_condition]).where(
                 dal.crystal_screen_table.c.crystal_screen_name == crystal_screen_name)
     df = pd.read_sql_query(q, dal.engine)
+    logger.info('finished loading information for screen {0!s} from database'.format(crystal_screen_name))
     return df
 
 def save_crystal_screen_to_db(dal, logger, df, csname, pgbar):
     logger.info('saving ' + csname + ' crystal screen to database')
-    start, step = get_step_for_progress_bar(len(df.index))
+    start, step = misc.get_step_for_progress_bar(len(df.index))
     for index, row in df.iterrows():
         start += step
         pgbar.value = int(start)
@@ -39,4 +45,5 @@ def save_crystal_screen_to_db(dal, logger, df, csname, pgbar):
             else:
                 logger.error(str(e))
     pgbar.value = 0
+    logger.info('finished saving ' + csname + ' crystal screen to database')
 

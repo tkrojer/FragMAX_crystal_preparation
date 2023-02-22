@@ -8,6 +8,7 @@ def get_protein_acronym(dal, logger):
     rp = dal.connection.execute(q)
     result = rp.first()
     proteinacronym = result[0]
+    logger.info('reading protein acronym from database: "{0!s}"'.format(proteinacronym))
     return proteinacronym
 
 def get_result_list_of_dicts(result):
@@ -37,21 +38,32 @@ def get_value_from_foreign_key(dal, column, foreignkey, key):
 
 def get_protein_batch_for_dropdown(dal, logger):
     logger.info('reading protein batch information from database')
-    q = select([dal.protein_batch_table.c.protein_batch_id,
-                dal.protein_batch_table.c.protein_batch_date_received]).order_by(
-        dal.protein_batch_table.c.protein_batch_id.asc())
+    q = select(dal.protein_batch_table.c.protein_batch_name).order_by(
+        dal.protein_batch_table.c.protein_batch_name.asc())
     rp = dal.connection.execute(q)
-    result = rp.fetchall()
-    result_list = []
-    for entry in result:
-        protein_id = entry[0]
-        protein_batch_date_received = entry[1]
-        date_received = protein_batch_date_received.strftime('%Y-%m-%d')
-        protein_acronym = get_value_from_foreign_key(dal, dal.project_table.c.protein_acronym,
-                                                     dal.project_table.c.project_id,
-                                                     protein_id)
-        result_list.append('{0!s}: {1!s}-{2!s} ({3:s})'.format(protein_id, protein_acronym, protein_id, date_received))
+    result_list = [x[0] for x in rp.fetchall()]
+    logger.info('finished reading protein batch information from database')
     return result_list
+
+def get_plate_type_for_dropdown(dal, logger):
+    logger.info('reading plate type information from database')
+    q = select(dal.plate_type_table.c.plate_type_name.distinct()).order_by(
+               dal.plate_type_table.c.plate_type_name.asc())
+    rp = dal.connection.execute(q)
+    result_list = [x[0] for x in rp.fetchall()]
+    logger.info('finished reading plate type information from database')
+    return result_list
+
+def get_crystallization_method_for_dropdown(dal, logger):
+    logger.info('reading crystallization method information from database')
+    q = select(dal.crystallization_method_table.c.method_name).order_by(
+               dal.crystallization_method_table.c.method_name.asc())
+    rp = dal.connection.execute(q)
+    result_list = [x[0] for x in rp.fetchall()]
+    logger.info('finished reading crystallization method information from database')
+    return result_list
+
+
 
 def combine_pkey_and_name_for_dropdown(logger, dal, q):
     rp = dal.connection.execute(q)
@@ -76,35 +88,9 @@ def get_existing_crystal_screens_for_dropdown(dal, logger):
 #        logger.info('>>>> {0!s}'.format(entry))
 #        result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
 #    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
+    logger.info('finished reading existing crystal screens from database')
     return result_list
 
-def get_plate_type_for_dropdown(dal, logger):
-    logger.info('reading plate type information from database')
-    q = select([dal.plate_type_table.c.plate_type_id,
-                dal.plate_type_table.c.plate_type_name]).order_by(
-        dal.plate_type_table.c.plate_type_id.asc())
-#    rp = dal.connection.execute(q)
-#    result = rp.fetchall()
-#    result_list = []
-#    for entry in result:
-#        logger.info('>>>> {0!s}'.format(entry))
-#        result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
-    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
-    return result_list
-
-def get_crystallization_method_for_dropdown(dal, logger):
-    logger.info('reading crystallization method information from database')
-    q = select([dal.crystallization_method_table.c.method_id,
-                dal.crystallization_method_table.c.method_name]).order_by(
-        dal.crystallization_method_table.c.method_id.asc())
-#    rp = dal.connection.execute(q)
-#    result = rp.fetchall()
-#    result_list = []
-#    for entry in result:
-#        logger.info('>>>> {0!s}'.format(entry))
-#        result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
-    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
-    return result_list
 
 def get_soak_plates_for_dropdown(dal, logger):
     logger.info('reading soak plate entries from database')

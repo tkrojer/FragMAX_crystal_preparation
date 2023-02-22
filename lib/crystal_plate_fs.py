@@ -42,13 +42,18 @@ def subwell_range(subwell_01, subwell_02, subwell_03):
     return subwell_range
 
 def save_crystal_plate_csv_to_inspect_folder(logger, subwell_01, subwell_02, subwell_03, barcode, plate_type, folder,
-                                             start_row, end_row, start_column, end_column):
+                                             start_row, end_row, start_column, end_column, pgbar):
     logger.info('writing crystal plate CSV file as ' + os.path.join(folder, '1-inspect', barcode + '.csv'))
     misc.backup_file(logger, os.path.join(folder, '1-inspect'), barcode + '.csv')
+    start, step = misc.get_step_for_progress_bar(len(row_range(start_row, end_row)))
     data = []
     for row in row_range(start_row, end_row):
+        start += step
+        pgbar.value = int(start)
         for column in column_range(start_column, end_column):
             for subwell in subwell_range(subwell_01, subwell_02, subwell_03):
                 data.append([plate_type, barcode, row, column, subwell, ''])
     df = pd.DataFrame(data, columns=misc.crystal_plate_header())
     df.to_csv(os.path.join(os.path.join(folder, '1-inspect', barcode + '.csv')), index=False)
+    pgbar.value = 0
+    logger.info('finished writing crystal plate CSV file as ' + os.path.join(folder, '1-inspect', barcode + '.csv'))

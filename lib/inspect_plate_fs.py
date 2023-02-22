@@ -15,24 +15,30 @@ def get_crystal_drop_list_from_csv(logger, barcode, folder):
         logger.error('file {0!s}.csv does not exist in {1!s}'.format(barcode, folder))
     return d
 
-def read_crystal_image_list(logger, barcode, folder, inspect_folder):
-    logger.info('trying to read crystal images for plate {0!s} in {1!s}'.format(barcode, folder))
+def read_crystal_image_list(logger, barcode, folder, inspect_folder, pgbar):
+    logger.info('reading crystal images for plate {0!s} in {1!s}'.format(barcode, folder))
     drop_list = get_crystal_drop_list_from_csv(logger, barcode, inspect_folder)
+    start, step = misc.get_step_for_progress_bar(len(glob.glob(os.path.join(folder, '*.jpg'))))
     l = []
     for i in sorted(glob.glob(os.path.join(folder, '*.jpg'))):
         fn = os.path.basename(i)
+        start += step
+        pgbar.value = int(start)
         if barcode in fn:
             if fn.split('_')[13] == '00':
                 column, row, subwell = misc.get_row_column_subwell_from_filename(i)
-#                logger.warning('--- {0!s} {1!s} {2!s}'.format(column, row, subwell))
                 row_letter = misc.get_row_letter_from_row_number(row, misc.swiss_ci_3_drop_layout())
-#                logger.warning('=== {0!s}'.format(row_letter))
                 if crystallization_drop_exists(drop_list, row_letter, column, subwell):
                     l.append(i)
                 else:
                     logger.warning('no entry for {0!s} {1!s} {2!s} in {3!s}.csv'.format(
                         column_letter, row, subwell, barcode))
-    logger.info('found {0!s} crystal images'.format(len(l)))
+    if l:
+        logger.info('found {0!s} crystal images'.format(len(l)))
+    else:
+        logger.error('could not find any crystal images for place {0!s}'.format(barcode))
+    pgbar.value = 0
+    logger.info('finished reading crystal images')
     return l
 
 def crystallization_drop_exists(drop_list, row, column, subwell):
@@ -87,3 +93,4 @@ def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, 
         df.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False)
     else:
         logger.warning('looks like there were no new crystals marked for plate ' + barcode)
+    logger.info('finished writing marked crystal CSV file')

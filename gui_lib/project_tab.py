@@ -122,8 +122,3 @@ class project_tab(object):
         existing_methods = query.get_crystallization_method_for_dropdown(self.dal, self.logger)
         self.logger.info('found the following crystallization methods in database: ' + str(existing_methods))
         self.crystalplateObject.select_method.options = existing_methods
-
-        existing_plate_types = query.get_plate_type_for_dropdown(self.dal, self.logger)
-        self.logger.info('found the following plate types in database: ' + str(existing_methods))
-        self.soakplateObject.select_plate_type.options = existing_plate_types
-

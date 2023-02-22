@@ -10,6 +10,7 @@ def save_crystal_screen_as_csv(logger, csfolder, csname, cstemplate):
     else:
         logger.info('creating new template ' + os.path.join(csfolder, csname + '.csv'))
         copyfile(cstemplate, os.path.join(csfolder, csname + '.csv'))
+    logger.info('finished saving crystal screen csv')
 
 def save_crystal_screen_as_excel(logger, csfolder, csname, cstemplate):
     logger.warning('removing whitespaces from crystal screen name: ' + csname)
@@ -20,6 +21,7 @@ def save_crystal_screen_as_excel(logger, csfolder, csname, cstemplate):
         logger.info('creating new template ' + os.path.join(csfolder, csname + '.xlsx'))
         df_template = pd.read_csv(cstemplate)
         df_template.to_excel(os.path.join(csfolder, csname + '.xlsx'), index=False)
+    logger.info('finished saving crystal screen excel file')
 
 def read_crystal_screen_as_df(logger, csfile):
     logger.info('reading {0!s} as dataframe'.format(csfile))
@@ -30,6 +32,7 @@ def read_crystal_screen_as_df(logger, csfile):
         df = pd.read_csv(b.files[0], sep=dialect.delimiter)
     elif csfile.endswith('.xlsx'):
         df = pd.read_excel(csfile)
+    logger.info('finished reading {0!s} as dataframe'.format(csfile))
     return df
 
 def save_dragonfly_to_csv(logger, dragonflyFile):
@@ -52,3 +55,4 @@ def save_dragonfly_to_csv(logger, dragonflyFile):
     f = open(dragonflyFile.replace('.txt', '.csv'), 'w')
     f.write(csv)
     f.close()
+    logger.info('finished saving dragonfly txt file as csv file')
