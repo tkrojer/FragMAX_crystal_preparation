@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from shutil import (copyfile, move)
+import re
 
 def swiss_ci_3_drop_layout():
 
@@ -435,6 +436,20 @@ def get_row_letter_column_subwell_from_filename(crystal_image):
         subwell = fn.split('_')[12]
     return column, row_letter, subwell
 
+def get_row_letter_column_subwell_well_from_filename(crystal_image):
+    column = None
+    subwell = None
+    row_letter = None
+    well = None
+    if crystal_image:
+        fn = os.path.basename(crystal_image)
+        column = fn.split('_')[10]
+        row = fn.split('_')[11]
+        row_letter = get_row_letter_from_row_number(row, swiss_ci_3_drop_layout())
+        well = row_letter + str(int(column))
+        subwell = fn.split('_')[12]
+    return column, row_letter, subwell, well
+
 def get_row_letter_from_row_number(row_number, plate_layout):
     row_letter = None
     for r in plate_layout:
@@ -455,7 +470,8 @@ def get_list_of_dict_from_marked_crystal_list(marked_crystal_list, barcode):
         d['crystal_plate_column'] = column
         d['crystal_plate_subwell'] = subwell
         d['crystal_plate_well'] = d['crystal_plate_row'] + d['crystal_plate_column']
-        d['marked_crystal_code'] = d['crystal_plate_barcode'] + '-' + d['crystal_plate_well'] + d['crystal_plate_subwell']
+#        d['marked_crystal_code'] = d['crystal_plate_barcode'] + '-' + d['crystal_plate_well'] + d['crystal_plate_subwell']
+        d['marked_crystal_code'] = "{0!s}-{1!s}-{2!s}-{3!s}".format(barcode, row_letter, int(column), int(subwell))
         l.append(d)
     return l
 
@@ -486,7 +502,10 @@ def crystal_plate_header():
         'crystal_plate_row',
         'crystal_plate_column',
         'crystal_plate_subwell',
-        'status'
+        'crystal_plate_well',
+        'status',
+        'soak_plate_name',
+        'soak_plate_well'
     ]
     return header
 
@@ -516,26 +535,44 @@ def read_line_from_shifter_csv(logger, line):
         s = {}
     else:
         try:
+#            s = {
+#                'PlateType':            re.split(r'[,;]+', line)[0],
+#                'PlateID':              re.split(r'[,;]+', line)[1],
+#                'LocationShifter':      re.split(r'[,;]+', line)[2],
+#                'PlateRow':             re.split(r'[,;]+', line)[3],
+#                'PlateColumn':          re.split(r'[,;]+', line)[4],
+#                'PositionSubWell':      re.split(r'[,;]+', line)[5],
+#                'Comment':              re.split(r'[,;]+', line)[6],
+#                'CrystalID':            re.split(r'[,;]+', line)[7],
+#                'TimeArrival':          re.split(r'[,;]+', line)[8],
+#                'TimeDeparture':        re.split(r'[,;]+', line)[9],
+#                'PickDuration':         re.split(r'[,;]+', line)[10],
+#                'DestinationName':      re.split(r'[,;]+', line)[11],
+#                'DestinationLocation':  re.split(r'[,;]+', line)[12],
+#                'Barcode':              re.split(r'[,;]+', line)[13],
+#                'ExternalComment':      re.split(r'[,;]+', line)[14]
+#            }
             s = {
-                'PlateType':            re.split(r'[,;]+', line)[0],
-                'PlateID':              re.split(r'[,;]+', line)[1],
-                'LocationShifter':      re.split(r'[,;]+', line)[2],
-                'PlateRow':             re.split(r'[,;]+', line)[3],
-                'PlateColumn':          re.split(r'[,;]+', line)[4],
-                'PositionSubWell':      re.split(r'[,;]+', line)[5],
-                'Comment':              re.split(r'[,;]+', line)[6],
-                'CrystalID':            re.split(r'[,;]+', line)[7],
-                'TimeArrival':          re.split(r'[,;]+', line)[8],
-                'TimeDeparture':        re.split(r'[,;]+', line)[9],
-                'PickDuration':         re.split(r'[,;]+', line)[10],
-                'DestinationName':      re.split(r'[,;]+', line)[11],
-                'DestinationLocation':  re.split(r'[,;]+', line)[12],
-                'Barcode':              re.split(r'[,;]+', line)[13],
-                'ExternalComment':      re.split(r'[,;]+', line)[14]
+                'PlateType':            line.split(",")[0],
+                'PlateID':              line.split(",")[1],
+                'LocationShifter':      line.split(",")[2],
+                'PlateRow':             line.split(",")[3],
+                'PlateColumn':          line.split(",")[4],
+                'PositionSubWell':      line.split(",")[5],
+                'Comment':              line.split(",")[6],
+                'CrystalID':            line.split(",")[7],
+                'TimeArrival':          line.split(",")[8],
+                'TimeDeparture':        line.split(",")[9],
+                'PickDuration':         line.split(",")[10],
+                'DestinationName':      line.split(",")[11],
+                'DestinationLocation':  line.split(",")[12],
+                'Barcode':              line.split(",")[13],
+                'ExternalComment':      line.split(",")[14]
             }
         except IndexError:
             logger.warning('seems there are marked but not mounted crystals in file (check info line below):')
-            logger.info(str(line.split(';')))
+#            logger.info(str(re.split(r'[,;]+', line)))
+            logger.info(str(line.split(",")))
             s = {}
     return s
 
@@ -546,14 +583,17 @@ def read_line_from_shifter_csv_as_mounted_crystal_dict(logger, line):
     if s:
         well = s['PlateRow'] + (2 - len(s['PlateColumn'])) * '0' + s['PlateColumn']
         subwell = subwell_letter_to_numeric(s['PositionSubWell'])
-        soak_dict['marked_crystal_code'] = s['PlateID'] + '-' + well + '-' + subwell
+#        soak_dict['marked_crystal_code'] = s['PlateID'] + '-' + well + '-' + subwell
+        soak_dict['marked_crystal_code'] = "{0!s}-{1!s}-{2!s}-{3!s}".format(s['PlateID'], s['PlateRow'],
+                                                                            s['PlateColumn'], int(subwell))
         soak_dict['status'] = s['Comment'].split(':')[0]
         soak_dict['compound_appearance'] = s['Comment'].split(':')[1]
         soak_dict['crystal_appearance'] = s['Comment'].split(':')[2]
         if not 'fail' in s['Comment'].lower():
             mount_dict['puck_name'] = s['DestinationName']
             mount_dict['puck_position'] = s['DestinationLocation']
-            mount_dict['mount_datetime'] = s['TimeDeparture']
+            # time format: "15/03/2023 09:11:27"
+            mount_dict['mount_datetime'] = datetime.strptime(s['TimeDeparture'], '%d/%m/%Y %H:%M:%S')
             mount_dict['marked_crystal_code'] = soak_dict['marked_crystal_code']
             mount_dict['compound_appearance'] = soak_dict['compound_appearance']
             mount_dict['crystal_appearance'] = soak_dict['crystal_appearance']

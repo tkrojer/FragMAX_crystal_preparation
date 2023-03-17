@@ -1,4 +1,5 @@
 import os
+import glob
 import pandas as pd
 
 import sys
@@ -32,7 +33,7 @@ def read_crystal_image_list(logger, barcode, folder, inspect_folder, pgbar):
                     l.append(i)
                 else:
                     logger.warning('no entry for {0!s} {1!s} {2!s} in {3!s}.csv'.format(
-                        column_letter, row, subwell, barcode))
+                        row_letter, column, subwell, barcode))
     if l:
         logger.info('found {0!s} crystal images'.format(len(l)))
     else:
@@ -63,9 +64,10 @@ def check_for_marked_crystals(logger, barcode, folder):
         # if you want to remove columns in dataframe df.drop(columns=["Letter", "GDP per capita"])
 #        df['status'] = 'old'
         marked_crystal_list = df.values.tolist()
+    logger.info('finished checking for marked/ soaked crystals in ' + csv_file)
     return marked_crystal_list
 
-def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, folder, plate_type):
+def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, folder, plate_type, pgbar):
     logger.info('writing marked crystal CSV file as ' + os.path.join(folder, '2-soak', barcode + '_xtal.csv'))
     misc.backup_file(logger, os.path.join(folder, '2-soak'), barcode + '_xtal.csv')
     data = []
@@ -74,20 +76,25 @@ def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, 
         logger.info('will read in existing records and add new ones')
         df = pd.read_csv(os.path.join(folder, '2-soak', barcode + '_xtal.csv'), dtype = str)
         data = df.values.tolist()
+    start, step = misc.get_step_for_progress_bar(len(marked_crystal_list))
     for item in marked_crystal_list:
+        start += step
+        pgbar.value = int(start)
         plate_type = item[0]
         barcode = item[1]
         row_letter = item[2]
         column = item[3]
         subwell = item[4]
-        status = item[5]
+        well = item[5]
+        status = item[6]
         if status == 'new':
             logger.info('adding new marked crystal to {0!s}.csv: row {1!s} - col {2!s} - sub {3!s}'.format(
                 barcode, row_letter, column, subwell))
-            data.append([plate_type, barcode, row_letter, column, subwell, 'marked'])
+            data.append([plate_type, barcode, row_letter, column, subwell, well, 'marked', '', ''])
         else:
             logger.warning('skipping row {0!s} - col {1!s} - sub {2!s}; status: {3!s}'.format(
                 row_letter, column, subwell, status))
+    pgbar.value = 0
     if data:
         df = pd.DataFrame(data, columns=misc.crystal_plate_header())
         df.to_csv(os.path.join(os.path.join(folder, '2-soak', barcode + '_xtal.csv')), index=False)

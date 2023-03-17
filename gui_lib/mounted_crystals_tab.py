@@ -1,6 +1,7 @@
 import ipywidgets as widgets
 from IPython.display import display,clear_output
 from tkinter import Tk, filedialog
+from datetime import datetime
 
 import panel as pn
 pn.extension('tabulator')
@@ -45,7 +46,7 @@ class mounted_crystals_tab(object):
 
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI',
                                                    layout=widgets.Layout(display="flex", width="auto"))
-#        export_csv_for_exi_button.on_click(self.export_csv_for_exi)
+        export_csv_for_exi_button.on_click(self.export_csv_for_exi)
         self.grid_widget[1, 0] = export_csv_for_exi_button
 
         export_csv_for_fragmaxapp_button = widgets.Button(description='Export CSV for FragMAXapp',
@@ -55,7 +56,7 @@ class mounted_crystals_tab(object):
 
         export_csv_summary_button = widgets.Button(description='Export summary CSV',
                                                    layout=widgets.Layout(display="flex", width="auto"))
-#        export_csv_summary_button.on_click(self.export_csv_summary)
+        export_csv_summary_button.on_click(self.export_csv_summary)
         self.grid_widget[1, 2] = export_csv_summary_button
 
         self.table_box = widgets.VBox()
@@ -113,6 +114,16 @@ class mounted_crystals_tab(object):
             display(mounted_crystal_table)
             self.table_box.children = [out]
 
+    def export_csv_for_exi(self, b):
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        shipment = 'shipment_' + now
+        df = db.get_mounted_crystals_for_exi_where_shipment_is_none(self.logger, self.dal)
+        fs.save_csv_file_for_exi(self.logger, df,
+                                 os.path.join(self.settingsObject.workflow_folder, '5-exi', shipment + '.csv'))
+        db.update_db_with_shipment_information(self.logger, self.dal, shipment)
+
+    def export_csv_summary(self, b):
+        print('hallo')
 
 
 
@@ -175,46 +186,7 @@ class mounted_crystals_tab(object):
 #        else:
 #            self.logger.error('CSV file is empty; aborting save...')
 
-#    def export_csv_for_exi(self, b):
-#        self.logger.info('preparing CSV file for upload to EXI...')
-#        query = db.select([self.dbObject.mountedcrystalTable.columns.Crystal_ID,
-#                           self.dbObject.mountedcrystalTable.columns.Puck_Name,
-#                           self.dbObject.mountedcrystalTable.columns.Puck_Position]).\
-#            where(self.dbObject.mountedcrystalTable.columns.Shipment == None).\
-#            order_by(self.dbObject.mountedcrystalTable.columns.Puck_Name.asc(),
-#                    db.cast(self.dbObject.mountedcrystalTable.columns.Puck_Position, db.Integer).asc())
-#        ResultProxy = self.dbObject.connection.execute(query)
-#        result = ResultProxy.fetchall()
-#        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-#        shipment = 'shipment_' + now
-#        exi_csv = ''
-#
-#        # increment if 7 pucks in dewar
-#        puckList = []
-#        dewar_number = 1
-#
-#        for r in result:
-#            Crystal_ID = r[0]
-#            puck = r[1]
-##            if puck not in puckList and len(puckList) < 8:
-##                puckList.append(puck)
-##            elif len(puckList) == 8:
-##                puckList = [puck]
-##                dewar_number += 1
-#            position = r[2]
-##            proteinacronym = Crystal_ID.split('-')[0]
-#            proteinacronym = Crystal_ID[:Crystal_ID.rfind('-x')]
-##            sample = Crystal_ID.split('-')[1]
-#            sample = Crystal_ID[Crystal_ID.rfind('-x')+1:]
-#            self.logger.info('{0!s} {1!s} {2!s} {3!s} {4!s}'.format(puck, position, Crystal_ID, proteinacronym, sample))
-#            self.update_shipment_in_db(shipment, Crystal_ID)
-#            exi_csv += 'Dewar{0!s},{1!s},Unipuck,{2!s},{3!s},{4!s},,,,,,,,\n'.format(dewar_number, puck, position, proteinacronym, sample)
-#            if puck not in puckList and len(puckList) < 8:
-#                puckList.append(puck)
-#            elif len(puckList) == 8:
-#                puckList = [puck]
-#                dewar_number += 1
-#        self.save_shipment_csv_file(shipment, exi_csv)
+
 
 #    def save_fragmax_csv_file(self, shipment, fragmax_csv):
 #        if fragmax_csv != '':

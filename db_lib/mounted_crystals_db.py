@@ -4,6 +4,10 @@ from sqlalchemy import and_
 
 import pandas as pd
 
+import os
+import sys
+sys.path.append(os.path.join(os.getcwd(), 'lib'))
+import misc
 
 def get_next_mounted_crystal_number(logger, dal):
     q = select(dal.mounted_crystals_table.c.mounted_crystal_code).order_by(
@@ -81,3 +85,25 @@ def get_mounted_crystals_from_db_for_table_as_df(logger, dal):
         df = pd.DataFrame(data, columns=[header])
     logger.info('finished reading mounted crystals from database')
     return df
+
+def get_mounted_crystals_for_exi_where_shipment_is_none(logger, dal):
+    logger.info('reading mounted crystals from database where shipment is none')
+    q = select([dal.mounted_crystals_table.c.puck_name,
+                dal.mounted_crystals_table.c.puck_position,
+                dal.mounted_crystals_table.c.mounted_crystal_code]).where(
+        dal.mounted_crystals_table.c.shipment == None).order_by(
+        dal.mounted_crystals_table.c.mounted_crystal_code.asc())
+    df = pd.read_sql_query(q, dal.engine)
+    logger.info('found {0!s} number of crystals'.format(df.shape[0]))
+    df.insert(0, 'dewar', 'Dewar1')
+    df.insert(3, 'type', 'Unipuck')
+    df['sample'] = [x.split('-')[-1] for x in df['mounted_crystal_code']]
+    df['mounted_crystal_code'] = [x.split('-')[-0] for x in df['mounted_crystal_code']]
+    return df
+
+def update_db_with_shipment_information(logger, dal, shipment):
+    logger.info('updating mounted_crystal table with shipment information')
+    u = dal.mounted_crystals_table.update().values(shipment=shipment).where(
+        dal.mounted_crystals_table.c.shipment == None)
+    dal.connection.execute(u)
+    logger.info('finished updating mounted_crystal table with shipment information')

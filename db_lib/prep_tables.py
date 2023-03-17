@@ -31,6 +31,8 @@ def insert(dal, standard_table_file, logger):
                     logger.error(str(e))
 #                if "UNIQUE constraint failed" in str(e):
 #                    logger.warning('entry {0!s} exists; skipping...'.format(row))
+#                    u = dal.soak_plate_table.update().values(row)
+#                    dal.connection.execute(u)
 #                else:
 #                    logger.error(str(e))
     logger.info('finshed preparing {0!s}... '.format(tableObject.name))

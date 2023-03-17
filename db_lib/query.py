@@ -97,14 +97,16 @@ def get_soak_plates_for_dropdown(dal, logger):
     q = select(dal.soak_plate_table.c.soak_plate_name.distinct())
     # not sure, need to test
     rp = dal.connection.execute(q)
-    return rp
+    result_list = [x[0] for x in rp.fetchall()]
+    return result_list
 
 def get_compound_plates_for_dropdown(dal, logger):
     logger.info('reading soak plate entries from database')
     q = select(dal.compound_batch_table.c.compound_plate_name.distinct())
     # not sure, need to test
     rp = dal.connection.execute(q)
-    return rp
+    result_list = [x[0] for x in rp.fetchall()]
+    return result_list
 
 def load_crystal_plate_from_database(dal, logger, barcode):
     logger.info('loading information for crystal plate ' + barcode)

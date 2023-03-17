@@ -15,3 +15,8 @@ def get_shifter_csv_file_as_dict_list(logger, shifter_csv_file):
         if soak_dict:
             soak_list.append(soak_dict)
     return xtal_list, soak_list
+
+def save_csv_file_for_exi(logger, df, csv_file):
+    logger.info('saving csv file for exi as {0!s}'.format(csv_file))
+    df.to_csv(csv_file, header=False, index=False)
+    logger.info('finished saving csv file for exi')

@@ -25,6 +25,7 @@ class soaked_crystal_tab(object):
         self.logger = logger
         self.popup = popup
         self.progress_bar = progress_bar
+        self.soak_csv = None
 
         methods = [
             "opentrons workflow (compound to drop)",
@@ -82,7 +83,7 @@ class soaked_crystal_tab(object):
 
 
     def set_current_time(self, b):
-        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         self.soak_start.value = now
 
     def load_crystal_soak_csv(self, b):
@@ -94,28 +95,34 @@ class soaked_crystal_tab(object):
                                              initialdir=os.path.join(self.settingsObject.workflow_folder, '2-soak'),
                                              title="select _compound.csv file",
                                              filetypes=[("Text Files", "*.csv")])
-        soak_csv = b.files[0]
-        if soak_csv.endswith('_compound.csv') or soak_csv.endswith('_soak.csv'):
-            self.crystal_soak_csv.value = soak_csv
+        self.soak_csv = b.files[0]
+        if self.soak_csv.endswith('_compound.csv') or self.soak_csv.endswith('_soak.csv'):
+            self.crystal_soak_csv.value = self.soak_csv
         else:
             self.popup('Wrong file type! Please select a file ending with _compound.csv or _soak.csv!')
 
     def update_csv_and_db(self, b):
-        if soak_csv.endswith('_soak.csv'):
-            soaked_cystal_list = fs.read_opentrons_soak_plate_csv_file(self.logger, soak_csv)
+        if self.soak_csv.endswith('_soak.csv'):
+            soaked_cystal_list = fs.read_opentrons_soak_plate_csv_file(self.logger, self.soak_csv)
         else:
             soaked_cystal_list = None
             self.logger.error('only opentrons soaks are supported at the moment')
 
         if soaked_cystal_list:
+            self.logger.info('found {0!s} soaked crystals in plate'.format(len(soaked_cystal_list)))
             self.update_db(soaked_cystal_list)
             self.update_csv(soaked_cystal_list)
+        else:
+            self.logger.warning('cannot find any soaked crystals in plate')
 
     def update_db(self, soaked_cystal_list):
         d = {}
-        d['soak_plate_name'] = self.select_soakplate.value.replace('_compound.csv','').replace('_soak.csv','')
+        d['soak_plate_name'] = os.path.basename(self.soak_csv).replace('_compound.csv','').replace('_soak.csv','')
         d['soak_method'] = self.soak_method_dropdown.value
-        d['soak_datetime'] = self.soak_start.value
+        #d['soak_datetime'] = self.soak_start.value
+        # now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        # datetime_object = datetime.strptime(datetime_str, '%m/%d/%y %H:%M:%S')
+        d['soak_datetime'] = datetime.strptime(self.soak_start.value, '%Y/%m/%d %H:%M:%S')
         d['comment'] = self.comment.value
 
         try:

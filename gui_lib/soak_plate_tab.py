@@ -9,11 +9,12 @@ import query
 import soak_plate_db as db
 
 class soak_plate_tab(object):
-    def __init__(self, settingsObject, dal, logger):
+    def __init__(self, settingsObject, dal, logger, pgbar):
 
         self.settingsObject = settingsObject
         self.dal = dal
         self.logger = logger
+        self.pgbar = pgbar
 
         self.grid_widget = widgets.GridspecLayout(10, 4)
 
@@ -67,7 +68,6 @@ class soak_plate_tab(object):
         save_soakplate_button.on_click(self.save_soakplate_to_db)
         self.grid_widget[7, 0:] = save_soakplate_button
 
-
     def add_soakplate(self, b):
         l = []
         for opt in self.select_soakplate.options: l.append(opt)
@@ -78,23 +78,20 @@ class soak_plate_tab(object):
             self.logger.warning(self.soakplate_name.value + ' exists in soakplate dropdown')
         self.select_soakplate.options = l
 
-
     def refresh_soakplate(self, b):
         existing_soakplates = query.get_soak_plates_for_dropdown(self.dal, self.logger)
         self.select_soakplate.options = existing_soakplates
 
-
     def refresh_libraryplate(self, b):
         existing_compoundplates = query.get_compound_plates_for_dropdown(self.dal, self.logger)
         self.select_library_plate.options = existing_compoundplates
-
 
     def save_soakplate_to_db(self, b):
         d = {}
         d['soak_plate_name'] = self.select_soakplate.value
         d['base_buffer'] = self.soakplate_reservoir.value
         d['compound_plate_name'] = self.select_library_plate.value
-        d['soak_plate_type'] = self.select_plate_type
+        d['soak_plate_type'] = self.select_plate_type.value
 
         try:
             d['base_buffer_volume'] = float(self.soakplate_reservoir_volume.value)
@@ -107,7 +104,8 @@ class soak_plate_tab(object):
         except ValueError:
             d['compound_volume'] = 0.0
         d['compound_volume_unit'] = 'uL'
-        db.save_soak_plate_to_database(self.logger, self.dal, d)
+
+        db.save_soak_plate_to_database(self.logger, self.dal, d, self.pgbar)
         self.save_soakplate_csv_file()
 
     def save_soakplate_csv_file(self):

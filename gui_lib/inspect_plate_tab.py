@@ -13,11 +13,6 @@ sys.path.append(os.path.join(os.getcwd(), 'db_lib'))
 import query
 import inspect_plate_db as db
 
-#import pandas as pd
-#import panel as pn
-#import numpy as np
-#pn.extension('tabulator')
-
 import matplotlib.pyplot as plt
 import matplotlib.cbook as cbook
 from matplotlib.lines import Line2D
@@ -83,21 +78,21 @@ class inspect_plate_tab(object):
     def droplet_newly_flagged(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            if ro == i[2] and co == i[3] and su == i[4] and i[5] == 'new':
+            if ro == i[2] and co == i[3] and su == i[4] and i[6] == 'new':
                 exists = True
         return exists
 
     def droplet_already_flagged(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            if ro == i[2] and co == i[3] and su == i[4] and i[5] == 'marked':
+            if ro == i[2] and co == i[3] and su == i[4] and i[6] == 'marked':
                 exists = True
         return exists
 
     def droplet_was_soaked(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            if ro == i[2] and co == i[3] and su == i[4] and i[5] == 'soaked':
+            if ro == i[2] and co == i[3] and su == i[4] and i[6] == 'soaked':
                 exists = True
         return exists
 
@@ -176,19 +171,19 @@ class inspect_plate_tab(object):
 
     def flag_crystal_for_mounting(self, b):
         crystal_image = self.image_list[self.image_number]
-        column, row_letter, subwell = misc.get_row_letter_column_subwell_from_filename(crystal_image)
+        column, row_letter, subwell, well = misc.get_row_letter_column_subwell_well_from_filename(crystal_image)
         barcode = self.select_crystal_plate.value
         if ["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'] not in self.marked_crystal_list:
             # plate_type, barcode, row_letter, column, subwell, status
-            self.marked_crystal_list.append(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'])
+            self.marked_crystal_list.append(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, well, 'new', '', ''])
         self.change_crystal_image(1)
 
     def unflag_crystal_for_mounting(self, b):
         crystal_image = self.image_list[self.image_number]
-        column, row_letter, subwell = misc.get_row_letter_column_subwell_from_filename(crystal_image)
+        column, row_letter, subwell, well = misc.get_row_letter_column_subwell_well_from_filename(crystal_image)
         barcode = self.select_crystal_plate.value
         if ["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'] in self.marked_crystal_list:
-            self.marked_crystal_list.remove(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'])
+            self.marked_crystal_list.remove(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, well, 'new', '', ''])
         self.change_crystal_image(1)
 
     def show_crystal_image(self):
@@ -198,7 +193,7 @@ class inspect_plate_tab(object):
             image = plt.imread(image_file)
         plt.imshow(image)
         plt.axis("off")
-        column, row_letter, subwell = misc.get_row_letter_column_subwell_from_filename(crystal_image)
+        column, row_letter, subwell, well = misc.get_row_letter_column_subwell_well_from_filename(crystal_image)
         plt.title('row: {0!s} - column: {1!s} - subwell: {2!s}'.format(row_letter, column, subwell))
         with out:
             clear_output(wait=True)
@@ -207,7 +202,7 @@ class inspect_plate_tab(object):
         self.show_marked_crystals(crystal_image)
 
     def change_crystal_image(self, n):
-        self.image_number += 1
+        self.image_number += n
         if self.image_number > len(self.image_list):
             self.image_number = len(self.image_list)
         if self.image_number < 0:
@@ -228,7 +223,8 @@ class inspect_plate_tab(object):
                                                  self.marked_crystal_list,
                                                  self.select_crystal_plate.value,
                                                  self.settingsObject.workflow_folder,
-                                                 "SwissCI-MRC-3d")
+                                                 "SwissCI-MRC-3d",
+                                                 self.pgbar)
         xtal_list = misc.get_list_of_dict_from_marked_crystal_list(self.marked_crystal_list,
                                                                    self.select_crystal_plate.value)
         db.save_marked_crystals_to_db(self.dal, self.logger, xtal_list, self.pgbar)

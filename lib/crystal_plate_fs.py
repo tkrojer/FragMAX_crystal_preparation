@@ -52,7 +52,8 @@ def save_crystal_plate_csv_to_inspect_folder(logger, subwell_01, subwell_02, sub
         pgbar.value = int(start)
         for column in column_range(start_column, end_column):
             for subwell in subwell_range(subwell_01, subwell_02, subwell_03):
-                data.append([plate_type, barcode, row, column, subwell, ''])
+                well = row + str(int(column))
+                data.append([plate_type, barcode, row, column, subwell, well, '', '', ''])
     df = pd.DataFrame(data, columns=misc.crystal_plate_header())
     df.to_csv(os.path.join(os.path.join(folder, '1-inspect', barcode + '.csv')), index=False)
     pgbar.value = 0
