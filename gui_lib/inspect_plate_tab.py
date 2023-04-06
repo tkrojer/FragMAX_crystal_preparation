@@ -28,7 +28,7 @@ class inspect_plate_tab(object):
         self.image_number = 0
         self.marked_crystal_list = []
 
-        self.grid_widget = widgets.GridspecLayout(9, 4)
+        self.grid_widget = widgets.GridspecLayout(9, 4, height='700px')
 
 #        import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter',
 #                                                               layout=Layout(border='1px solid', width='75%'))
@@ -155,24 +155,24 @@ class inspect_plate_tab(object):
 
     def load_crystal_images(self, b):
         self.image_list = fs.read_crystal_image_list(self.logger,
-                                                     self.select_crystal_plate.value,
+                                                     self.select_crystal_plate.label,
                                                      self.settingsObject.crystal_image_folder,
                                                      os.path.join(self.settingsObject.workflow_folder, '1-inspect'),
                                                      self.pgbar)
         if self.image_list:
             self.logger.info('resetting marked_crystal_list and image_number...')
             self.marked_crystal_list = fs.check_for_marked_crystals(self.logger,
-                                                                    self.select_crystal_plate.value,
+                                                                    self.select_crystal_plate.label,
                                                                     self.settingsObject.workflow_folder)
             self.image_number = 0
             self.show_crystal_image()
         else:
-            self.logger.error('could not find any crystal images for {0!s}'.format(self.select_crystal_plate.value))
+            self.logger.error('could not find any crystal images for {0!s}'.format(self.select_crystal_plate.label))
 
     def flag_crystal_for_mounting(self, b):
         crystal_image = self.image_list[self.image_number]
         column, row_letter, subwell, well = misc.get_row_letter_column_subwell_well_from_filename(crystal_image)
-        barcode = self.select_crystal_plate.value
+        barcode = self.select_crystal_plate.label
         if ["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'] not in self.marked_crystal_list:
             # plate_type, barcode, row_letter, column, subwell, status
             self.marked_crystal_list.append(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, well, 'new', '', ''])
@@ -181,7 +181,7 @@ class inspect_plate_tab(object):
     def unflag_crystal_for_mounting(self, b):
         crystal_image = self.image_list[self.image_number]
         column, row_letter, subwell, well = misc.get_row_letter_column_subwell_well_from_filename(crystal_image)
-        barcode = self.select_crystal_plate.value
+        barcode = self.select_crystal_plate.label
         if ["SwissCI-MRC-3d", barcode, row_letter, column, subwell, 'new'] in self.marked_crystal_list:
             self.marked_crystal_list.remove(["SwissCI-MRC-3d", barcode, row_letter, column, subwell, well, 'new', '', ''])
         self.change_crystal_image(1)
@@ -221,13 +221,13 @@ class inspect_plate_tab(object):
         """
         fs.save_crystal_plate_csv_to_soak_folder(self.logger,
                                                  self.marked_crystal_list,
-                                                 self.select_crystal_plate.value,
+                                                 self.select_crystal_plate.label,
                                                  self.settingsObject.workflow_folder,
                                                  "SwissCI-MRC-3d",
                                                  self.pgbar)
         xtal_list = misc.get_list_of_dict_from_marked_crystal_list(self.marked_crystal_list,
-                                                                   self.select_crystal_plate.value)
-        db.save_marked_crystals_to_db(self.dal, self.logger, xtal_list, self.pgbar)
+                                                                   self.select_crystal_plate.label)
+        db.save_marked_crystals_to_db(self.dal, self.logger, xtal_list, self.pgbar, self.select_crystal_plate.value)
 
 
 

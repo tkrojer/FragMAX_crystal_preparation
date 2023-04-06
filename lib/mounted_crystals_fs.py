@@ -20,3 +20,8 @@ def save_csv_file_for_exi(logger, df, csv_file):
     logger.info('saving csv file for exi as {0!s}'.format(csv_file))
     df.to_csv(csv_file, header=False, index=False)
     logger.info('finished saving csv file for exi')
+
+def save_csv_summary_file(logger, df, csv_file):
+    logger.info('saving csv summary file as {0!s}'.format(csv_file))
+    df.to_csv(csv_file, header=True, index=False)
+    logger.info('finished saving csv summary file')

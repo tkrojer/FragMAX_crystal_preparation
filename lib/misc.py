@@ -462,7 +462,7 @@ def get_list_of_dict_from_marked_crystal_list(marked_crystal_list, barcode):
     l = []
     for item in marked_crystal_list:
         row_letter = item[2]
-        column = item[3]
+        column = str(int(item[3]))
         subwell = item[4]
         d = {}
         d['crystal_plate_barcode'] = barcode
@@ -569,6 +569,9 @@ def read_line_from_shifter_csv(logger, line):
                 'Barcode':              line.split(",")[13],
                 'ExternalComment':      line.split(",")[14]
             }
+            # Comment will be empty in case nothing was mounted
+            if s['Comment'] == '':
+                s = {}
         except IndexError:
             logger.warning('seems there are marked but not mounted crystals in file (check info line below):')
 #            logger.info(str(re.split(r'[,;]+', line)))

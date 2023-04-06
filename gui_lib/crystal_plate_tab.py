@@ -178,7 +178,7 @@ class crystal_plate_tab(object):
 
 
     def save_plate_to_db(self, b):
-        self.logger.info('saving information for ' + self.select_barcode.value + ' to database')
+        self.logger.info('saving information for ' + self.select_barcode.label + ' to database')
 
         d = {}
 
@@ -187,7 +187,7 @@ class crystal_plate_tab(object):
         except ValueError:
             d['protein_batch_concentration'] = 0.0
 
-        d['protein_batch_concentration_unit'] = 'nL'
+        d['protein_batch_concentration_unit_id'] = 9
 
         try:
             d['temperature'] = float(self.temperature.value)
@@ -199,76 +199,76 @@ class crystal_plate_tab(object):
         except ValueError:
             d['reservoir_volume'] = 0.0
 
-        d['reservoir_volume_unit'] = 'uL'
+        d['reservoir_volume_unit_id'] = 9
 
         try:
             d['subwell_01_protein_volume'] = float(self.subwell_a_protein.value)
         except ValueError:
             d['subwell_01_protein_volume'] = 0.0
 
-        d['subwell_01_protein_volume_unit'] = 'nL'
+        d['subwell_01_protein_volume_unit_id'] = 9
 
         try:
             d['subwell_01_reservoir_volume'] = float(self.subwell_a_reservoir.value)
         except ValueError:
             d['subwell_01_reservoir_volume'] = 0.0
 
-        d['subwell_01_reservoir_volume_unit'] = 'nL'
+        d['subwell_01_reservoir_volume_unit_id'] = 9
 
         try:
             d['subwell_01_seed_volume'] = float(self.subwell_a_seed.value)
         except ValueError:
             d['subwell_01_seed_volume'] = 0.0
 
-        d['subwell_01_seed_volume_unit'] = 'nL'
+        d['subwell_01_seed_volume_unit_id'] = 9
 
         try:
             d['subwell_02_protein_volume'] = float(self.subwell_c_protein.value)
         except ValueError:
             d['subwell_02_protein_volume'] = 0.0
 
-        d['subwell_02_protein_volume_unit'] = 'nL'
+        d['subwell_02_protein_volume_unit_id'] = 9
 
         try:
             d['subwell_02_reservoir_volume'] = float(self.subwell_c_reservoir.value)
         except ValueError:
             d['subwell_02_reservoir_volume'] = 0.0
 
-        d['subwell_02_reservoir_volume_unit'] = 'nL'
+        d['subwell_02_reservoir_volume_unit_id'] = 9
 
         try:
             d['subwell_02_seed_volume'] = float(self.subwell_c_seed.value)
         except ValueError:
             d['subwell_02_seed_volume'] = 0.0
 
-        d['subwell_02_seed_volume_unit'] = 'nL'
+        d['subwell_02_seed_volume_unit_id'] = 9
 
         try:
             d['subwell_03_protein_volume'] = float(self.subwell_d_protein.value)
         except ValueError:
             d['subwell_03_protein_volume'] = 0.0
 
-        d['subwell_03_protein_volume_unit'] = 'nL'
+        d['subwell_03_protein_volume_unit_id'] = 9
 
         try:
             d['subwell_03_reservoir_volume'] = float(self.subwell_d_reservoir.value)
         except ValueError:
             d['subwell_03_reservoir_volume'] = 0.0
 
-        d['subwell_03_reservoir_volume_unit'] = 'nL'
+        d['subwell_03_reservoir_volume_unit_id'] = 9
 
         try:
             d['subwell_03_seed_volume'] = float(self.subwell_d_seed.value)
         except ValueError:
             d['subwell_03_seed_volume'] = 0.0
 
-        d['subwell_03_seed_volume_unit'] = 'nL'
+        d['subwell_03_seed_volume_unit_id'] = 9
 
-        d['protein_batch_name'] = self.select_protein_batch.value
+        d['protein_batch_id'] = self.select_protein_batch.value
         d['protein_batch_buffer'] = self.protein_buffer.value
-        d['method_name'] = self.select_method.value
-        d['plate_type_name'] = self.select_plate_type.value
-        d['crystal_screen_name'] = self.select_screen_for_plate.value
+        d['method_id'] = self.select_method.value
+        d['plate_type_id'] = self.select_plate_type.value
+        d['crystal_screen_id'] = self.select_screen_for_plate.value
         d['protein_history'] = self.protein_history.value
 
         d['start_row'] = self.start_row.value
@@ -276,7 +276,7 @@ class crystal_plate_tab(object):
         d['start_column'] = self.start_column.value
         d['end_column'] = self.end_column.value
 
-        barcode = self.select_barcode.value
+        barcode = self.select_barcode.label
 
         db.save_crystal_plate_to_database(self.logger, self.dal, d, barcode)
 
@@ -292,8 +292,8 @@ class crystal_plate_tab(object):
                                                     d['subwell_01_protein_volume'],
                                                     d['subwell_02_protein_volume'],
                                                     d['subwell_03_protein_volume'],
-                                                    self.select_barcode.value,
-                                                    self.select_plate_type.value,
+                                                    barcode,
+                                                    self.select_plate_type.label,
                                                     self.settingsObject.workflow_folder,
                                                     d['start_row'],
                                                     d['end_row'],

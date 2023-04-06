@@ -82,8 +82,9 @@ class mounted_crystals_tab(object):
                                              filetypes=[("Text Files",
                                                      "*.csv")])
         if folder == '3-mount':
-            self.logger.info('reading CSV file of shifter mounted crystals from CSV file: ' + b.files[0])
-            self.read_shifter_csv(b.files[0])
+            for f in b.files:
+                self.logger.info('reading CSV file of shifter mounted crystals from CSV file: ' + f)
+                self.read_shifter_csv(f)
         elif folder == '4-mount-manual':
             self.logger.info('reading CSV file of manually mounted crystals from CSV file: ' + b.files[0])
 #            df = pd.read_csv(b.files[0], sep=';')
@@ -123,9 +124,11 @@ class mounted_crystals_tab(object):
         db.update_db_with_shipment_information(self.logger, self.dal, shipment)
 
     def export_csv_summary(self, b):
-        print('hallo')
-
-
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        summary = 'summary_' + now
+        df = db.get_summary_dataframe(self.logger, self.dal)
+        fs.save_csv_summary_file(self.logger, df,
+                                 os.path.join(self.settingsObject.workflow_folder, '7-summary', summary + '.csv'))
 
 
 

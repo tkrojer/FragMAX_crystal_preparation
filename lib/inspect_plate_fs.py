@@ -83,8 +83,8 @@ def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, 
         plate_type = item[0]
         barcode = item[1]
         row_letter = item[2]
-        column = item[3]
-        subwell = item[4]
+        column = str(int(item[3]))
+        subwell = str(int(item[4]))
         well = item[5]
         status = item[6]
         if status == 'new':

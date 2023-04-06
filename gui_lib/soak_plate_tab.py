@@ -91,26 +91,27 @@ class soak_plate_tab(object):
         d['soak_plate_name'] = self.select_soakplate.value
         d['base_buffer'] = self.soakplate_reservoir.value
         d['compound_plate_name'] = self.select_library_plate.value
-        d['soak_plate_type'] = self.select_plate_type.value
+        d['soak_plate_type'] = self.select_plate_type.label
+        d['soak_plate_type_id'] = self.select_plate_type.value
 
         try:
             d['base_buffer_volume'] = float(self.soakplate_reservoir_volume.value)
         except ValueError:
             d['base_buffer_volume'] = 0.0
-        d['base_buffer_volume_unit'] = 'uL'
+        d['base_buffer_volume_unit_id'] = 8
 
         try:
             d['compound_volume'] = float(self.soakplate_compound_volume.value)
         except ValueError:
             d['compound_volume'] = 0.0
-        d['compound_volume_unit'] = 'uL'
+        d['compound_volume_unit_id'] = 8
 
         db.save_soak_plate_to_database(self.logger, self.dal, d, self.pgbar)
         self.save_soakplate_csv_file()
 
     def save_soakplate_csv_file(self):
-        df = db.get_soak_plate_from_database_as_df(self.logger, self.dal, self.select_soakplate.value)
-        fs.save_soak_plate_csv_file(self.logger, self.settingsObject.workflow_folder, self.select_soakplate.value, df)
+        df = db.get_soak_plate_from_database_as_df(self.logger, self.dal, self.select_soakplate.label)
+        fs.save_soak_plate_csv_file(self.logger, self.settingsObject.workflow_folder, self.select_soakplate.label, df)
 
 
 

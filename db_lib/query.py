@@ -23,45 +23,93 @@ def get_result_list_of_dicts(result):
         result_list.append(value_dict)
     return result_list
 
-def get_existing_crystal_plate_barcodes(dal, logger):
-    logger.info('reading existing crystal plate barcodes from database')
-    q = select([dal.crystal_plate_table.c.crystal_plate_barcode.distinct()])
-    rp = dal.connection.execute(q)
-    existing_crystalscreens = [x[0] for x in rp.fetchall()]
-    return existing_crystalscreens
-
 def get_value_from_foreign_key(dal, column, foreignkey, key):
     q = select([column]).where(foreignkey == key)
     rp = dal.connection.execute(q)
     result = rp.fetchall()
     return result[0][0]
 
-def get_protein_batch_for_dropdown(dal, logger):
-    logger.info('reading protein batch information from database')
-    q = select(dal.protein_batch_table.c.protein_batch_name).order_by(
-        dal.protein_batch_table.c.protein_batch_name.asc())
+def get_label_and_value(result):
+    rl = []
+    for item in result:
+        rl.append([item[0], item[1]])
+    return rl
+
+def get_existing_crystal_plate_barcodes(dal, logger):
+    logger.info('reading existing crystal plate barcodes from database')
+    q = select([dal.crystal_plate_table.c.crystal_plate_barcode,
+                dal.crystal_plate_table.c.crystal_plate_id]).order_by(
+                dal.crystal_plate_table.c.crystal_plate_id)
     rp = dal.connection.execute(q)
-    result_list = [x[0] for x in rp.fetchall()]
-    logger.info('finished reading protein batch information from database')
-    return result_list
+#    existing_crystalscreens = [x[0] for x in rp.fetchall()]
+    existing_crystalscreens = get_label_and_value(rp.fetchall())
+    logger.info('finshed reading existing crystal plate barcodes from database')
+    return existing_crystalscreens
 
 def get_plate_type_for_dropdown(dal, logger):
     logger.info('reading plate type information from database')
-    q = select(dal.plate_type_table.c.plate_type_name.distinct()).order_by(
-               dal.plate_type_table.c.plate_type_name.asc())
+    q = select([dal.plate_type_table.c.plate_type_name,
+                dal.plate_type_table.c.plate_type_id]).order_by(
+                dal.plate_type_table.c.plate_type_name.asc())
     rp = dal.connection.execute(q)
-    result_list = [x[0] for x in rp.fetchall()]
+#    result_list = [x[0] for x in rp.fetchall()]
+    result_list = get_label_and_value(rp.fetchall())
     logger.info('finished reading plate type information from database')
+    return result_list
+
+def get_protein_batch_for_dropdown(dal, logger):
+    logger.info('reading protein batch information from database')
+    q = select([dal.protein_batch_table.c.protein_batch_name,
+                dal.protein_batch_table.c.protein_batch_id]).order_by(
+                dal.protein_batch_table.c.protein_batch_name.asc())
+    rp = dal.connection.execute(q)
+#    result_list = [x[0] for x in rp.fetchall()]
+    result_list = get_label_and_value(rp.fetchall())
+    logger.info('finished reading protein batch information from database')
     return result_list
 
 def get_crystallization_method_for_dropdown(dal, logger):
     logger.info('reading crystallization method information from database')
-    q = select(dal.crystallization_method_table.c.method_name).order_by(
-               dal.crystallization_method_table.c.method_name.asc())
+    q = select([dal.crystallization_method_table.c.method_name,
+                dal.crystallization_method_table.c.method_id]).order_by(
+                dal.crystallization_method_table.c.method_name.asc())
     rp = dal.connection.execute(q)
-    result_list = [x[0] for x in rp.fetchall()]
+#    result_list = [x[0] for x in rp.fetchall()]
+    result_list = get_label_and_value(rp.fetchall())
     logger.info('finished reading crystallization method information from database')
     return result_list
+
+def get_existing_crystal_screens_for_dropdown(dal, logger):
+    logger.info('reading existing crystal screens from database')
+    q = select([dal.crystal_screen_table.c.crystal_screen_name,
+                dal.crystal_screen_table.c.crystal_screen_id]).order_by(
+        dal.crystal_screen_table.c.crystal_screen_id.asc())
+    rp = dal.connection.execute(q)
+    result_list = get_label_and_value(rp.fetchall())
+#    result = rp.fetchall()
+#    result_list = []
+#    # need to do it like this because there is no unique crystal_screen_name in the table
+#    # would need to introduce a crystal_screen_condition_table to which the
+#    # crystal_screen_table points to
+#    for entry in result:
+#        result_list.append(entry[0])
+##        logger.info('>>>> {0!s}'.format(entry))
+##        result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
+##    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
+    logger.info('finished reading existing crystal screens from database')
+    return result_list
+
+def get_soak_plates_for_dropdown(dal, logger):
+    logger.info('reading soak plate entries from database')
+    q = select(dal.soak_plate_table.c.soak_plate_name.distinct())
+    # not sure, need to test
+    rp = dal.connection.execute(q)
+    result_list = [x[0] for x in rp.fetchall()]
+    return result_list
+
+
+
+
 
 
 
@@ -73,32 +121,8 @@ def combine_pkey_and_name_for_dropdown(logger, dal, q):
         result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
     return result_list
 
-def get_existing_crystal_screens_for_dropdown(dal, logger):
-    logger.info('reading existing crystal screens from database')
-    q = select(dal.crystal_screen_table.c.crystal_screen_name.distinct()).order_by(
-        dal.crystal_screen_table.c.crystal_screen_id.asc())
-    rp = dal.connection.execute(q)
-    result = rp.fetchall()
-    result_list = []
-    # need to do it like this because there is no unique crystal_screen_name in the table
-    # would need to introduce a crystal_screen_condition_table to which the
-    # crystal_screen_table points to
-    for entry in result:
-        result_list.append(entry[0])
-#        logger.info('>>>> {0!s}'.format(entry))
-#        result_list.append('{0!s}: {1!s}'.format(entry[0], entry[1]))
-#    result_list = combine_pkey_and_name_for_dropdown(logger, dal, q)
-    logger.info('finished reading existing crystal screens from database')
-    return result_list
 
 
-def get_soak_plates_for_dropdown(dal, logger):
-    logger.info('reading soak plate entries from database')
-    q = select(dal.soak_plate_table.c.soak_plate_name.distinct())
-    # not sure, need to test
-    rp = dal.connection.execute(q)
-    result_list = [x[0] for x in rp.fetchall()]
-    return result_list
 
 def get_compound_plates_for_dropdown(dal, logger):
     logger.info('reading soak plate entries from database')

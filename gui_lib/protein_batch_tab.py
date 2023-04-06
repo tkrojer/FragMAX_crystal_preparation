@@ -21,7 +21,8 @@ class protein_batch_tab(object):
         self.protein_batch_tab_dict = {}
 
         self.top_grid_widget = widgets.GridspecLayout(2, 3)
-        self.read_batch_from_db_button = widgets.Button(description='Load Batches from DB', style= {'button_color':'orange'})
+        self.read_batch_from_db_button = widgets.Button(description='Load Batches from DB',
+                                                        style= {'button_color':'orange'})
         self.top_grid_widget[0, 0] = self.read_batch_from_db_button
         self.read_batch_from_db_button.on_click(self.read_batch_from_db)
 
@@ -66,13 +67,19 @@ class protein_batch_tab(object):
             proteinbatch = qr['protein_batch_id']
         self.logger.info('adding tab for batch {0!s}'.format(proteinbatch))
 
-        expression_host = widgets.Text(value=qr['protein_batch_expression_host'], layout=widgets.Layout(height="auto", width="200"))
-        comment = widgets.Textarea(value=qr['protein_batch_comment'], layout=widgets.Layout(height="auto", width="200"))
+        expression_host = widgets.Text(value=qr['protein_batch_expression_host'],
+                                       layout=widgets.Layout(height="auto", width="200"))
+        comment = widgets.Textarea(value=qr['protein_batch_comment'],
+                                   layout=widgets.Layout(height="auto", width="200"))
         date_received = widgets.DatePicker(disabled=False)
-        supplier_id = widgets.Text(value=qr['protein_batch_supplier_name'], layout=widgets.Layout(height="auto", width="200"))
-        sequence = widgets.Textarea(value=qr['protein_batch_sequence'], layout=widgets.Layout(height="auto", width="200"))
-        buffer = widgets.Text(value=qr['protein_batch_buffer'], layout=widgets.Layout(height="auto", width="200"))
-        concentration = widgets.Text(value=str(qr['protein_batch_concentration']), layout=widgets.Layout(height="auto", width="200"))
+        supplier_id = widgets.Text(value=qr['protein_batch_supplier_name'],
+                                   layout=widgets.Layout(height="auto", width="200"))
+        sequence = widgets.Textarea(value=qr['protein_batch_sequence'],
+                                    layout=widgets.Layout(height="auto", width="200"))
+        buffer = widgets.Text(value=qr['protein_batch_buffer'],
+                              layout=widgets.Layout(height="auto", width="200"))
+        concentration = widgets.Text(value=str(qr['protein_batch_concentration']),
+                                     layout=widgets.Layout(height="auto", width="200"))
         if qr['protein_batch_date_received'] is not None:
             try:
                 date_received.value = qr['protein_batch_date_received']
@@ -126,7 +133,7 @@ class protein_batch_tab(object):
                 'protein_batch_sequence': self.protein_batch_tab_dict[batch][4].value,
                 'protein_batch_buffer': self.protein_batch_tab_dict[batch][5].value,
                 'protein_batch_concentration': self.protein_batch_tab_dict[batch][6].value,
-                'protein_batch_concentration_unit': 'mg/ml'
+                'protein_batch_concentration_unit_id': 14
             }
             self.logger.info('data for protein batch: {0!s}'.format(d))
             l.append(d)

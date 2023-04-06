@@ -19,6 +19,25 @@ def read_opentrons_soak_plate_csv_file(logger, soak_plate_csv):
     soaked_cystal_list = df.to_dict('records')  # 'records' turns df into list of dicts
     return soaked_cystal_list
 
+def read_modified_opentrons_xtal_plate_csv_file(logger, xtal_plate_csv):
+    logger.info('reading crystal plate CSV file ' + xtal_plate_csv)
+    df = pd.read_csv(xtal_plate_csv, dtype=str)  # set dtype otherwise 01 becomes 1
+
+#    df['marked_crystal_code'].replace('', np.nan, inplace=True)
+    df['marked_crystal_code'] = df.apply(lambda x: "{0!s}-{1!s}-{2!s}-{3!s}".format(x['crystal_plate_barcode'],
+                                                                                    x['crystal_plate_row'],
+                                                                                    x['crystal_plate_column'],
+                                                                                    x['crystal_plate_subwell']), axis=1)
+    df = df.loc[df['status'] == 'transferred']
+    df = df.drop('crystal_plate_well', axis=1)
+    df = df.drop('crystal_plate_column', axis=1)
+    df = df.drop('crystal_plate_barcode', axis=1)
+    df = df.drop('crystal_plate_subwell', axis=1)
+    df = df.drop('plate_type_name', axis=1)
+    df = df.drop('crystal_plate_row', axis=1)
+    soaked_cystal_list = df.to_dict('records')
+    return soaked_cystal_list
+
 def get_unique_crystal_plate_barcodes(soaked_cystal_list):
     barcode_list = []
     for d in soaked_cystal_list:

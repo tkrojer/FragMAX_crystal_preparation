@@ -93,17 +93,18 @@ class soaked_crystal_tab(object):
         root.call('wm', 'attributes', '.', '-topmost', True)
         b.files = filedialog.askopenfilename(multiple=True,
                                              initialdir=os.path.join(self.settingsObject.workflow_folder, '2-soak'),
-                                             title="select _compound.csv file",
+                                             title="select _xtal.csv file",
                                              filetypes=[("Text Files", "*.csv")])
         self.soak_csv = b.files[0]
-        if self.soak_csv.endswith('_compound.csv') or self.soak_csv.endswith('_soak.csv'):
+        if self.soak_csv.endswith('_xtal.csv'):
             self.crystal_soak_csv.value = self.soak_csv
         else:
             self.popup('Wrong file type! Please select a file ending with _compound.csv or _soak.csv!')
 
     def update_csv_and_db(self, b):
-        if self.soak_csv.endswith('_soak.csv'):
-            soaked_cystal_list = fs.read_opentrons_soak_plate_csv_file(self.logger, self.soak_csv)
+        if self.soak_csv.endswith('_xtal.csv'):
+#            soaked_cystal_list = fs.read_opentrons_soak_plate_csv_file(self.logger, self.soak_csv)
+            soaked_cystal_list = fs.read_modified_opentrons_xtal_plate_csv_file(self.logger, self.soak_csv)
         else:
             soaked_cystal_list = None
             self.logger.error('only opentrons soaks are supported at the moment')
@@ -117,8 +118,8 @@ class soaked_crystal_tab(object):
 
     def update_db(self, soaked_cystal_list):
         d = {}
-        d['soak_plate_name'] = os.path.basename(self.soak_csv).replace('_compound.csv','').replace('_soak.csv','')
-        d['soak_method'] = self.soak_method_dropdown.value
+#        d['soak_plate_name'] = os.path.basename(self.soak_csv).replace('_compound.csv','').replace('_soak.csv','')
+        d['soak_method'] = self.soak_method_dropdown.label
         #d['soak_datetime'] = self.soak_start.value
         # now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         # datetime_object = datetime.strptime(datetime_str, '%m/%d/%y %H:%M:%S')
@@ -130,12 +131,13 @@ class soaked_crystal_tab(object):
         except ValueError:
             d['soak_solution_volume'] = 0.0
         d['soak_solution_volume_unit'] = 'uL'
+        d['soak_solution_volume_unit_id'] = 8
 
         try:
             d['soak_temperature'] = float(self.temperature.value)
         except ValueError:
             d['soak_temperature'] = 0.0
-        d['soak_temperature_unit'] = 'K'
+        d['soak_temperature_unit_id'] = 20
 
         db.save_soaked_crystals_to_database(self.logger, self.dal, soaked_cystal_list, d, self.progress_bar)
 

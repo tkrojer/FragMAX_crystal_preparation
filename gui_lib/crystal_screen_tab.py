@@ -82,7 +82,7 @@ class crystal_screen_tab(object):
         for opt in self.select_screen.options: l.append(opt)
         if self.screen_name.value not in l:
             self.logger.info('adding ' + self.screen_name.value + ' to screen dropdown')
-            l.append(self.screen_name.value)
+            l.append((self.screen_name.value, None))
         else:
             self.logger.warning(self.screen_name.value + ' exists in screen dropdown')
         self.select_screen.options = l
@@ -101,13 +101,13 @@ class crystal_screen_tab(object):
         else:
             self.logger.warning('screen {0!s} does not exist in database; skipping...'.format(self.select_screen.value))
 
-    def save_screen_csv(self, b):
-        crystal_screen_name = self.select_screen.value.replace(' ','')
-        fs.save_crystal_screen_as_excel(self.logger, self.settings.crystal_screen_folder,
-                                        crystal_screen_name, self.crystal_plate_template)
+#    def save_screen_csv(self, b):
+#        crystal_screen_name = self.select_screen.value.replace(' ','')
+#        fs.save_crystal_screen_as_excel(self.logger, self.settings.crystal_screen_folder,
+#                                        crystal_screen_name, self.crystal_plate_template)
 
     def save_screen_excel(self, b):
-        crystal_screen_name = self.select_screen.value.replace(' ','')
+        crystal_screen_name = self.select_screen.label.replace(' ','')
         fs.save_crystal_screen_as_excel(self.logger, self.settings.crystal_screen_folder,
                                         crystal_screen_name, self.crystal_plate_template)
 
@@ -159,6 +159,7 @@ class crystal_screen_tab(object):
 
     def save_screen_to_db(self, b):
         df = self.screen_sheet.get_changed_df()
-        csname = self.select_screen.value.replace(' ','')
+        csname = self.select_screen.label.replace(' ','')
+#        csid = self.select_screen.value
         db.save_crystal_screen_to_db(self.dal, self.logger, df, csname, self.progress_bar)
 
