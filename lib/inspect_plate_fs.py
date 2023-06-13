@@ -101,3 +101,32 @@ def save_crystal_plate_csv_to_soak_folder(logger, marked_crystal_list, barcode, 
     else:
         logger.warning('looks like there were no new crystals marked for plate ' + barcode)
     logger.info('finished writing marked crystal CSV file')
+
+def plate_id_exists(logger, manualcsv, crystal_plate_options):
+    plate_exists = False
+    plate_id = os.path.basename(manualcsv).replace('.csv', '')
+    plate_list = []
+    for plate in crystal_plate_options:
+        plate_list.append(plate[0])
+    if plate_id in plate_list:
+        logger.info('plate id exists in database')
+        plate_exists = True
+    else:
+        logger.error('plate id does not exisit in database; check the filename of your csv file')
+    return plate_exists
+
+def get_marked_crystal_list(logger, manualcsv):
+    plate_id = os.path.basename(manualcsv).replace('.csv', '')
+    logger.info('getting marked crystals for {0!s}'.format(plate_id))
+    marked_crystal_list = []
+    for l in open(manualcsv):
+        l = l.replace('\n', '')
+        row = l.split(',')[0]
+#        col = l.split(',')[1]
+        col = (2 - len(l.split(',')[1])) * '0' + l.split(',')[1]
+#        sub = l.split(',')[2] # 01
+        sub = (2 - len(l.split(',')[2])) * '0' + l.split(',')[2]
+        well = row + col
+        marked_crystal_list.append(["SwissCI-MRC-3d", plate_id, row, col, sub, well, 'new', '', ''])
+#    print(marked_crystal_list)
+    return marked_crystal_list

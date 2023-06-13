@@ -58,6 +58,10 @@ class DataAccessLayer:
         Column('crystal_screen_condition_id', Integer(), primary_key=True),
         Column('crystal_screen_id', ForeignKey('crystal_screen_table.crystal_screen_id')),
         Column('crystal_screen_condition', String(255)),
+        Column('crystal_screen_chem_comp_ids', String(255)),                # can be supplied comma separated
+        Column('crystal_screen_chem_comp_concentrations', String(255)),     # in crystal_screen excel file
+        Column('crystal_screen_chem_comp_units', String(255)),              #
+        Column('crystal_screen_chem_comp_phs', String(255)),                #
         Column('crystal_screen_well', String(12)),
         Column('crystal_screen_row', String(12)),
         Column('crystal_screen_column', String(12)),

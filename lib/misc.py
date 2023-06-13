@@ -413,6 +413,19 @@ def get_coordinates_from_filename(crystal_image, plate_layout):
                 break
     return x, y
 
+def get_coordinates_from_mounted_crystal_list(source, plate_layout):
+    x = None
+    y = None
+    column = (2-len(source[0]))*'0'+source[0]
+    row = source[1]
+    subwell = (2-len(source[2]))*'0'+source[2]
+    for c in plate_layout:
+        if c[6] == column and c[4] == row and c[7] == subwell:
+            x = c[1]
+            y = c[2]
+            break
+    return x, y
+
 def get_row_column_subwell_from_filename(crystal_image):
     column = None
     row = None

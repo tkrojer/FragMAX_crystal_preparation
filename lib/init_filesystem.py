@@ -106,6 +106,13 @@ class init_filesystem(object):
             self.logger.info('creating workflow/7-summary folder: ' + workflow_summary_folder)
             os.mkdir(workflow_summary_folder)
 
+        workflow_inspect_manual_folder = os.path.join(self.settings.project_folder, 'workflow', '8-inspect-manual')
+        if os.path.isdir(workflow_inspect_manual_folder):
+            self.logger.warning('workflow/8-inspect-manual folder exists: ' + workflow_inspect_manual_folder)
+        else:
+            self.logger.info('creating workflow/8-inspect-manual folder: ' + workflow_inspect_manual_folder)
+            os.mkdir(workflow_inspect_manual_folder)
+
         self.settings.eln_folder = os.path.join(self.settings.project_folder, 'eln')
         if os.path.isdir(self.settings.eln_folder):
             self.logger.warning('eln folder exists: ' + self.settings.eln_folder)

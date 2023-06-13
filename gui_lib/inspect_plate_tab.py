@@ -28,7 +28,7 @@ class inspect_plate_tab(object):
         self.image_number = 0
         self.marked_crystal_list = []
 
-        self.grid_widget = widgets.GridspecLayout(9, 4, height='700px')
+        self.grid_widget = widgets.GridspecLayout(10, 4, height='700px')
 
 #        import_shifter_marked_crystals_button = widgets.Button(description='import marked crystals from shifter',
 #                                                               layout=Layout(border='1px solid', width='75%'))
@@ -45,40 +45,51 @@ class inspect_plate_tab(object):
         load_crystal_image_button.on_click(self.load_crystal_images)
         self.grid_widget[1, 3] = load_crystal_image_button
 
+
+        save_manual_crystal_template_button = widgets.Button(description='save manual template', style= {'button_color': 'orange'})
+        save_manual_crystal_template_button.on_click(self.save_manual_crystal_template)
+        self.grid_widget[2, 0] = save_manual_crystal_template_button
+
+        import_manual_crystal_button = widgets.Button(description='import manual', style= {'button_color': 'orange'})
+        import_manual_crystal_button.on_click(self.import_manual_crystal)
+        self.grid_widget[2, 1] = import_manual_crystal_button
+
         self.cystal_image_box = widgets.VBox(children=[], layout=Layout(border='3px solid red', width='100%'))
-        self.grid_widget[2:6, 0:2] = self.cystal_image_box
+        self.grid_widget[3:7, 0:2] = self.cystal_image_box
 
         self.cystal_plate_box = widgets.VBox(children=[], layout=Layout(border='solid', width='100%'))
-        self.grid_widget[2:6, 2:] = self.cystal_plate_box
+        self.grid_widget[3:7, 2:] = self.cystal_plate_box
 
         self.show_marked_crystals(None)
 
         prev_image_button = widgets.Button(description='<<<', layout=Layout(border='1px solid', width='100%'))
         prev_image_button.on_click(self.change_prev_crystal_image)
-        self.grid_widget[6, 0] = prev_image_button
+        self.grid_widget[7, 0] = prev_image_button
         next_image_button = widgets.Button(description='>>>', layout=Layout(border='1px solid', width='100%'))
         next_image_button.on_click(self.change_next_crystal_image)
-        self.grid_widget[6, 1] = next_image_button
+        self.grid_widget[7, 1] = next_image_button
 
         mount_crystal_button = widgets.Button(description='Mount', style={'button_color': 'green'},
                                               layout=Layout(border='1px solid', width='100%'))
         mount_crystal_button.on_click(self.flag_crystal_for_mounting)
-        self.grid_widget[7, 0] = mount_crystal_button
+        self.grid_widget[8, 0] = mount_crystal_button
         unmount_crystal_button = widgets.Button(description='Unmount', style={'button_color': 'red'},
                                                 layout=Layout(border='1px solid', width='100%'))
         unmount_crystal_button.on_click(self.unflag_crystal_for_mounting)
-        self.grid_widget[7, 1] = unmount_crystal_button
+        self.grid_widget[8, 1] = unmount_crystal_button
 
         save_marked_crystals_button = widgets.Button(description='Save to DB & CSV', style={'button_color': 'orange'},
                                               layout=Layout(border='1px solid', width='100%'))
         save_marked_crystals_button.on_click(self.save_marked_crystals)
-        self.grid_widget[8, 0:] = save_marked_crystals_button
+        self.grid_widget[9, 0:] = save_marked_crystals_button
 
 
     def droplet_newly_flagged(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
+            print(ro, i[2], co, i[3], su, i[4], i[6])
             if ro == i[2] and co == i[3] and su == i[4] and i[6] == 'new':
+                print('found')
                 exists = True
         return exists
 
@@ -102,8 +113,13 @@ class inspect_plate_tab(object):
         soaked = self.droplet_was_soaked(ro, co, su)
         return new, old, soaked
 
-    def show_marked_crystals(self, crystal_image):
-        cx, cy = misc.get_coordinates_from_filename(crystal_image, misc.swiss_ci_3_drop_layout())
+    def show_marked_crystals(self, source):
+        if isinstance(source, list):
+#            print('>>>', source)
+            cx, cy = misc.get_coordinates_from_mounted_crystal_list(source, misc.swiss_ci_3_drop_layout())
+#            print(cx, cy)
+        else:
+            cx, cy = misc.get_coordinates_from_filename(source, misc.swiss_ci_3_drop_layout())
         magnify = 2
         out = widgets.Output()
         fig, ax = plt.subplots()
@@ -203,8 +219,8 @@ class inspect_plate_tab(object):
 
     def change_crystal_image(self, n):
         self.image_number += n
-        if self.image_number > len(self.image_list):
-            self.image_number = len(self.image_list)
+        if self.image_number >= len(self.image_list):
+            self.image_number = len(self.image_list) - 1
         if self.image_number < 0:
             self.image_number = 0
         self.show_crystal_image()
@@ -229,6 +245,30 @@ class inspect_plate_tab(object):
                                                                    self.select_crystal_plate.label)
         db.save_marked_crystals_to_db(self.dal, self.logger, xtal_list, self.pgbar, self.select_crystal_plate.value)
 
+
+    def save_manual_crystal_template(self, b):
+        print('hallo')
+
+    def import_manual_crystal(self, b):
+        existing_crystalplates = query.get_existing_crystal_plate_barcodes(self.dal, self.logger)
+        self.select_crystal_plate.options = existing_crystalplates
+        clear_output()
+        root = Tk()
+        root.withdraw()
+        root.call('wm', 'attributes', '.', '-topmost', True)
+        b.files = filedialog.askopenfilename(multiple=True,
+                                             initialdir=os.path.join(self.settingsObject.workflow_folder, '8-inspect-manual'),
+                                             title="Select file",
+                                             filetypes=[("CSV Files",
+                                                         ".csv")])
+        manualcsv = b.files[0]
+        if fs.plate_id_exists(self.logger, manualcsv, self.select_crystal_plate.options):
+            self.marked_crystal_list = fs.get_marked_crystal_list(self.logger, manualcsv)
+            self.logger.info('parsing marked_crystal_list...')
+            for item in self.marked_crystal_list:
+                source = [item[3], item[2], item[4]]    # column, row, subwell
+                self.logger.info('column: {0!s} - row: {1!s} - subwell: {2!s}'.format(item[3], item[2], item[4]))
+                self.show_marked_crystals(source)
 
 
 
