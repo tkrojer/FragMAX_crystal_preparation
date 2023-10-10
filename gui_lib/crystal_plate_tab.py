@@ -199,7 +199,7 @@ class crystal_plate_tab(object):
         except ValueError:
             d['reservoir_volume'] = 0.0
 
-        d['reservoir_volume_unit_id'] = 9
+        d['reservoir_volume_unit_id'] = 8
 
         try:
             d['subwell_01_protein_volume'] = float(self.subwell_a_protein.value)

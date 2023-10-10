@@ -51,7 +51,7 @@ class mounted_crystals_tab(object):
 
         export_csv_for_fragmaxapp_button = widgets.Button(description='Export CSV for FragMAXapp',
                                                           layout=widgets.Layout(display="flex", width="auto"))
-#        export_csv_for_fragmaxapp_button.on_click(self.export_csv_for_fragmaxapp)
+        export_csv_for_fragmaxapp_button.on_click(self.export_csv_for_fragmaxapp)
         self.grid_widget[1, 1] = export_csv_for_fragmaxapp_button
 
         export_csv_summary_button = widgets.Button(description='Export summary CSV',
@@ -130,6 +130,8 @@ class mounted_crystals_tab(object):
         fs.save_csv_summary_file(self.logger, df,
                                  os.path.join(self.settingsObject.workflow_folder, '7-summary', summary + '.csv'))
 
+    def export_csv_for_fragmaxapp(self, b):
+        self.logger.info('preparing CSV file for upload to FragMAXapp...')
 
 
 

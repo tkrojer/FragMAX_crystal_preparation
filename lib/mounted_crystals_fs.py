@@ -25,3 +25,5 @@ def save_csv_summary_file(logger, df, csv_file):
     logger.info('saving csv summary file as {0!s}'.format(csv_file))
     df.to_csv(csv_file, header=True, index=False)
     logger.info('finished saving csv summary file')
+    logger.info('saving excel summary file as {0!s}'.format(csv_file.replace('.csv', '.xlsx')))
+    df.to_excel(csv_file.replace('.csv', '.xlsx'), header=True, index=False)

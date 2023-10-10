@@ -15,7 +15,10 @@ def insert(dal, standard_table_file, logger):
         3: dal.soak_method_table,
         4: dal.space_group_table,
         5: dal.compound_table,
-        6: dal.compound_batch_table
+        6: dal.compound_batch_table,
+        7: dal.wwpdb_chem_comp_table,
+        8: dal.gene_src_table,
+        9: dal.wwpdb_allowed_values_table
     }
 
     for index in standard_table_dict:

@@ -87,9 +87,9 @@ class inspect_plate_tab(object):
     def droplet_newly_flagged(self, ro, co, su):
         exists = False
         for i in self.marked_crystal_list:
-            print(ro, i[2], co, i[3], su, i[4], i[6])
+#            print(ro, i[2], co, i[3], su, i[4], i[6])
             if ro == i[2] and co == i[3] and su == i[4] and i[6] == 'new':
-                print('found')
+#                print('found')
                 exists = True
         return exists
 

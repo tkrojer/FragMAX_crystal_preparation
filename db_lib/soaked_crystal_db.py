@@ -36,6 +36,7 @@ def get_marked_crystal_id(dal, logger, d):
                dal.marked_crystals_table.c.crystal_plate_column == column))
     rp = dal.connection.execute(q)
     r = rp.fetchall()
+    logger.info(r)
     idx = r[0][0]
     logger.info('marked_crystal_id = {0!s}'.format(idx))
     return idx

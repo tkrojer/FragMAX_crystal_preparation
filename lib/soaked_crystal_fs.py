@@ -22,6 +22,9 @@ def read_opentrons_soak_plate_csv_file(logger, soak_plate_csv):
 def read_modified_opentrons_xtal_plate_csv_file(logger, xtal_plate_csv):
     logger.info('reading crystal plate CSV file ' + xtal_plate_csv)
     df = pd.read_csv(xtal_plate_csv, dtype=str)  # set dtype otherwise 01 becomes 1
+#    df.loc[df["crystal_plate_subwell"] == "01", "crystal_plate_subwell"] = "a"
+#    df.loc[df["crystal_plate_subwell"] == "02", "crystal_plate_subwell"] = "c"
+#    df.loc[df["crystal_plate_subwell"] == "03", "crystal_plate_subwell"] = "d"
 
 #    df['marked_crystal_code'].replace('', np.nan, inplace=True)
     df['marked_crystal_code'] = df.apply(lambda x: "{0!s}-{1!s}-{2!s}-{3!s}".format(x['crystal_plate_barcode'],
@@ -86,10 +89,18 @@ def append_xtbm_to_shifter_csv(logger, shifter_csv_file, d):
     logger.info('adding xtbm to file: {0!s} {1!s} {2!s}'.format(d['row'], d['column'], d['subwell']))
     f = open(shifter_csv_file, 'a')
     # plate_type is hardcoded for now; information is in crystal plate
+    if d['subwell'] == '01':
+        subwell = 'a'
+    elif d['subwell'] == '02':
+        subwell = 'c'
+    elif d['subwell'] == '03':
+        subwell = 'd'
+    else:
+        subwell = ''
     f.write(
         '{0!s},{1!s},AM,{2!s},{3!s},{4!s},,,,,,,,,\n'.format('SwissCI-MRC-3d',
                                                              d['crystal_plate_barcode'],
-                                                             d['row'], d['column'], d['subwell']))
+                                                             d['row'], d['column'], subwell))
     f.close()
 
 def save_shifter_csv_file_for_mounting(logger, folder, soaked_cystal_list):
