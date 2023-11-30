@@ -51,3 +51,7 @@ CREATE TABLE version_table (
 )
 -- version "00001" - end -----------------------------------------
 
+-- version "00002" - start
+ALTER TABLE xray_dataset_table ADD "selected" BOOLEAN;
+UPDATE version_table set version_number="00002" where version_number="00001"
+-- version "00002" - end -----------------------------------------

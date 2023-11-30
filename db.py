@@ -254,7 +254,7 @@ class DataAccessLayer:
         Column('data_collection_comment', String(55)),
         Column('created_on', DateTime(), default=datetime.now),
         Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now),
-        UniqueConstraint('mount_datetime', name='unique_mount_datetime')
+        UniqueConstraint('mount_datetime', 'marked_crystal_code', name='unique_mount_datetime')
     )
 
     xray_dataset_table = Table('xray_dataset_table',
@@ -272,6 +272,7 @@ class DataAccessLayer:
         Column('omega_range_total', Numeric(12, 2)),
         Column('n_images', Integer()),
         Column('is_dataset', Boolean(), default=False),
+        Column('selected', Boolean(), default=False),
         Column('scicat_doi', String(255)),
         Column('dozor_plot', String(255)),
         Column('crystal_snapshot_1', String(255)),
@@ -618,7 +619,7 @@ class DataAccessLayer:
         self.engine = create_engine('sqlite:///' + conn_string or self.conn_string)
         self.metadata.create_all(self.engine)
         self.connection = self.engine.connect()
-        d = {'version_number': '00001'}
+        d = {'version_number': '00002'}
         try:
             ins = dal.version_table.insert().values(d)
             dal.connection.execute(ins)

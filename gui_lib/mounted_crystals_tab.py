@@ -36,12 +36,12 @@ class mounted_crystals_tab(object):
 
         import_manually_mounted_crystals_button = widgets.Button(description='Import manual',
                                                                  layout=widgets.Layout(display="flex", width="auto"))
-#        import_manually_mounted_crystals_button.on_click(self.manual_mounted_crystals)
+        import_manually_mounted_crystals_button.on_click(self.manual_mounted_crystals)
         self.grid_widget[0, 2] = import_manually_mounted_crystals_button
 
         save_template_manually_mounted_crystals_button = widgets.Button(description='Save manual template',
                                                                         layout=widgets.Layout(display="flex", width="auto"))
-#        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
+        save_template_manually_mounted_crystals_button.on_click(self.save_template_manually_mounted_crystals)
         self.grid_widget[0, 3] = save_template_manually_mounted_crystals_button
 
         export_csv_for_exi_button = widgets.Button(description='Export CSV for EXI',
@@ -79,20 +79,33 @@ class mounted_crystals_tab(object):
         b.files = filedialog.askopenfilename(multiple=True,
                                              initialdir=os.path.join(self.settingsObject.workflow_folder, folder),
                                              title="Select file",
-                                             filetypes=[("Text Files",
-                                                     "*.csv")])
+                                             filetypes=[("Text Files", "*.csv"), ("Excel file","*.xlsx")])
         if folder == '3-mount':
             for f in b.files:
                 self.logger.info('reading CSV file of shifter mounted crystals from CSV file: ' + f)
                 self.read_shifter_csv(f)
         elif folder == '4-mount-manual':
-            self.logger.info('reading CSV file of manually mounted crystals from CSV file: ' + b.files[0])
+            for f in b.files:
+                self.logger.info('reading EXCEL file of manually mounted crystals: ' + b.files[0])
+                self.read_manual_excel_file(f)
 #            df = pd.read_csv(b.files[0], sep=';')
 #            self.logger.info(df.head)
 #            self.update_db_with_manually_mounted_crystals(df)
 
+    def save_template_manually_mounted_crystals(self, b):
+        self.logger.info('saving CSV file for manually mounted crystals in workflow/4-mount-manual...')
+        now_ext = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        folder = os.path.join(self.settingsObject.workflow_folder, '4-mount-manual')
+        excel_file = os.path.join(folder, 'manual_mount_' + now_ext + '.xlsx')
+        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        fs.save_manual_mount_template(self.logger, folder, now, excel_file)
+
     def read_shifter_csv(self, shifter_csv_file):
         xtal_list, soak_list = fs.get_shifter_csv_file_as_dict_list(self.logger, shifter_csv_file)
+        self.update_database(xtal_list, soak_list)
+
+    def read_manual_excel_file(self, manual_excel_file):
+        xtal_list, soak_list = fs.get_manual_excel_file_as_dict_list(self.logger, manual_excel_file)
         self.update_database(xtal_list, soak_list)
 
     def update_database(self, xtal_list, soak_list):
@@ -131,8 +144,11 @@ class mounted_crystals_tab(object):
                                  os.path.join(self.settingsObject.workflow_folder, '7-summary', summary + '.csv'))
 
     def export_csv_for_fragmaxapp(self, b):
-        self.logger.info('preparing CSV file for upload to FragMAXapp...')
-
+        now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        fragmaxapp = 'fragmaxapp_' + now
+        df = db.get_fragmax_dataframe(self.logger, self.dal)
+        fs.save_csv_file_for_fragmaxapp(self.logger, df,
+                                 os.path.join(self.settingsObject.workflow_folder, '6-fragmaxapp', fragmaxapp + '.csv'))
 
 
 
