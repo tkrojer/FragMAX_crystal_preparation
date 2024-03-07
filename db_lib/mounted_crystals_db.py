@@ -238,6 +238,17 @@ def get_summary_dataframe(logger, dal):
     logger.info('finished reading mounted crystals summary from database')
     return df
 
+def get_mounted_crystals_dataframe(logger, dal):
+    logger.info('reading only mounted_crystal_code, cpdid, smiles from database for process.csv file')
+    k = get_joins(dal)
+    q = select([dal.mounted_crystals_table.c.mounted_crystal_code.distinct(),
+                dal.compound_batch_table.c.compound_code,
+                dal.compound_table.c.smiles]).order_by(
+                dal.mounted_crystals_table.c.mounted_crystal_code.asc())
+    q = q.select_from(k)
+    df = pd.read_sql_query(q, dal.engine)
+    return df
+
 def get_fragmax_dataframe(logger, dal):
     logger.info('reading mounted crystals for fragmaxapp csv file from database')
     k = get_joins(dal)

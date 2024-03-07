@@ -25,7 +25,10 @@ def get_manual_excel_file_as_dict_list(logger, manual_excel_file):
 #                                    'crystal_plate_column',
 #                                    'subwell']].agg('-'.join, axis=1)
 
-    df['marked_crystal_code'] = df['crystal_plate_barcode'] + "-" + df['crystal_plate_row'] + "-" + df['crystal_plate_column'].astype(str) + "-" + df['subwell'].astype(str)
+    df['marked_crystal_code'] = df['crystal_plate_barcode'].astype(str) + "-" + \
+                                df['crystal_plate_row'] + "-" + \
+                                df['crystal_plate_column'].astype(str) + "-" + \
+                                df['subwell'].astype(str)
 
     df = df.drop('crystal_plate_barcode', axis=1)
     df = df.drop('crystal_plate_row', axis=1)
@@ -41,12 +44,15 @@ def save_csv_file_for_exi(logger, df, csv_file):
     df.to_csv(csv_file, header=False, index=False)
     logger.info('finished saving csv file for exi')
 
-def save_csv_summary_file(logger, df, csv_file):
+def save_csv_summary_file(logger, dfsumm, dfproc, csv_file, process_csv):
     logger.info('saving csv summary file as {0!s}'.format(csv_file))
-    df.to_csv(csv_file, header=True, index=False)
+    dfsumm.to_csv(csv_file, header=True, index=False)
     logger.info('finished saving csv summary file')
     logger.info('saving excel summary file as {0!s}'.format(csv_file.replace('.csv', '.xlsx')))
-    df.to_excel(csv_file.replace('.csv', '.xlsx'), header=True, index=False)
+    dfsumm.to_excel(csv_file.replace('.csv', '.xlsx'), header=True, index=False)
+#    dfproc = dfproc.drop_duplicates(subset=['mounted_crystal_code'], keep='last')
+    logger.info('saving csv file for processing (only unique mounted_crystal_codes)')
+    dfproc.to_csv(process_csv, header=True, index=False)
 
 def save_csv_file_for_fragmaxapp(logger, df, csv_file):
     logger.info('saving csv file for fragmaxapp as {0!s}'.format(csv_file))
