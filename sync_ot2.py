@@ -3,6 +3,20 @@ import logging
 import paramiko
 from datetime import datetime
 from fabric import Connection
+import hashlib
+import os
+
+# ot2
+# /data/fragmax/visitors/<proposal>/2-soak
+# maxiv
+# /data/staff/biomax/tobias/workflow_test/20211214/workflow/2-soak
+
+ot_dir = "/data/fragmax/visitors"
+maxiv_dir = "/data/staff/biomax/tobias/workflow_test"
+local_dir = ""
+default_host = "offline-fe1"
+ssh_client = None
+ssh_ot = None
 
 
 def sync_remote_folders_secure(local_dir, remote_dir, remote_host, remote_user, ssh_password):
@@ -30,35 +44,50 @@ def sync_remote_folders_secure(local_dir, remote_dir, remote_host, remote_user, 
     rsync_cmd = f"sshpass -p '{ssh_password}' rsync -avz -e 'ssh {ssh_options}' {local_dir} {remote_user}@{remote_host}:{remote_dir}"
 
     # Establish an SSH connection to the remote server
-    with Connection(host=remote_host, user=remote_user, connect_kwargs=connect_kwargs) as c:
-        # Execute the rsync command locally since we're using sshpass to handle password input
-        c.local(rsync_cmd)
+#    with Connection(host=remote_host, user=remote_user, connect_kwargs=connect_kwargs) as c:
+#        # Execute the rsync command locally since we're using sshpass to handle password input
+#        c.local(rsync_cmd)
 
 
 # Example usage
 # sync_remote_folders_secure('/path/to/local/dir', '/path/to/remote/dir', 'remote_host_address', 'remote_user', 'your_ssh_password')
 
-
-def backup_files(remote_host, port, username, password, folder_path):
-    logger.info(f"making backups of all files in {folder_path}")
-    # Create an SSH client
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
+def transfer_file(local_path, remote_path, hostname, port, username, password):
     try:
-        # Connect to the remote host
-        client.connect(hostname=remote_host, port=port, username=username, password=password)
+        # Create an SSH client instance
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
+        # Connect to the remote server
+        ssh.connect(hostname, port, username, password)
+
+        # Create an SFTP session
+        sftp = ssh.open_sftp()
+
+        # Transfer the file
+        sftp.put(local_path, remote_path)
+        print(f"Successfully transferred {local_path} to {remote_path} on {hostname}")
+
+        # Close the SFTP session and SSH connection
+        sftp.close()
+        ssh.close()
+    except Exception as e:
+        print(f"Failed to transfer file: {e}")
+
+def backup_files(remote_host, folder_path, ssh_client):
+    logger.info(f"host: {remote_host} - making backups of all files in {folder_path}")
+    logger.info(f"ssh_client: {ssh_client}")
+    try:
         # Get the current date and time for file naming
         current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
         # Ensure the backup folder exists
         backup_folder = f"{folder_path}/backup"
-        stdin, stdout, stderr = client.exec_command(f'mkdir -p {backup_folder}')
+        stdin, stdout, stderr = ssh_client.exec_command(f'mkdir -p {backup_folder}')
         stdout.read()
 
         # List all files in the specified folder
-        stdin, stdout, stderr = client.exec_command(f'ls -1 {folder_path}')
+        stdin, stdout, stderr = ssh_client.exec_command(f'ls -1 {folder_path}')
         files = stdout.read().decode('utf-8').strip().split('\n')
 
         # Copy and move each file to the backup folder
@@ -68,15 +97,15 @@ def backup_files(remote_host, port, username, password, folder_path):
             # Copy and rename the file
             command = f'cp {original_file_path} {backup_file_path}'
             logger.info(command)
-            stdin, stdout, stderr = client.exec_command(command)
+            stdin, stdout, stderr = ssh_client.exec_command(command)
             stdout.read()
 
-        print("Backup completed successfully.")
+        logger.info("Backup completed successfully.")
 
     except Exception as e:
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
     finally:
-        client.close()
+        ssh_client.close()
 
 
 # Replace the following variables with your actual details
@@ -99,36 +128,54 @@ class DPGLogHandler(logging.Handler):
         dpg.set_value(self.widget_id, new_text)
 
 def host_login(host_input, username_input, password_input):
-    logger.info('trying to connect to {0!s}'.format(host_input))
-    ssh_client = paramiko.SSHClient()
-    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    logger.info(f'trying to connect to host_input}...')
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        ssh_client.connect(host_input, username=username_input, password=password_input)
+        client.connect(host_input, username=username_input, password=password_input)
     except paramiko.ssh_exception.AuthenticationException:
-        logger.error('connection failed')
-        ssh_client = None
-    if ssh_client:
-        logger.info('connection established')   # takes several seconds before exception appears
-    return ssh_client
+        logger.error(f'connection to {host_input} failed')
+    if client:
+        logger.info(f'connection {host_input} established')   # takes several seconds before exception appears
+    return client
 
 # Callback function for the button
-def login_button_callback(sender, app_data, user_data):
+def login_maxiv_callback(sender, app_data, user_data):
     username_input = dpg.get_value(user_data["username_field"])
     password_input = dpg.get_value(user_data["password_field"])
+    hashed_password = hashlib.sha256(password_input.encode()).hexdigest()
     host_input = dpg.get_value(user_data["host_field"])
-    ssh_client = host_login(host_input, username_input, password_input)
-    combo_selection = dpg.get_value(user_data["combo_box"])
-
+    global ssh_client
+    ssh_client = host_login(host_input, username_input, hashed_password)
     # Log the action
-    logger.info(f"user: {username_input}, pass: {password_input}, Combo Selection: {combo_selection}")
+    logger.info(f"user: {username_input}, pass: {hashed_password}, ssh: {ssh_client}")
+
+def login_ot_callback(sender, app_data, user_data):
+    username_input = "root"
+    password_input = dpg.get_value(user_data["otpw_field"])
+    hashed_password = hashlib.sha256(password_input.encode()).hexdigest()
+    host_input = dpg.get_value(user_data["otip_field"])
+    global ssh_ot
+    ssh_ot = host_login(host_input, username_input, hashed_password)
+    # Log the action
+    logger.info(f"user: {username_input}, pass: {hashed_password}, ssh: {ssh_client}")
 
 def sync_button_callback(sender, app_data, user_data):
     username_input = dpg.get_value(user_data["username_field"])
     password_input = dpg.get_value(user_data["password_field"])
-    combo_selection = dpg.get_value(user_data["combo_box"])
-
-    # Log the action
-    logger.info(f"user: {username_input}, pass: {password_input}, Combo Selection: {combo_selection}")
+    hashed_password = hashlib.sha256(password_input.encode()).hexdigest()
+    proposal_input = dpg.get_value(user_data["proposal_field"])
+    proposal_type = dpg.get_value(user_data["combo_box"])
+    remote_host = dpg.get_value(user_data["host_field"])
+    otip_input = dpg.get_value(user_data["otip_field"])
+    folder_path = os.path.join(maxiv_dir, proposal_input, "workflow", "2-soak")
+    if not ssh_client:
+        logger.error('log into maxiv host computer first')
+    else:
+        # Log the action
+        # /data/staff/biomax/tobias/workflow_test/20211214/workflow/2-soak
+        logger.info(f"folder_path: {folder_path}, ssh: {ssh_client}")
+        backup_files(remote_host, folder_path, ssh_client)
 
 
 def setup_logger():
@@ -153,19 +200,18 @@ dpg.create_context()
 #
 
 
-with dpg.window(label="input", width=600, height=400):
-
-    default_host = "offline-fe1"
-    ssh_client = None
+with dpg.window(label="input", width=1000, height=600):
 
     # Group for the text input
     with dpg.group(horizontal=False):
-        dpg.add_text("username:")
+        dpg.add_text("MAXIV username:")
         username_field = dpg.add_input_text()
-        dpg.add_text("password:")
+        dpg.add_text("MAXIV password:")
         password_field = dpg.add_input_text(password=True)
         dpg.add_text("MAXIV host:")
         host_field = dpg.add_input_text(default_value="offline-fe1")
+        dpg.add_text("OT-2 password:")
+        otpw_field = dpg.add_input_text(password=True)
         dpg.add_text("OT-2 IP address:")
         otip_field = dpg.add_input_text(default_value="192.252")
         dpg.add_text("proposal:")
@@ -177,16 +223,21 @@ with dpg.window(label="input", width=600, height=400):
         combo_box = dpg.add_combo(items=["academic", "proprietary"])
 
     with dpg.group(horizontal=True):
-        login_button = dpg.add_button(label="login", callback=login_button_callback,
-                                    user_data={"username_field": username_field,
-                                               "password_field": password_field,
-                                               "proposal_field": proposal_field,
-                                               "combo_box": combo_box,})
+        login_maxiv_button = dpg.add_button(label="login MAXIV", callback=login_maxiv_callback,
+                                        user_data={"username_field": username_field,
+                                                   "password_field": password_field,
+                                                   "host_field": host_field})
+
+        login_ot_button = dpg.add_button(label="login OT-2", callback=login_ot_callback,
+                                        user_data={"otpw_field": otpw_field,
+                                                   "otip_field": otip_field})
 
         sync_button = dpg.add_button(label="synchronize", callback=sync_button_callback,
                                     user_data={"username_field": username_field,
                                                "password_field": password_field,
                                                "proposal_field": proposal_field,
+                                               "host_field": host_field,
+                                               "otip_field": otip_field,
                                                "combo_box": combo_box,})
 
     # Window for logging
@@ -195,7 +246,7 @@ with dpg.window(label="input", width=600, height=400):
 
 logger = setup_logger()
 
-dpg.create_viewport(title='MAXIV <-> OT-2', width=600, height=400)
+dpg.create_viewport(title='MAXIV <-> OT-2', width=1000, height=600)
 dpg.setup_dearpygui()
 dpg.show_viewport()
 dpg.start_dearpygui()

@@ -139,9 +139,11 @@ class mounted_crystals_tab(object):
     def export_csv_summary(self, b):
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         summary = 'summary_' + now
-        df = db.get_summary_dataframe(self.logger, self.dal)
-        fs.save_csv_summary_file(self.logger, df,
-                                 os.path.join(self.settingsObject.workflow_folder, '7-summary', summary + '.csv'))
+        dfsumm = db.get_summary_dataframe(self.logger, self.dal)
+        dfproc = db.get_mounted_crystals_dataframe(self.logger, self.dal)
+        fs.save_csv_summary_file(self.logger, dfsumm, dfproc,
+                                 os.path.join(self.settingsObject.workflow_folder, '7-summary', summary + '.csv'),
+                                 os.path.join(self.settingsObject.workflow_folder, '7-summary', 'process.csv'))
 
     def export_csv_for_fragmaxapp(self, b):
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
