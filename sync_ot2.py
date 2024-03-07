@@ -14,9 +14,10 @@ import os
 ot_dir = "/data/fragmax/visitors"
 maxiv_dir = "/data/staff/biomax/tobias/workflow_test"
 local_dir = ""
-default_host = "offline-fe1"
+default_host = "offline-fe1.maxiv.lu.se"
 ssh_client = None
 ssh_ot = None
+ot_keyfile = "C:/Users/tobkro/ot2_ssh_key"
 
 
 def sync_remote_folders_secure(local_dir, remote_dir, remote_host, remote_user, ssh_password):
@@ -128,13 +129,24 @@ class DPGLogHandler(logging.Handler):
         dpg.set_value(self.widget_id, new_text)
 
 def host_login(host_input, username_input, password_input):
-    logger.info(f'trying to connect to host_input}...')
+    logger.info(f'trying to connect to {host_input}...')
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    try:
-        client.connect(host_input, username=username_input, password=password_input)
-    except paramiko.ssh_exception.AuthenticationException:
-        logger.error(f'connection to {host_input} failed')
+    logger.info(f"count dots in {host_input} -> {host_input.count('.')}")
+#    try:
+#        if str(host_input).count('.') > 2:
+    logger.info(f'run: ssh -i {ot_keyfile} root@{host_input}')
+    print(f'run: ssh -i {ot_keyfile} root@{host_input}')
+    client.connect(str(host_input), username=username_input, password=password_input, key_filename=ot_keyfile)
+#        else:
+#    client.connect(host_input, username=username_input, password=password_input)
+#    except paramiko.ssh_exception.AuthenticationException:
+#        client = None
+#        logger.error(f'connection to {host_input} failed')
+#        if host_input.count('.') > 2:
+#            logger.info(f'run: ssh -i {ot_keyfile} root@{host_input}')
+#        else:
+#            logger.info(f'run: ssh {username_input}@{host_input}')
     if client:
         logger.info(f'connection {host_input} established')   # takes several seconds before exception appears
     return client
