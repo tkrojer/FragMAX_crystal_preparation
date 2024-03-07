@@ -90,6 +90,7 @@ def backup_files(remote_host, folder_path, ssh_client):
         # List all files in the specified folder
         stdin, stdout, stderr = ssh_client.exec_command(f'ls -1 {folder_path}')
         files = stdout.read().decode('utf-8').strip().split('\n')
+        logger.info(files)
 
         # Copy and move each file to the backup folder
         for file in files:
@@ -132,49 +133,49 @@ def host_login(host_input, username_input, password_input):
     logger.info(f'trying to connect to {host_input}...')
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    logger.info(f"count dots in {host_input} -> {host_input.count('.')}")
-#    try:
-#        if str(host_input).count('.') > 2:
-    logger.info(f'run: ssh -i {ot_keyfile} root@{host_input}')
-    print(f'run: ssh -i {ot_keyfile} root@{host_input}')
-    client.connect(str(host_input), username=username_input, password=password_input, key_filename=ot_keyfile)
-#        else:
-#    client.connect(host_input, username=username_input, password=password_input)
-#    except paramiko.ssh_exception.AuthenticationException:
-#        client = None
-#        logger.error(f'connection to {host_input} failed')
-#        if host_input.count('.') > 2:
-#            logger.info(f'run: ssh -i {ot_keyfile} root@{host_input}')
-#        else:
-#            logger.info(f'run: ssh {username_input}@{host_input}')
+#    logger.info(f"count dots in {host_input} -> {host_input.count('.')}")
+    try:
+        if str(host_input).count('.') > 2:
+            logger.info(f'run: ssh -i {ot_keyfile} root@{host_input}')
+            print(f'run: ssh -i {ot_keyfile} root@{host_input}')
+            client.connect(str(host_input), username=username_input, password=password_input, key_filename=ot_keyfile)
+        else:
+            client.connect(host_input, username=username_input, password=password_input)
+    except paramiko.ssh_exception.AuthenticationException:
+        client = None
+        logger.error(f'connection to {host_input} failed')
+        if str(host_input).count('.') > 2:
+            logger.info(f'run: ssh -i {ot_keyfile} root@{host_input}')
+        else:
+            logger.info(f'run: ssh {username_input}@{host_input}')
     if client:
         logger.info(f'connection {host_input} established')   # takes several seconds before exception appears
     return client
 
 # Callback function for the button
 def login_maxiv_callback(sender, app_data, user_data):
-    username_input = dpg.get_value(user_data["username_field"])
-    password_input = dpg.get_value(user_data["password_field"])
-    hashed_password = hashlib.sha256(password_input.encode()).hexdigest()
+    username_input = str(dpg.get_value(user_data["username_field"])).replace("\r", "").replace("\n", "")
+    password_input = str(dpg.get_value(user_data["password_field"])).replace("\r", "").replace("\n", "")
+    hashed_password = hashlib.sha256(password_input.encode('utf-8')).hexdigest()
     host_input = dpg.get_value(user_data["host_field"])
     global ssh_client
-    ssh_client = host_login(host_input, username_input, hashed_password)
+    ssh_client = host_login(host_input, username_input, password_input)
     # Log the action
     logger.info(f"user: {username_input}, pass: {hashed_password}, ssh: {ssh_client}")
 
 def login_ot_callback(sender, app_data, user_data):
     username_input = "root"
-    password_input = dpg.get_value(user_data["otpw_field"])
-    hashed_password = hashlib.sha256(password_input.encode()).hexdigest()
+    password_input = str(dpg.get_value(user_data["otpw_field"])).replace("\r", "").replace("\n", "")
+    hashed_password = hashlib.sha256(password_input.encode('utf-8')).hexdigest()
     host_input = dpg.get_value(user_data["otip_field"])
     global ssh_ot
-    ssh_ot = host_login(host_input, username_input, hashed_password)
+    ssh_ot = host_login(host_input, username_input, password_input)
     # Log the action
     logger.info(f"user: {username_input}, pass: {hashed_password}, ssh: {ssh_client}")
 
 def sync_button_callback(sender, app_data, user_data):
-    username_input = dpg.get_value(user_data["username_field"])
-    password_input = dpg.get_value(user_data["password_field"])
+    username_input = str(dpg.get_value(user_data["username_field"])).replace("\r", "").replace("\n", "")
+    password_input = str(dpg.get_value(user_data["password_field"])).replace("\r", "").replace("\n", "")
     hashed_password = hashlib.sha256(password_input.encode()).hexdigest()
     proposal_input = dpg.get_value(user_data["proposal_field"])
     proposal_type = dpg.get_value(user_data["combo_box"])
