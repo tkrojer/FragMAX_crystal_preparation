@@ -181,7 +181,8 @@ def sync_button_callback(sender, app_data, user_data):
     proposal_type = dpg.get_value(user_data["combo_box"])
     remote_host = dpg.get_value(user_data["host_field"])
     otip_input = dpg.get_value(user_data["otip_field"])
-    folder_path = os.path.join(maxiv_dir, proposal_input, "workflow", "2-soak")
+#    folder_path = os.path.join(maxiv_dir, proposal_input, "workflow", "2-soak")
+    folder_path = "/".join([maxiv_dir, proposal_input, "workflow", "2-soak"])
     if not ssh_client:
         logger.error('log into maxiv host computer first')
     else:
